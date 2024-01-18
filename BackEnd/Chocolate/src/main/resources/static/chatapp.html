@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>WebSocket Chat123</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #chat {
+            overflow-y: scroll;
+            max-height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .my-message {
+            float: right;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        .other-message {
+            text-align: left;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 8px;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.1.2/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<script>
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/public', function (chatMessage) {
+                showMessage(JSON.parse(chatMessage.body));
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+
+    function sendMessage() {
+        var message = $('#message').val();
+        var sender = $('#sender').val();
+        $('#message').val("")
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ 'content': message, 'sender': sender }));
+    }
+
+    function showMessage(message) {
+        var formattedMessage = '<div class="message ' + (message.sender === $('#sender').val() ? 'my-message' : 'other-message') + '">' + message.sender + ': ' + message.content + '</div>';
+        $('#chat').append("<div style='width: 100%; float: left;'>" + formattedMessage + "</div>");
+        // Scroll to the bottom of the chat
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+    }
+
+    $(document).ready(function () {
+        connect();
+    });
+</script>
+
+
+<div>
+    <div id="chat"></div>
+    <input type="text" id="sender" placeholder="Your Name" />
+    <input type="text" id="message" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="disconnect()">Disconnect</button>
+</div>
+
+</body>
+</html>
