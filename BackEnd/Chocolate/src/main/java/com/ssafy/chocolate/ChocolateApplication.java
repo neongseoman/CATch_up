@@ -1,5 +1,6 @@
 package com.ssafy.chocolate;
 
+import org.kurento.client.KurentoClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +10,13 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 
 @SpringBootApplication
 @EnableWebSocket
-@EnableWebSocketMessageBroker
 public class ChocolateApplication {
+
+
+    @Bean
+    public KurentoClient kurentoClient() {
+        return KurentoClient.create();
+    }
 
 
     @Bean
