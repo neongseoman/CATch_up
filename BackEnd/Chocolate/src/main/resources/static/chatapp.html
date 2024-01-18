@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>WebSocket Chat123</title>
     <style>
         body {
@@ -96,14 +97,15 @@
     <div id="chat-sidebar">
         <h2>Chat Rooms</h2>
         <div class="chat-room">
-            <button>Create Chat Room</button>
+            <button onclick="createChatRoom()">방 생성하기</button>
+            <button onclick="joinChatRoom()">방 접속하기</button>
         </div>
         <h2>Joined Rooms</h2>
 
 
         <div style="width: 100%;">
-            <input style="width: 70%; float: left;" type="text" id="message" placeholder="Type a message..." />
-            <button style="float: left; width: 15%; padding-left: 15px;" onclick="sendMessage()">Join</button>
+            <input style="width: 70%; float: left;" type="text" placeholder="Type a message..." />
+            <button style="float: left; width: 15%; padding-left: 15px;" onclick="">Join</button>
         </div>
         <!-- Add more chat rooms as needed -->
     </div>
@@ -121,6 +123,46 @@
 <script>
 
 
+    var roomId = "public"
+    function createChatRoom() {
+
+        disconnect();
+        roomId = prompt("채팅방 아이디를 아무거나 입력하세요 ex) 1234")
+        
+        connect();
+
+        fetch('/createChatRoom', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: roomId
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Failed to create chat room');
+            }
+            return response.text(); // 서버에서 반환한 문자열을 받음
+        })
+        .then(function (data) {
+            console.log('Server response:', data); // 서버 응답을 클라이언트 콘솔에 출력
+        })
+        .catch(function (error) {
+            console.error('Error creating chat room:', error);
+        });
+
+    }
+
+
+    function joinChatRoom() {
+
+        disconnect();
+        roomId = prompt("들어갈 채팅방 아이디를 입력하세요 ex) 1234")
+        connect();
+
+    }
+
+
     var stompClient = null;
 
     function connect() {
@@ -128,7 +170,7 @@
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/public', function (chatMessage) {
+            stompClient.subscribe('/topic/' + roomId, function (chatMessage) {
                 showMessage(JSON.parse(chatMessage.body));
             });
         });
@@ -146,7 +188,8 @@
         var sender = $('#sender').val();
 
         if (message !== "") { // 메시지가 비어있지 않으면 전송
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ 'content': message, 'sender': sender }));
+
+            stompClient.send("/app/chat.sendToNewTopic", {}, JSON.stringify({ 'content': message, 'sender': sender, 'topic': "LLLL" + roomId + "LLLL" }));
             $('#message').val(""); // 메시지 전송 후 입력란 초기화
         }
 }
@@ -162,7 +205,6 @@
     $(document).ready(function () {
         connect();
         $('#message').on('keyup', function(event) {
-            console.log("wef")
             if (event.keyCode === 13) { // 엔터 키 눌렀을 때
                 sendMessage();
             }
