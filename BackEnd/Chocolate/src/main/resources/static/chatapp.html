@@ -100,13 +100,7 @@
             <button onclick="createChatRoom()">방 생성하기</button>
             <button onclick="joinChatRoom()">방 접속하기</button>
         </div>
-        <h2>Joined Rooms</h2>
 
-
-        <div style="width: 100%;">
-            <input style="width: 70%; float: left;" type="text" placeholder="Type a message..." />
-            <button style="float: left; width: 15%; padding-left: 15px;" onclick="">Join</button>
-        </div>
         <!-- Add more chat rooms as needed -->
     </div>
     <div id="chat-main" style="margin-left: 20px;">
@@ -130,6 +124,7 @@
         roomId = prompt("채팅방 아이디를 아무거나 입력하세요 ex) 1234")
         
         connect();
+        $("#chat").html("");
 
         fetch('/createChatRoom', {
             method: 'POST',
@@ -139,6 +134,8 @@
             body: roomId
         })
         .then(function (response) {
+
+
             if (!response.ok) {
                 throw new Error('Failed to create chat room');
             }
@@ -159,6 +156,7 @@
         disconnect();
         roomId = prompt("들어갈 채팅방 아이디를 입력하세요 ex) 1234")
         connect();
+        $("#chat").html("");
 
     }
 
