@@ -1,32 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <title>WebSocket Chat123</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        #chat-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #chat-sidebar {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+        }
+
+        #chat-main {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .chat-room {
+            margin-bottom: 10px;
         }
 
         #chat {
             overflow-y: scroll;
-            max-height: 300px;
             border: 1px solid #ccc;
             padding: 10px;
+            border-radius: 5px;
         }
 
         .message {
             margin-bottom: 10px;
+            text-align: right;
         }
 
         .my-message {
-            float: right;
             color: #fff;
             background-color: #007bff;
             border-radius: 10px;
             padding: 10px;
             display: inline-block;
+            float: right;
         }
 
         .other-message {
@@ -35,16 +61,28 @@
             border-radius: 10px;
             padding: 10px;
             display: inline-block;
+            float: left;
         }
 
         input[type="text"] {
-            width: 80%;
-            padding: 8px;
-            margin-right: 5px;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         button {
-            padding: 8px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +92,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+<div id="chat-container" style="margin-top: 20px;">
+    <div id="chat-sidebar">
+        <h2>Chat Rooms</h2>
+        <div class="chat-room">
+            <button>Create Chat Room</button>
+        </div>
+        <h2>Joined Rooms</h2>
+
+
+        <div style="width: 100%;">
+            <input style="width: 70%; float: left;" type="text" id="message" placeholder="Type a message..." />
+            <button style="float: left; width: 15%; padding-left: 15px;" onclick="sendMessage()">Join</button>
+        </div>
+        <!-- Add more chat rooms as needed -->
+    </div>
+    <div id="chat-main" style="margin-left: 20px;">
+        <input type="text" id="sender" style="width: 97%;" placeholder="Your Name" />
+        <div id="chat"></div>
+        <div style="width: 100%;">
+            <input style="width: 80%; float: left;" type="text" id="message" placeholder="Type a message..." />
+            <button style="float: left; width: 15%;" onclick="sendMessage()">Send</button>
+        </div>
+        <button onclick="disconnect()" style="float: right; margin: 10px 20px 0 0;">Disconnect</button>
+    </div>
+</div>
+
 <script>
+
+
     var stompClient = null;
 
     function connect() {
@@ -78,9 +144,12 @@
     function sendMessage() {
         var message = $('#message').val();
         var sender = $('#sender').val();
-        $('#message').val("")
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ 'content': message, 'sender': sender }));
-    }
+
+        if (message !== "") { // 메시지가 비어있지 않으면 전송
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ 'content': message, 'sender': sender }));
+            $('#message').val(""); // 메시지 전송 후 입력란 초기화
+        }
+}
 
     function showMessage(message) {
         var formattedMessage = '<div class="message ' + (message.sender === $('#sender').val() ? 'my-message' : 'other-message') + '">' + message.sender + ': ' + message.content + '</div>';
@@ -89,19 +158,38 @@
         $('#chat').scrollTop($('#chat')[0].scrollHeight);
     }
 
+
     $(document).ready(function () {
         connect();
+        $('#message').on('keyup', function(event) {
+            console.log("wef")
+            if (event.keyCode === 13) { // 엔터 키 눌렀을 때
+                sendMessage();
+            }
+        });
+
+
+
+        function setChatMainHeight() {
+            var windowHeight = $(window).height();
+            var chatContainerHeight = $('#chat-container').height();
+            var headerHeight = $('header').height();
+
+            var chatMainHeight = windowHeight*1 - 80;
+            $('#chat-main').height(chatMainHeight);
+            $('#chat').height($('#chat-main').height() - 150)
+            console.log(chatMainHeight);
+
+        }
+
+        setChatMainHeight();
+
+        $(window).on('resize', function () {
+            setChatMainHeight();
+        });
+
     });
 </script>
-
-
-<div>
-    <div id="chat"></div>
-    <input type="text" id="sender" placeholder="Your Name" />
-    <input type="text" id="message" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
-    <button onclick="disconnect()">Disconnect</button>
-</div>
 
 </body>
 </html>
