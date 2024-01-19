@@ -14,10 +14,6 @@ public class TopicService {
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void createTopic(String topicName) {
-        String topicPath = "/topic/" + topicName;
-        messagingTemplate.convertAndSend(topicPath, "New topic created: " + topicName);
-    }
 
     public void deleteTopic(String topicName) {
         String topicPath = "/topic/" + topicName;

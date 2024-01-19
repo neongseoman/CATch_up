@@ -88,18 +88,22 @@
 
 
         .live-item {
-            padding: 10px;
-            border-bottom: solid #ddd 1px;
-            display: flex;
-            align-items: center;
-            transition: background-color 0.2s, cursor 0.2s;
-        }
+        padding: 10px;
+        border-bottom: solid #ddd 1px;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s, cursor 0.2s;
+    }
+    .live-item:hover {
+        background-color: #f0f0f0; 
+        cursor: pointer;
+    }
 
-        .live-item:hover {
-            background-color: #f0f0f0;
-            cursor: pointer;
-        }
-
+    .live-item.clicked {
+        background-color: rgb(103, 103, 103);
+        color: #fff;
+        font-weight: bold;
+    }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -112,27 +116,28 @@
     <div id="chat-sidebar">
         <h2>Chat Rooms</h2>
         <div class="chat-room" style="display: none;">
-            <button onclick="createChatRoom()">방 생성하기</button>
+            <button onclick="joinChatRoom()">방 생성하기</button>
             <button onclick="joinChatRoom()">방 접속하기</button>
         </div>
         
-        <div class="live-item" onclick="roomId = 'limlive'; joinChatRoom(false)">
+        
+        <div class="live-item" onclick="roomId = 'limlive'; joinChatRoom(false); handleClick(this)">
             <img style="width:100px; height: 100px; margin-right: 10px;" src="https://newsimg.sedaily.com/2022/09/07/26AZCXCOBS_1.jpg" alt="YTN ON AIR">
             <div>
                 <h3>[라이브] 임재범 라이브 공연</h3>
                 <p>4.2천명 시청 중</p>
             </div>
         </div>
-        
-        <div class="live-item" onclick="roomId = 'bblive'; joinChatRoom(false)">
+
+        <div class="live-item" onclick="roomId = 'bblive'; joinChatRoom(false); handleClick(this)">
             <img style="width:100px; height: 100px; margin-right: 10px;" src="https://thumb.mtstarnews.com/06/2023/09/2023090508401619946_2.jpg/dims/optimize" alt="YTN ON AIR">
             <div>
                 <h3>[라이브] 홍대 비비 라이브 공연</h3>
                 <p>6.5천명 시청 중</p>
             </div>
         </div>
-        
-        <div class="live-item" onclick="roomId = 'kimlive'; joinChatRoom(false)">
+
+        <div class="live-item" onclick="roomId = 'kimlive'; joinChatRoom(false); handleClick(this)">
             <img style="width:100px; height: 100px; margin-right: 10px;" src="https://archivenew.vop.co.kr/images/f4c45d1dcc36120a194dab578b083a1f/2012-03/17040702_123123123.jpg" alt="YTN ON AIR">
             <div>
                 <h3>[라이브] 김경호 라이브 공연</h3>
@@ -140,7 +145,6 @@
             </div>
         </div>
           
-        <!-- Add more chat rooms as needed -->
     </div>
     <div id="chat-main" style="margin-left: 20px;">
         <input type="text" id="sender" style="width: 97%; pointer-events: none;" placeholder="Your Name" />
@@ -157,48 +161,26 @@
 
 
     var roomId = "public"
-    function createChatRoom() {
-
-        disconnect();
-        roomId = prompt("채팅방 아이디를 아무거나 입력하세요 ex) 1234")
-        
-        connect();
-        $("#chat").html("");
-
-        fetch('/createChatRoom', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: roomId
-        })
-        .then(function (response) {
 
 
-            if (!response.ok) {
-                throw new Error('Failed to create chat room');
-            }
-            return response.text(); // 서버에서 반환한 문자열을 받음
-        })
-        .then(function (data) {
-            console.log('Server response:', data); // 서버 응답을 클라이언트 콘솔에 출력
-        })
-        .catch(function (error) {
-            console.error('Error creating chat room:', error);
-        });
 
+    let lastClickedItem = null;
+
+    function handleClick(item) {
+        if (lastClickedItem !== null) {
+            lastClickedItem.classList.remove('clicked');
+        }
+        item.classList.add('clicked');
+        lastClickedItem = item;
     }
 
 
     function joinChatRoom(useRoomId = true) {
-
-
         disconnect();
         if (useRoomId)
             roomId = prompt("들어갈 채팅방 아이디를 입력하세요 ex) 1234")
         connect();
         $("#chat").html("<h4>방에 접속하셨습니다.</h4>");
-
     }
 
 
