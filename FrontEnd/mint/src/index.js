@@ -1,17 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const video = document.querySelector("video");
+const constraints = {video: true, audio:true}
+const userNickName = "moonjar";
+const email = "moonjar@gmail.com"
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+window.onload = () => {
+    document.getElementById("camera_on_button").addEventListener("click", cameraOn)
+}
+function cameraOn() {
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            const videoTrack = stream.getVideoTracks();
+            const audioTrack = stream.getAudioTracks();
+            console.log("Your stream is gotten.", constraints)
+
+            stream.onremovetrack = () => {
+                console.log("your stream is done");
+            }
+
+            video.srcObject = stream;
+        }).catch((error) => {
+        if (error.name === "OverconstrainedError") {
+            console.error(
+                `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`,
+            );
+        } else if (error.name === "NotAllowedError") {
+            console.error(
+                "You need to grant this page permission to access your camera and microphone.",
+            );
+        } else {
+            console.error(`getUserMedia error: ${error.name}`, error);
+        }
+    });
+}
+
+
+const regist = ()=> {
+
+}
+
