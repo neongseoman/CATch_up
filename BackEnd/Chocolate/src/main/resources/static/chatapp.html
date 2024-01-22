@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat123</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        #chat-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #chat-sidebar {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+        }
+
+        #chat-main {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .chat-room {
+            margin-bottom: 10px;
+        }
+
+        #chat {
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            text-align: right;
+        }
+
+        .my-message {
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 10px;
+            padding: 10px;
+            display: inline-block;
+            float: right;
+        }
+
+        .other-message {
+            text-align: left;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 10px;
+            display: inline-block;
+            float: left;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .live-item {
+        padding: 10px;
+        border-bottom: solid #ddd 1px;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s, cursor 0.2s;
+    }
+    .live-item:hover {
+        background-color: #f0f0f0; 
+        cursor: pointer;
+    }
+
+    .live-item.clicked {
+        background-color: rgb(103, 103, 103);
+        color: #fff;
+        font-weight: bold;
+    }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.1.2/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<div id="chat-container" style="margin-top: 20px;">
+    <div id="chat-sidebar">
+        <h2>Chat Rooms</h2>
+        <div class="chat-room" style="display: none;">
+            <button onclick="joinChatRoom()">방 생성하기</button>
+            <button onclick="joinChatRoom()">방 접속하기</button>
+        </div>
+        
+        
+        <div class="live-item" onclick="roomId = 'limlive'; joinChatRoom(false); handleClick(this)">
+            <img style="width:100px; height: 100px; margin-right: 10px;" src="https://newsimg.sedaily.com/2022/09/07/26AZCXCOBS_1.jpg" alt="YTN ON AIR">
+            <div>
+                <h3>[라이브] 임재범 라이브 공연</h3>
+                <p>4.2천명 시청 중</p>
+            </div>
+        </div>
+
+        <div class="live-item" onclick="roomId = 'bblive'; joinChatRoom(false); handleClick(this)">
+            <img style="width:100px; height: 100px; margin-right: 10px;" src="https://thumb.mtstarnews.com/06/2023/09/2023090508401619946_2.jpg/dims/optimize" alt="YTN ON AIR">
+            <div>
+                <h3>[라이브] 홍대 비비 라이브 공연</h3>
+                <p>6.5천명 시청 중</p>
+            </div>
+        </div>
+
+        <div class="live-item" onclick="roomId = 'kimlive'; joinChatRoom(false); handleClick(this)">
+            <img style="width:100px; height: 100px; margin-right: 10px;" src="https://archivenew.vop.co.kr/images/f4c45d1dcc36120a194dab578b083a1f/2012-03/17040702_123123123.jpg" alt="YTN ON AIR">
+            <div>
+                <h3>[라이브] 김경호 라이브 공연</h3>
+                <p>3.2천명 시청 중</p>
+            </div>
+        </div>
+          
+    </div>
+    <div id="chat-main" style="margin-left: 20px;">
+        <input type="text" id="sender" style="width: 97%; pointer-events: none;" placeholder="Your Name" />
+        <div id="chat"></div>
+        <div style="width: 100%;">
+            <input style="width: 80%; float: left;" type="text" id="message" placeholder="Type a message..." />
+            <button style="float: left; width: 15%;" onclick="sendMessage()">Send</button>
+        </div>
+        <button onclick="disconnect()" style="float: right; margin: 10px 20px 0 0;">Disconnect</button>
+    </div>
+</div>
+
+<script>
+
+
+    var roomId = "public"
+
+
+
+    let lastClickedItem = null;
+
+    function handleClick(item) {
+        if (lastClickedItem !== null) {
+            lastClickedItem.classList.remove('clicked');
+        }
+        item.classList.add('clicked');
+        lastClickedItem = item;
+    }
+
+
+    function joinChatRoom(useRoomId = true) {
+        disconnect();
+        if (useRoomId)
+            roomId = prompt("들어갈 채팅방 아이디를 입력하세요 ex) 1234")
+        connect();
+        $("#chat").html("<h4>방에 접속하셨습니다.</h4>");
+    }
+
+
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/' + roomId, function (chatMessage) {
+                showMessage(JSON.parse(chatMessage.body));
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+
+
+    const animalNames = [
+        '라이언', '호랑이', '팬더', '곰', '코끼리',
+        '기린', '치타', '하이에나', '강아지', '고양이',
+        '독수리', '펭귄', '하마', '기러기', '물소',
+        '오리', '물개', '치마', '타조', '캥거루',
+        '토끼', '다람쥐', '쿼카', '앵무새', '북극곰',
+        '카멜', '히말라야산의 고양이', '얼룩말', '침팬지'
+    ];
+
+    const randomIndex = Math.floor(Math.random() * animalNames.length);
+    $('#sender').val(animalNames[randomIndex]);
+    function sendMessage() {
+        var message = $('#message').val();
+        var sender = $('#sender').val();
+
+        if (message !== "") { // 메시지가 비어있지 않으면 전송
+
+            stompClient.send("/app/chat.sendToNewTopic", {}, JSON.stringify({ 'content': message, 'sender': sender, 'topic': "LLLL" + roomId + "LLLL" }));
+            $('#message').val(""); // 메시지 전송 후 입력란 초기화
+        }
+}
+
+    function showMessage(message) {
+        var formattedMessage = '<div class="message ' + (message.sender === $('#sender').val() ? 'my-message' : 'other-message') + '">' + message.sender + ': ' + message.content + '</div>';
+        $('#chat').append("<div style='width: 100%; float: left;'>" + formattedMessage + "</div>");
+        // Scroll to the bottom of the chat
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+    }
+
+
+    $(document).ready(function () {
+        connect();
+        $('#message').on('keyup', function(event) {
+            if (event.keyCode === 13) { // 엔터 키 눌렀을 때
+                sendMessage();
+            }
+        });
+
+
+
+        function setChatMainHeight() {
+            var windowHeight = $(window).height();
+            var chatContainerHeight = $('#chat-container').height();
+            var headerHeight = $('header').height();
+
+            var chatMainHeight = windowHeight*1 - 80;
+            $('#chat-main').height(chatMainHeight);
+            $('#chat').height($('#chat-main').height() - 150)
+            console.log(chatMainHeight);
+
+        }
+
+        setChatMainHeight();
+
+        $(window).on('resize', function () {
+            setChatMainHeight();
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -39,6 +39,11 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    implementation 'org.webjars:webjars-locator-core'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3'
+
 //    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 //    implementation 'org.springframework.session:spring-session-data-redis'
 //    implementation 'org.springframework.session:spring-session-jdbc'
