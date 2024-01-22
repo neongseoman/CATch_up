@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker(new String[]{"/topic"});
         config.setApplicationDestinationPrefixes(new String[]{"/app"});
     }
-
+gi
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(new String[]{"/chat"}).withSockJS();
     }
