@@ -27,7 +27,7 @@ public class ChatController {
         topicService.deleteTopic(topicName);
         return "success";
     }
-    @MessageMapping("/chat.sendToNewTopic") // 클라이언트에서 해당 경로로 메시지를 전송
+    @MessageMapping("/chat.sendToNewTopic") // 클라이언트에서 해당 경로로 메시지를 전송..
     public void sendToNewTopic(@Payload String message) {
         String topicName = message.split("LLLL")[1];
         String topicPath = "/topic/" + topicName;
