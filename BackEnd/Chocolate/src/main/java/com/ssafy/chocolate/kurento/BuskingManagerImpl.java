@@ -1,14 +1,18 @@
 package com.ssafy.chocolate.kurento;
 
+import com.google.gson.JsonObject;
+import com.ssafy.chocolate.exception.NoBuskingException;
 import org.kurento.client.KurentoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class BuskingManagerImpl implements BuskingManager {
 
     private final Logger log = LoggerFactory.getLogger(BuskingManagerImpl.class);
@@ -46,21 +50,36 @@ public class BuskingManagerImpl implements BuskingManager {
     }
 
     @Override
-    public BuskingImpl startBusking(String busker, WebSocketSession session) {
-        BuskingImpl buskingImpl = buskings.get(busker);
-        if (buskingImpl != null){
-            log.debug("There is busker, U can not new Busking");
+    public BuskingImpl startBusking(WebSocketSession session, JsonObject jsonMessage) throws NoBuskingException, IOException {
+        String busker = jsonMessage.get("busker").getAsString();
+        BuskingImpl buskingImpl = null;
+        if (!buskings.containsKey(busker)) {
+            buskingImpl = new BuskingImpl(busker,session,kurentoClient, jsonMessage);
+            buskings.put(busker, buskingImpl);
+
+            return buskingImpl;
+        } else{
+            log.debug("There is a busker, U can not new Busking");
+            throw new NoBuskingException("버스킹 이미 하고 있는데용?");
         }
-        buskingImpl = new BuskingImpl(busker,kurentoClient.createMediaPipeline(),session);
-        buskings.put(busker, buskingImpl);
-        return buskingImpl;
+
     }
 
     @Override
-    public UserSession joinBusking(String busker, String audience, WebSocketSession session) {
+    public UserSession joinBusking(WebSocketSession session,JsonObject jsonMessage) {
+        String busker = jsonMessage.get("busker").getAsString();
+        String audience = jsonMessage.get("audience").getAsString();
         BuskingImpl buskingImpl = buskings.get(busker);
         UserSession userSession = buskingImpl.join(audience,session);
         return userSession;
+    }
+
+    @Override
+    public void leaveBusking(WebSocketSession session, JsonObject jsonMessage) {
+        String busker = jsonMessage.get("busker").getAsString();
+        String audience = jsonMessage.get("audience").getAsString();
+        BuskingImpl buskingImpl = buskings.get(busker);
+        buskingImpl.leave(audience);
 
     }
 }

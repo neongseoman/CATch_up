@@ -1,5 +1,7 @@
 package com.ssafy.chocolate.config;
 
+import com.ssafy.chocolate.kurento.BuskingManager;
+import com.ssafy.chocolate.kurento.BuskingManagerImpl;
 import com.ssafy.chocolate.kurento.CallHandler;
 import org.kurento.client.KurentoClient;
 import org.springframework.context.annotation.Bean;
@@ -12,15 +14,15 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
-    private final KurentoClient kurentoClient;
+    private final BuskingManagerImpl buskingManagerImpl;
 
-    public WebSocketConfig(KurentoClient kurentoClient) {
-        this.kurentoClient = kurentoClient;
+    public WebSocketConfig(BuskingManagerImpl buskingManagerImpl) {
+        this.buskingManagerImpl = buskingManagerImpl;
     }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new CallHandler(kurentoClient),"/busking");
+        registry.addHandler(new CallHandler(buskingManagerImpl),"/busking");
     }
 
 

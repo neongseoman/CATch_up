@@ -3,6 +3,7 @@ package com.ssafy.chocolate.kurento;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.ssafy.chocolate.exception.NoBuskingException;
 import org.kurento.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,18 +12,19 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
+
 
 public class CallHandler extends TextWebSocketHandler {
 
-    public CallHandler(KurentoClient kurentoClient) {
-        this.kurentoClient = kurentoClient;
+    public CallHandler(BuskingManagerImpl buskingManager) {
+        this.buskingManager = buskingManager;
     }
 
     private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
     private static final Gson gson = new GsonBuilder().create();
 
-    private final KurentoClient kurentoClient;
-    private MediaPipeline pipeline;
+    private final BuskingManagerImpl buskingManager;
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -33,8 +35,10 @@ public class CallHandler extends TextWebSocketHandler {
         log.debug(sb.toString());
         switch (type) {
             case "startBusking":
+                startBusking(session,jsonMessage);
             case "joinBusking":
                 try {
+                    buskingManager.joinBusking(session, jsonMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -53,9 +57,8 @@ public class CallHandler extends TextWebSocketHandler {
         super.handleTextMessage(session, message);
     }
 
-    public void startBusking(WebSocketSession session,JsonObject jsonMessage){
-        String userId = jsonMessage.get("userId").getAsString();
-//        BuskingManager.
+    public void startBusking(WebSocketSession session,JsonObject jsonMessage) throws NoBuskingException, IOException {
+        buskingManager.startBusking(session,jsonMessage);
     }
 
 }

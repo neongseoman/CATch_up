@@ -12,7 +12,6 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @EnableWebSocket
 public class ChocolateApplication {
 
-
     @Bean
     public KurentoClient kurentoClient() {
         return KurentoClient.create();
