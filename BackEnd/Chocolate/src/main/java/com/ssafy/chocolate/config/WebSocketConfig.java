@@ -1,23 +1,35 @@
 package com.ssafy.chocolate.config;
 
+import com.ssafy.chocolate.kurento.BuskingManagerImpl;
+import com.ssafy.chocolate.kurento.CallHandler;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.*;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
 
 @Configuration
+@EnableWebSocket
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    public WebSocketConfig() {
+public class WebSocketConfig implements WebSocketConfigurer,WebSocketMessageBrokerConfigurer  {
+    private final BuskingManagerImpl buskingManagerImpl;
+
+    public WebSocketConfig(BuskingManagerImpl buskingManagerImpl) {
+        this.buskingManagerImpl = buskingManagerImpl;
     }
+
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(new CallHandler(buskingManagerImpl),"/busking");
+    }
+
 
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker(new String[]{"/topic"});
         config.setApplicationDestinationPrefixes(new String[]{"/app"});
     }
-gi
+
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(new String[]{"/chat"}).withSockJS();
     }
+
 }
