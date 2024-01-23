@@ -158,11 +158,7 @@
 </div>
 
 <script>
-
-
     var roomId = "public"
-
-
 
     let lastClickedItem = null;
 
@@ -205,17 +201,6 @@
     }
 
 
-    const animalNames = [
-        '라이언', '호랑이', '팬더', '곰', '코끼리',
-        '기린', '치타', '하이에나', '강아지', '고양이',
-        '독수리', '펭귄', '하마', '기러기', '물소',
-        '오리', '물개', '치마', '타조', '캥거루',
-        '토끼', '다람쥐', '쿼카', '앵무새', '북극곰',
-        '카멜', '히말라야산의 고양이', '얼룩말', '침팬지'
-    ];
-
-    const randomIndex = Math.floor(Math.random() * animalNames.length);
-    $('#sender').val(animalNames[randomIndex]);
     function sendMessage() {
         var message = $('#message').val();
         var sender = $('#sender').val();
@@ -236,6 +221,7 @@
 
 
     $(document).ready(function () {
+        fetchUserInfo();
         connect();
         $('#message').on('keyup', function(event) {
             if (event.keyCode === 13) { // 엔터 키 눌렀을 때
@@ -264,6 +250,21 @@
         });
 
     });
+
+    function fetchUserInfo() {
+    $.ajax({
+        url: '/api/userinfo',
+        type: 'GET',
+        success: function(response) {
+            console.log('1234User info:', response);
+            $('#sender').val(response);
+        },
+        error: function(error) {
+            console.log('Error fetching user info:', error);
+        }
+    });
+}
+
 </script>
 
 </body>
