@@ -1,4 +1,4 @@
-package com.ssafy.chocolate.config;
+package com.ssafy.chocolate.chatting.config;
 
 import com.ssafy.chocolate.kurento.BuskingManagerImpl;
 import com.ssafy.chocolate.kurento.CallHandler;

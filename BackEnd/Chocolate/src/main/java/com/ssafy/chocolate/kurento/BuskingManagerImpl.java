@@ -1,14 +1,13 @@
 package com.ssafy.chocolate.kurento;
 
 import com.google.gson.JsonObject;
-import com.ssafy.chocolate.exception.NoBuskingException;
+import com.ssafy.chocolate.kurento.exception.NoBuskingException;
 import org.kurento.client.KurentoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
