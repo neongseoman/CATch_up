@@ -49,7 +49,6 @@ public class ChatController {
         return "chatapp.html";
     }
 
-
     @GetMapping("/api/userinfo")
     public ResponseEntity<?> getUserInfo() {
         String username = getCurrentUsername();

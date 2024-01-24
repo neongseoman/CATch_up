@@ -33,5 +33,34 @@
         <button class="btn btn-sm btn-danger btn-block" type="submit">로그아웃</button>
     </form>
 </div>
+<script>
+    //위치정보 보내는 코드
+    if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(sendPositionToServer);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+
+    function sendPositionToServer(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        // POST 요청을 위한 옵션 설정
+        var requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude: latitude, longitude: longitude }),
+        };
+
+        // 서버로 요청 보내기
+        fetch('/api/location', requestOptions)
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+
+
+
+</script>
 </body>
 </html>
