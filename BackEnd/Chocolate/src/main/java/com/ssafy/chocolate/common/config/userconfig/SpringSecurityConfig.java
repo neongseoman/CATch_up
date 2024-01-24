@@ -29,7 +29,7 @@ public class SpringSecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/status", "/img/**", "/user/join", "/auth/join").permitAll()
+                        .requestMatchers("/**","/status", "/img/**", "/user/join", "/auth/join").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
