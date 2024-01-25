@@ -11,9 +11,9 @@ const stompClient = new StompJS.Client({
 const video = document.querySelector("video");
 const constraints = {video: true, audio: false}
 
-var iceServers
-var pcConfig
-var pc
+let iceServers
+let pcConfig
+let pc
 
 
 window.onload = () => {
@@ -70,8 +70,6 @@ const cameraOn = () => {
 
 const broadCast = async () => {
     console.log("방송 버튼 눌림")
-    // console.log(stompClient.state)
-    // if (stompClient.state)
     sendMessage("hello world")
     sendMessage("방송버튼 눌림")
     pc.createOffer()
@@ -88,7 +86,7 @@ const stompInit = () => {
     if ( typeof WebSocket !== 'function'){
         console.log("no websocket")
         stompClient.webSocketFactory = function (){
-            return new SockJS("http://127.0.0.1:8080/busking")
+            return new SockJS("ws://127.0.0.1:8080/busking")
         }
     }
 
