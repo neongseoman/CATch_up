@@ -1,5 +1,3 @@
-// 검색 결과
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PlaceResult from './PlaceResult';
@@ -21,6 +19,7 @@ const Buttons = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
 `;
 
 const ResultButton =styled.button`
@@ -30,13 +29,6 @@ const ResultButton =styled.button`
     border-radius: 20px;
     width: calc(33% - 5px);
     height: 50px;
-    background: #525252;
-    &:hover {
-        background: #777777;
-    }
-    &:active {
-        background: #F7B84B;
-    }
 `;
 
 const SearchResult = () => {
@@ -53,7 +45,6 @@ const SearchResult = () => {
     const [viewPlaceResult, setViewPlaceResult] = useState(tmp.viewPlaceResult);
     const [viewStreamerResult, setViewStreamerResult] = useState(tmp.viewStreamerResult);
     const [viewShortsResult, setViewShortsResult] = useState(tmp.viewShortsResult);
-    const [message, setMessage] = useState()
     
     // 상태가 변경될 때마다 로컬 스토리지에 저장
     useEffect(() => {
@@ -87,11 +78,11 @@ const SearchResult = () => {
     return (
         <center>
             <Wrapper>
-                <PageTitle>{message}</PageTitle>
+                <PageTitle>검색 결과</PageTitle>
                 <Buttons>
-                    <ResultButton onClick={handlePlaceClick}>장소</ResultButton>
-                    <ResultButton onClick={handleStreamerClick}>스트리머</ResultButton>
-                    <ResultButton onClick={handleShortsClick}>쇼츠</ResultButton>
+                    <ResultButton onClick={handlePlaceClick} style={{ background: viewPlaceResult ? '#F7B84B' : '#5E6468' }}>장소</ResultButton>
+                    <ResultButton onClick={handleStreamerClick} style={{ background: viewStreamerResult ? '#F7B84B' : '#5E6468' }}>스트리머</ResultButton>
+                    <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#F7B84B' : '#5E6468' }}>쇼츠</ResultButton>
                 </Buttons>
                 {viewPlaceResult && <PlaceResult />}
                 {viewStreamerResult && <StreamerResult />}
