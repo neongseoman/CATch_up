@@ -22,14 +22,13 @@ public class WebSocketConfig implements WebSocketConfigurer,WebSocketMessageBrok
         registry.addHandler(new CallHandler(buskingManagerImpl),"/busking");
     }
 
-
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker(new String[]{"/topic"});
         config.setApplicationDestinationPrefixes(new String[]{"/app"});
     }
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(new String[]{"/chat"}).withSockJS();
+        // registry.addEndpoint(new String[]{"/chat"}).setAllowedOrigins("*");
+        registry.addEndpoint(new String[]{"/chat"}).setAllowedOriginPatterns("*").withSockJS();
     }
-
 }
