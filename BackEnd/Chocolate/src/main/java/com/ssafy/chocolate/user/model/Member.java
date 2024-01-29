@@ -2,9 +2,13 @@ package com.ssafy.chocolate.user.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
+@Getter
+@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,32 +21,25 @@ public class Member {
 
     private String roles;
 
-    private Member(Long id, String userid, String pw, String roleUser) {
+    private String following;
+    private String follower;
+    private String airtime;
+
+
+    public Member(Long id, String userid, String pw, String roles, String following, String follower, String airtime) {
         this.id = id;
         this.userid = userid;
         this.pw = pw;
-        this.roles = roleUser;
+        this.roles = roles;
+        this.following = following;
+        this.follower = follower;
+        this.airtime = airtime;
     }
 
     protected Member() {}
 
     public static Member createUser(String userId, String pw, PasswordEncoder passwordEncoder) {
-        return new Member(null, userId, passwordEncoder.encode(pw), "USER");
+        return new Member(null, userId, passwordEncoder.encode(pw), "USER","0","0","0");
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public String getPw() {
-        return pw;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
 }
