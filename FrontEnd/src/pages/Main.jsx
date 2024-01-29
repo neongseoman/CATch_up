@@ -23,6 +23,11 @@ const Main = () => {
           );
         })}
       </ListWrapper>
+
+
+        <Link to="/streaming">
+            <Button>방송하기</Button>
+        </Link>
     </>
   );
 };
