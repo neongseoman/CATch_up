@@ -22,14 +22,14 @@ p {
   color: var(--font-black);
 }
 :root {
-  --main: #00a5b9;
+  --main: #e8543d;
   --sub-color: #eab64d;
 
   --alert-green: #31a215;
   --alert-amber: #ef8523;
   --alert-red: #f14646;
 
-  --font-main: #558c99;
+  --font-main: #802b2b;
   --font-black: #3d4a59;
   --font-gray: #6d7a89;
   --font-light-gray: #b4b4b4;
