@@ -1,4 +1,4 @@
-package com.ssafy.chocolate.stream;
+package com.ssafy.chocolate.kurento.dto;
 
 import com.google.gson.JsonObject;
 import org.kurento.client.IceCandidate;

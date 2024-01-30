@@ -1,9 +1,10 @@
-package com.ssafy.chocolate.stream;
+package com.ssafy.chocolate.kurento;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.ssafy.chocolate.common.exception.NoBuskingException;
+import com.ssafy.chocolate.kurento.service.BuskingManagingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.TextMessage;
@@ -15,14 +16,14 @@ import java.io.IOException;
 
 public class CallHandler extends TextWebSocketHandler {
 
-    public CallHandler(BuskingManagerImpl buskingManager) {
+    public CallHandler(BuskingManagingService buskingManager) {
         this.buskingManager = buskingManager;
     }
 
     private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
     private static final Gson gson = new GsonBuilder().create();
 
-    private final BuskingManagerImpl buskingManager;
+    private final BuskingManagingService buskingManager;
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -55,7 +56,7 @@ public class CallHandler extends TextWebSocketHandler {
         super.handleTextMessage(session, message);
     }
 
-    public void startBusking(WebSocketSession session,JsonObject jsonMessage) throws NoBuskingException, IOException {
+    public void startBusking(WebSocketSession session,JsonObject jsonMessage) throws IOException, NoBuskingException {
         buskingManager.startBusking(session,jsonMessage);
     }
 
