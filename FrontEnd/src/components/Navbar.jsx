@@ -96,7 +96,7 @@ const Header = styled.header`
   width: 100%;
   padding: 15px;
   height: ${props => props.isMainPage ? '320px' : '50px'};
-  border-bottom: 1px solid var(--line-gray);
+
   background-color: var(--main);
   display: flex; /* 플렉스 컨테이너로 설정 */
   justify-content: center; /* 수평 중앙 정렬 */

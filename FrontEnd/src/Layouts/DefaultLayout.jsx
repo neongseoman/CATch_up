@@ -36,9 +36,7 @@ const DefaultLayout = styled.div`
   margin: 0 auto;
   max-width: 720px;
   padding: 36px;
-  border-radius: 16px;
-  border: 1px solid #ddd;
-  background-color: #fff;
+  background-color: #000;
   display: flex;
   flex-direction: column;
   gap: 24px;
