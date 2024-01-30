@@ -5,21 +5,24 @@ import Page from './pages/Page';
 import { Layout, NavLayout } from './Layouts/DefaultLayout';
 import { useEffect } from 'react';
 
+import SearchResult from './Search/SearchResult';
+
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<NavLayout />}>
-          <Route path='/' element={<Main />} />
-          <Route path='/page/:pageId' element={<Page />} />
-        </Route>
-        <Route path="user" element={<Layout />}>
-            <Route path='login' element={<Login />} />
-            <Route path='logout' element={<Login />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <SearchResult />
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route element={<NavLayout />}>
+    //       <Route path='/' element={<Main />} />
+    //       <Route path='/page/:pageId' element={<Page />} />
+    //     </Route>
+    //     <Route path="user" element={<Layout />}>
+    //         <Route path='login' element={<Login />} />
+    //         <Route path='logout' element={<Login />} />
+    //     </Route>
+    //   </Routes>
+    // </BrowserRouter>
   );
 }
 
