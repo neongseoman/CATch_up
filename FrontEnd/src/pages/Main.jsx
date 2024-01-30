@@ -28,6 +28,10 @@ const Main = () => {
         <Link to="/streaming">
             <Button>방송하기</Button>
         </Link>
+
+        <Link to="/watching">
+            <Button>방송하기</Button>
+        </Link>
     </>
   );
 };

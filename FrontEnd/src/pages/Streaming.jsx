@@ -1,15 +1,28 @@
 import React, {useEffect} from "react";
 import CustomText from "../components/CustomText";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState.js"
+import {stompConnection} from "../WebRTC/StreamerStomp";
 
+const stompClient = stompConnection("busker")
 const Streaming =() =>{
-    useEffect(() => {
-        const constraints = {video:true,audio:true}
 
-        navigator.mediaDevices.getUserMedia(constraints)
+    const [userInfo,setUserInfo] = useRecoilState(userInfoState)
+    const userId = userInfo.userId
+    const userNickName = userInfo.userNickName
+    let count = 0
+
+    // Establish Web Socket
+
+    // Set Peer Connection
+
+    useEffect( () => {
+        const constraints = {video:true,audio:false}
+
+         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) =>{
                 const videoElement = document.getElementById("streamingVideo")
                 const videoTrack = stream.getVideoTracks();
-                console.log("video track is gotten")
                 videoElement.srcObject = stream;
 
             }).catch(error=>{
