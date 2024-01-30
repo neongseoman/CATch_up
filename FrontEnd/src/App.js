@@ -4,8 +4,9 @@ import Login from './pages/Login';
 import SignUpForm from './pages/SignUpForm'; // 회원가입 폼 import
 import Page from './pages/Page';
 import UserInfo from './pages/UserInfo';
-import {  NavLayout } from './Layouts/DefaultLayout';
+import {  NavLayout,NavLayoutWithoutDefault } from './Layouts/DefaultLayout';
 import ErrorPage from './pages/ErrorPage';
+import MainMapPage from './pages/MainMapPage'
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
         <Route element={<NavLayout />}>
           <Route path='/' element={<Main />} />
           <Route path='/page/:pageId' element={<Page />} />
+        </Route>
+        <Route element={<NavLayoutWithoutDefault />}>
+          <Route path='/map' element={<MainMapPage />} />
         </Route>
         <Route path="user" element={<NavLayout />}>
           <Route path='login' element={<Login />} />

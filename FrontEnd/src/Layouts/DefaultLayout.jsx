@@ -12,6 +12,16 @@ export const NavLayout = () => {
     </>
   );
 };
+
+export const NavLayoutWithoutDefault = () =>{
+  return (
+    <>
+      <Navbar />
+        <Outlet />
+    </>
+  );
+};
+
 export const Layout = () => {
   return (
     <DefaultLayout>
