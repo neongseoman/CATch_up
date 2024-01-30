@@ -6,7 +6,7 @@ import ChatApp from './components/ChatApp'
 import Streaming from './pages/Streaming'
 import { Layout, NavLayout } from './Layouts/DefaultLayout';
 import React, { useEffect } from 'react';
-import Streaming from "./pages/Streaming";
+import StreamingPage from "./pages/StreamingPage";
 import {Button} from "./components/Button";
 import {
     RecoilRoot,
@@ -36,6 +36,8 @@ function App() {
                   <Route path="user" element={<Layout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
+                  </Route>
+                  <Route path="streamingpage" element={<StreamingPage />}>
                   </Route>
               </Routes>
           </BrowserRouter>
