@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@stomp/stompjs": "^7.0.0",
