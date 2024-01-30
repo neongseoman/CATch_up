@@ -12,6 +12,11 @@ java {
     sourceCompatibility = '17'
 }
 
+bootJar {
+    duplicatesStrategy = 'EXCLUDE'
+}
+
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
