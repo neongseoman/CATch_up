@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@testing-library/jest-dom": "^5.14.1",
@@ -14,6 +15,7 @@
     "react-router": "^6.9.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "sockjs-client": "^1.1.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
