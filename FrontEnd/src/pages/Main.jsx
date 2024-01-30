@@ -10,7 +10,14 @@ const Main = () => {
         메인페이지 입니다
       </CustomText>
       <CustomText typography="p">메인페이지는 좋죠</CustomText>
-      <Link to={'/map'}>지도</Link>
+      <div>
+      Test Link: 
+      <Link to={'/map'}> 지도,</Link>
+      <Link to={'/streaming'}> 방송송출,</Link>
+      <Link to={'/watching'}> 방송시청,</Link>
+      <Link to={'/streamingpage'}> 스트리밍페이지</Link>
+      </div>
+
       
       <TwoColumnLayout>
         <ColumnContainer>제1항의 해임건의는 국회재적의원 3분의 1 이상의 발의에 의하여 국회재적의원 과반수의 찬성이 있어야 한다. 대통령후보자가 1인일 때에는 그 득표수가 선거권자 총수의 3분의 1 이상이 아니면 대통령으로 당선될 수 없다.<br/><br/>

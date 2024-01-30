@@ -39,17 +39,17 @@ function App() {
           <Route path='/page/:pageId' element={<Page />} />
           <Route path='/streaming' element={<Streaming />} />
           <Route path='/watching' element={<Watching />} />
+          
         </Route>
         <Route element={<NavLayoutWithoutDefault />}>
           <Route path='/map' element={<MainMapPage />} />
+          <Route path="/streamingpage" element={<StreamingPage />} />
         </Route>
         <Route path="user" element={<NavLayout />}>
           <Route path='login' element={<Login />} />
           <Route path='logout' element={<Login />} />
           <Route path='signup' element={<SignUpForm />} />
           <Route path='info' element={<UserInfo />} />
-        </Route>
-        <Route path="streamingpage" element={<StreamingPage />}>
         </Route>
         <Route path="/error" render={(props) => <ErrorPage {...props} />} />
       </Routes>
