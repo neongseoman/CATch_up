@@ -22,17 +22,27 @@ public class SignalController {
     private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @MessageMapping("/busker")
-    public void listenTestStomp( @Payload String message) {
-        System.out.println(message);
-        System.out.println("test");
-        HashMap<String,String> map = new HashMap<>();
-        map.put("test","test");
+//    @MessageMapping("/busker")
+//    public void listenTestStomp( @Payload String message) {
+//        System.out.println(message);
+////        System.out.println("test");
+//        HashMap<String,String> map = new HashMap<>();
+//        map.put("test","test");
+//
+//        simpMessagingTemplate.convertAndSend("/busker",map);
+//        return;
+//    }
 
-        simpMessagingTemplate.convertAndSend("/busker",map);
+    @MessageMapping("/busker/{buskerName}")
+    public void listenTestStomp2(@DestinationVariable String buskerName, @Payload String message) {
+        System.out.println(buskerName+" "+message);
+//        System.out.println("");
+        HashMap<String,String> map = new HashMap<>();
+        map.put("buskerName","test success");
+
+        simpMessagingTemplate.convertAndSend("/busker/"+buskerName,map);
         return;
     }
-
 
 
     @MessageMapping("startBusking")
