@@ -17,6 +17,8 @@ import Audience from "./pages/Watching";
 import Watching from "./pages/Watching";
 
 
+import SearchResult from './Search/SearchResult';
+
 function App() {
 
   return (
