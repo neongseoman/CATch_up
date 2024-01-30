@@ -11,7 +11,6 @@ import MainMapPage from './pages/MainMapPage'
 
 import ChatApp from './components/ChatApp'
 import Streaming from './pages/Streaming'
-import { Layout, NavLayout } from './Layouts/DefaultLayout';
 import React, { useEffect } from 'react';
 import StreamingPage from "./pages/StreamingPage";
 import {Button} from "./components/Button";

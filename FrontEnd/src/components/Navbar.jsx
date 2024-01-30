@@ -99,6 +99,12 @@ const Header = styled.header`
   display: flex; /* 플렉스 컨테이너로 설정 */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
+
+  // 모바일 화면에 대한 스타일
+  @media (max-width: 768px) {
+    flex-direction: column; // 세로 방향으로 쌓기
+    height: auto; // 높이 자동 조절
+  }
 `;
 
 const Nav = styled.nav`
@@ -115,11 +121,24 @@ const Nav = styled.nav`
   > a{
     background-color: var(--main);
   }
+
+  // 모바일 화면에 대한 스타일
+  @media (max-width: 768px) {
+    gap: 15px;
+    width: 100%; // 너비를 100%로 설정
+    justify-content: center; // 중앙 정렬
+  }
 `;
 
 const StyledLink = styled(Link)`
   color: var( --pure-white);
   font-weight: bold;
+
+  // 모바일 화면에 대한 스타일
+  @media (max-width: 768px) {
+    width:50px;
+    font-size:14px;
+  }
 `;
 
 export default Navbar;
