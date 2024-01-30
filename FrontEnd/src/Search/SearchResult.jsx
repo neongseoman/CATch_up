@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PlaceResult from './PlaceResult';
-import StreamerResult from './StreamerResult';
+import ProfileResult from './ProfileResult';
 import ShortsResult from './ShortsResult';
 
 const Wrapper = styled.div`
@@ -11,30 +11,33 @@ const Wrapper = styled.div`
     align-items: flex-start; /* 왼쪽 정렬 */
 `;
 
-const PageTitle = styled.h2`
+const PageTitle = styled.p`
     color: #5E6468;
+    font-size: 20px;
+    margin-bottom: 10px;
 `;
 
 const Buttons = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `;
 
 const ResultButton =styled.button`
     color: white;
     font-size: 24px;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     width: calc(33% - 5px);
     height: 50px;
+    cursor: pointer;
 `;
 
 const SearchResult = () => {
     var tmp = {
         viewPlaceResult: true,
-        viewStreamerResult: false,
+        viewProfileResult: false,
         viewShortsResult: false,
     };
 
@@ -43,35 +46,35 @@ const SearchResult = () => {
     }
 
     const [viewPlaceResult, setViewPlaceResult] = useState(tmp.viewPlaceResult);
-    const [viewStreamerResult, setViewStreamerResult] = useState(tmp.viewStreamerResult);
+    const [viewProfileResult, setViewProfileResult] = useState(tmp.viewProfileResult);
     const [viewShortsResult, setViewShortsResult] = useState(tmp.viewShortsResult);
     
     // 상태가 변경될 때마다 로컬 스토리지에 저장
     useEffect(() => {
         const viewState = {
             viewPlaceResult,
-            viewStreamerResult,
+            viewProfileResult,
             viewShortsResult,
         };
         console.log(JSON.stringify(viewState))
         localStorage.setItem('viewState', JSON.stringify(viewState));
-    }, [viewPlaceResult, viewStreamerResult, viewShortsResult]);
+    }, [viewPlaceResult, viewProfileResult, viewShortsResult]);
 
     const handlePlaceClick = () => {
         setViewPlaceResult(true);
-        setViewStreamerResult(false);
+        setViewProfileResult(false);
         setViewShortsResult(false);
     };
 
-    const handleStreamerClick = () => {
+    const handleProfileClick = () => {
         setViewPlaceResult(false);
-        setViewStreamerResult(true);
+        setViewProfileResult(true);
         setViewShortsResult(false);
     };
 
     const handleShortsClick = () => {
         setViewPlaceResult(false);
-        setViewStreamerResult(false);
+        setViewProfileResult(false);
         setViewShortsResult(true);
     };
 
@@ -81,11 +84,11 @@ const SearchResult = () => {
                 <PageTitle>검색 결과</PageTitle>
                 <Buttons>
                     <ResultButton onClick={handlePlaceClick} style={{ background: viewPlaceResult ? '#F7B84B' : '#5E6468' }}>장소</ResultButton>
-                    <ResultButton onClick={handleStreamerClick} style={{ background: viewStreamerResult ? '#F7B84B' : '#5E6468' }}>스트리머</ResultButton>
+                    <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#F7B84B' : '#5E6468' }}>프로필</ResultButton>
                     <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#F7B84B' : '#5E6468' }}>쇼츠</ResultButton>
                 </Buttons>
                 {viewPlaceResult && <PlaceResult />}
-                {viewStreamerResult && <StreamerResult />}
+                {viewProfileResult && <ProfileResult />}
                 {viewShortsResult && <ShortsResult />}
             </Wrapper>
         </center>

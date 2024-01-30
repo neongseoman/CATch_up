@@ -1,11 +1,10 @@
 import React from "react";
 import CustomText from "../components/CustomText";
-import { Link } from "react-router-dom";
-import styled from "@emotion/styled";
-import { Button } from "../components/Button";
+import Kakaomap from "../components/KakaoMap";
+
 
 const Main = () => {
-  const pageNum = [1, 2, 3, 4, 5];
+
   return (
     <>
       <CustomText typography="h1" bold>
@@ -24,7 +23,6 @@ const Main = () => {
         })}
       </ListWrapper>
 
-
         <Link to="/streaming">
             <Button>방송하기</Button>
         </Link>
@@ -32,12 +30,10 @@ const Main = () => {
         <Link to="/watching">
             <Button>시청하기</Button>
         </Link>
+      <Kakaomap></Kakaomap>
     </>
   );
 };
-const ListWrapper = styled.ul`
-  display: flex;
-  gap: 8px;
-`;
+
 
 export default Main;
