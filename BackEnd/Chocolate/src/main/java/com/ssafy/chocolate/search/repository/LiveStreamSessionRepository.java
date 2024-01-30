@@ -1,6 +1,7 @@
 package com.ssafy.chocolate.search.repository;
 
 import com.ssafy.chocolate.search.model.LiveStreamSessionDto;
+import com.ssafy.chocolate.search.model.SearchUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -69,6 +70,43 @@ public class LiveStreamSessionRepository {
         );
 
         Page<LiveStreamSessionDto> searchResultPage = new PageImpl<>(
+                searchResults, pageable, totalResults);
+
+        return searchResultPage;
+    }
+
+
+
+    public Page<SearchUserDto> searchUser(String query, Pageable pageable) {
+
+        int pageSize = pageable.getPageSize();
+        int offset = (int)pageable.getOffset();
+
+        String sql = "SELECT * " +
+                "FROM user_info " +
+                "WHERE MATCH(nickname) AGAINST (? IN NATURAL LANGUAGE MODE) " +
+                "LIMIT ? OFFSET ?";
+
+        int totalResults = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM user_info " +
+                        "WHERE MATCH(nickname) AGAINST (? IN NATURAL LANGUAGE MODE)",
+                new Object[]{query},
+                Integer.class
+        );
+
+        List<SearchUserDto> searchResults = jdbcTemplate.query(
+                sql,
+                new Object[]{query, pageSize, offset},
+                (resultSet, rowNum) -> {
+                    SearchUserDto user = new SearchUserDto();
+                    user.setNickName(resultSet.getString("nickname"));
+                    user.setProfileImagePath(resultSet.getString("profile_image_path"));
+                    user.setIntroduction(resultSet.getString("introduction"));
+                    return user;
+                }
+        );
+
+        Page<SearchUserDto> searchResultPage = new PageImpl<>(
                 searchResults, pageable, totalResults);
 
         return searchResultPage;
