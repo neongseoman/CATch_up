@@ -1,0 +1,110 @@
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <script src="../src/index.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>-->
+    <title>Kurento Tutorial 5: Advanced Video Call 1 to 1 with
+        WebRTC</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Tutorial 5: Advanced Video Call 1 to 1 with WebRTC</h1>
+
+        <ol>
+            <li>Open this page with a browser compliant with WebRTC
+                (Chrome, Firefox).
+            </li>
+            <li>Type a nick in the field <i>Name</i> and click on <i>Register</i>.
+            </li>
+            <li>In a different machine (or a different tab in the same
+                browser) follow the same procedure to register another user.
+            </li>
+            <li>Type the name of the user to be called in the field <i>Peer</i>
+                and click on <i>Call</i>.
+            </li>
+            <li>Grant the access to the camera and microphone for both
+                users. After the SDP negotiation the communication should start.
+            </li>
+            <li>The called user should accept the incoming call (by a
+                confirmation dialog).
+            </li>
+            <li>Click on <i>Stop</i> to finish the communication.
+            </li>
+            <li>Type the name of the user to play its recording in the
+                field <i>Peer</i> and click on <i>Play Rec</i>
+            </li>
+        </ol>
+    </div>
+  <button id="cameraOnButton"> 카메라 발싸</button>
+    <div class="row">
+        <div class="col-md-5">
+            <label class="control-label" for="name">Name</label>
+            <div class="row">
+                <div class="col-md-5">
+                    <input id="name" name="name" class="form-control" type="text"
+                           onkeydown="if (event.keyCode == 13) register();"/>
+                </div>
+                <div class="col-md-7 text-right">
+                    <a id="register" href="#" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-plus"></span> Register</a>
+                </div>
+            </div>
+
+            <br/> <br/> <label class="control-label" for="peer">Peer</label>
+            <div class="row">
+                <div class="col-md-5">
+                    <input id="peer" name="peer" class="form-control" type="text"
+                           onkeydown="if (event.keyCode == 13) call();">
+                </div>
+                <div class="col-md-7 text-right">
+                    <a style="font-size: large" id="boardCast" href="#" class="btn btn-success"><span
+                            class="glyphicon glyphicon-play"></span> 방송하기</a> <a id="terminate"
+                                                                                 href="#" class="btn btn-danger"><span
+                        class="glyphicon glyphicon-stop"></span> Stop</a> <a id="play"
+                                                                             href="#" class="btn btn-warning"><span
+                        class="glyphicon glyphicon-play-circle"></span>Play Rec</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="navbar navbar-inverse navbar-fixed-top" id="video">
+    <div class="container">
+        <div class="navbar-header">
+            <video src="" id="camera-preview" width="640" height="480" autoplay></video>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="foot-fixed-bottom">
+        <div class="container text-center">
+            <hr/>
+            <div class="row">&copy; 2014-2015 Kurento</div>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="http://www.urjc.es"><img src="./img/urjc.gif"
+                                                      alt="Universidad Rey Juan Carlos" height="50px"/></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="https://kurento.openvidu.io/"><img src="./img/kurento.png"
+                                                                alt="Kurento" height="50px"/></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="http://www.naevatec.com"><img
+                            src="./img/naevatec.png" alt="Naevatec" height="50px"/></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
