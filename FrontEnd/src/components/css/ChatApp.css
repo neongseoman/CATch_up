@@ -1,0 +1,22 @@
+.chat-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .chat-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .chat-scroll {
+    width: 100%;
+    height: calc(100% - 90px);
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .chat-scroll p {
+    font-size: 2rem;
+    padding: 0.6rem 1rem;
+    background: #febf00;
+  }
+  
