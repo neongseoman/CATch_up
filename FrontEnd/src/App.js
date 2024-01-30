@@ -39,7 +39,6 @@ function App() {
           <Route path='/page/:pageId' element={<Page />} />
           <Route path='/streaming' element={<Streaming />} />
           <Route path='/watching' element={<Watching />} />
-          
         </Route>
         <Route element={<NavLayoutWithoutDefault />}>
           <Route path='/map' element={<MainMapPage />} />
