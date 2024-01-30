@@ -5,48 +5,55 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "live_stream_sessions")
 public class LiveStreamSessionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stream_no")
     private Long id;
 
-    @Column(name = "user_no", nullable = false)
     private Long userNo;
 
-    @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @Column(name = "end_time")
     private LocalDateTime endTime;
 
 
 
-    @Column(name = "latitude")
     private BigDecimal latitude;
 
-    @Column(name = "longitude")
     private BigDecimal longitude;
 
-    @Column(name = "location")
     private String location;
 
-    @Column(name = "title", length = 255)
     private String title;
 
-    @Column(name = "introduction", length = 255)
     private String introduction;
 
-    @Column(name = "category", length = 255)
     private String category;
 
-    @Column(name = "max_viewer")
     private Integer maxViewer;
 
-    public LiveStreamSessionDto(Long id, Long userNo, LocalDateTime startTime, LocalDateTime endTime, BigDecimal latitude, BigDecimal longitude, String location, String title, String introduction, String category, Integer maxViewer) {
+
+    private String nickName;
+
+    private String profileImagePath;
+
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
+
+    public LiveStreamSessionDto(Long id, Long userNo, LocalDateTime startTime, LocalDateTime endTime, BigDecimal latitude, BigDecimal longitude, String location, String title, String introduction, String category, Integer maxViewer, String nickName, String profileImagePath) {
         this.id = id;
         this.userNo = userNo;
         this.startTime = startTime;
@@ -58,6 +65,8 @@ public class LiveStreamSessionDto {
         this.introduction = introduction;
         this.category = category;
         this.maxViewer = maxViewer;
+        this.nickName = nickName;
+        this.profileImagePath = profileImagePath;
     }
 
     public LiveStreamSessionDto() {

@@ -27,8 +27,10 @@ public class LiveStreamSessionRepository {
         int pageSize = pageable.getPageSize();
         int offset = (int)pageable.getOffset();
 
-        String sql = "SELECT * FROM live_stream_sessions " +
-                "WHERE MATCH(title) AGAINST (? IN NATURAL LANGUAGE MODE) " +
+        String sql = "SELECT lss.*, ui.profile_image_path, ui.nickname " +
+                "FROM live_stream_sessions lss " +
+                "JOIN user_info ui ON lss.user_no = ui.user_no " +
+                "WHERE MATCH(lss.title) AGAINST (? IN NATURAL LANGUAGE MODE) " +
                 "LIMIT ? OFFSET ?";
 
         int totalResults = jdbcTemplate.queryForObject(
@@ -57,6 +59,10 @@ public class LiveStreamSessionRepository {
                     session.setIntroduction(resultSet.getString("introduction"));
                     session.setCategory(resultSet.getString("category"));
                     session.setMaxViewer(resultSet.getInt("max_viewer"));
+
+                    session.setProfileImagePath(resultSet.getString("ui.profile_image_path"));
+                    session.setNickName(resultSet.getString("ui.nickname"));
+
 
                     return session;
                 }
