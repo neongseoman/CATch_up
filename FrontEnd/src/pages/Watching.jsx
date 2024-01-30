@@ -2,11 +2,11 @@ import React, {useEffect} from "react";
 import CustomText from "../components/CustomText";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState.js"
-import {stompConnection} from "../WebRTC/StreamerStomp";
+import {stompConnection} from "../WebRTC/StompConnection";
 
 // Establish Web Socket
 // 함수 내에 있으면 객체가 여러개 생김....
-const stompClient = await stompConnection("audience")
+// const stompClient = await stompConnection("audience")
 const pc = new RTCPeerConnection();
 const Watching = () =>{
 

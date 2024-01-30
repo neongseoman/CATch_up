@@ -30,7 +30,7 @@ const Main = () => {
         </Link>
 
         <Link to="/watching">
-            <Button>방송하기</Button>
+            <Button>시청하기</Button>
         </Link>
     </>
   );

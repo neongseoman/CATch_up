@@ -2,9 +2,10 @@ import React, {useEffect} from "react";
 import CustomText from "../components/CustomText";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState.js"
-import {stompConnection} from "../WebRTC/StreamerStomp";
+import {stompConnection} from "../WebRTC/StompConnection";
 
 const stompClient = stompConnection("busker")
+const pc = new RTCPeerConnection();
 const Streaming =() =>{
 
     const [userInfo,setUserInfo] = useRecoilState(userInfoState)

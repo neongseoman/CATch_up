@@ -3,8 +3,8 @@ import * as StompJS from '@stomp/stompjs';
 
 
 // 이후에 중복 연결 확인해야함.
-export const stompConnection = async (target)=>{
-    console.log("연결 시도할게~")
+export const stompConnection = async (buskerName)=>{
+    console.log(buskerName + "과 연결 시도할게~")
     const client = new StompJS.Client({
         brokerURL: "ws://127.0.0.1:8080/signal"
     })
@@ -18,8 +18,14 @@ export const stompConnection = async (target)=>{
 
     client.onConnect = (frame) =>{
         console.log(frame);
+        client.subscribe(
+            `/busker/${buskerName}`,(res)=>{
+                console.log(res)
+                console.log(JSON.parse(res.body))
+            }
+        )
         client.publish({
-            destination:"/app/"+target,
+            destination:`/app/busker/${buskerName}`,
             body:JSON.stringify({"test":"test"})
         })
     }
@@ -30,5 +36,6 @@ export const stompConnection = async (target)=>{
     }
 
     client.activate()
+
     return client
 }
