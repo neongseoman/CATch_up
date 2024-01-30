@@ -21,4 +21,4 @@ export const Button = styled.button`
   }
 `;
 
-export const LinkButton = Button.withComponent("a");
+export default Button;
