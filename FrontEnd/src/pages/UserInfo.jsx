@@ -23,8 +23,8 @@ function UserInfo() {
         }
 
         const data = await response.json();
+        console.log(data)
         setUserInfo(data);
-        
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -46,9 +46,10 @@ function UserInfo() {
           <h1>User Information</h1>
           <p><strong>Login ID:</strong> {userInfo.loginId}</p>
           <p><strong>Roles:</strong> {userInfo.loginRoles[0].authority}</p>
-          <p><strong>Name:</strong> {userInfo.additionalInfo.following}</p>
-          <p><strong>Email:</strong> {userInfo.additionalInfo.follower}</p>
-          <p><strong>Email:</strong> {userInfo.additionalInfo.airtime}</p>
+          <p><strong>username:</strong> {userInfo.additionalInfo.username}</p>
+          <p><strong>follwing:</strong> {userInfo.additionalInfo.following}</p>
+          <p><strong>follower:</strong> {userInfo.additionalInfo.follower}</p>
+          <p><strong>airtime:</strong> {userInfo.additionalInfo.airtime}</p>
           <ListWrapper>
             {pageNum.map((e, i) => {
               return (
