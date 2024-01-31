@@ -27,11 +27,11 @@ p {
 
   --alert-green: #31a215;
   --alert-amber: #ef8523;
-  --alert-red: #f14646;
+  --alert-red: #ffd5d5;
 
-  --font-main: #802b2b;
-  --font-black: #3d4a59;
-  --font-gray: #6d7a89;
+  --font-main: #ff725d;
+  --font-black: #8d9196;
+  --font-gray: #aaacad;
   --font-light-gray: #b4b4b4;
 
   --bg-gray: #d8dede;
@@ -40,6 +40,7 @@ p {
   --pure-white: #ffffff;
   --line-black: #777777;
   --line-gray: #e8e8e8;
+  --input-text: #d2d2d2;
 
   --bold: 700;
   --medium: 500;
@@ -92,4 +93,9 @@ a.active {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* global.css */
+body {
+  background-color: black;
 }
