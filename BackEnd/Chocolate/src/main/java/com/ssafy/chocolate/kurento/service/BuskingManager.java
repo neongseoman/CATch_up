@@ -1,6 +1,7 @@
-package com.ssafy.chocolate.stream;
+package com.ssafy.chocolate.kurento.service;
 
 import com.google.gson.JsonObject;
+import com.ssafy.chocolate.kurento.dto.UserSession;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -8,10 +9,10 @@ import java.io.IOException;
 public interface BuskingManager {
 //    ConcurrentHashMap<String, Busking> Buskers;
 
-    BuskingImpl getBusking(String busker);
+    BuskingService getBusking(String busker);
     void stopBusking(String busker) throws IOException;
-    BuskingImpl startBusking(WebSocketSession session, JsonObject jsonMessage) throws Exception;
-    UserSession joinBusking(WebSocketSession session,JsonObject jsonMessage);
+    BuskingService startBusking(WebSocketSession session, JsonObject jsonMessage) throws Exception;
+    UserSession joinBusking(WebSocketSession session, JsonObject jsonMessage);
     void leaveBusking(WebSocketSession session, JsonObject jsonMessage);
 
 }

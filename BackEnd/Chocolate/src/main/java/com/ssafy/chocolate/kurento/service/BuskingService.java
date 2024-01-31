@@ -1,7 +1,8 @@
-package com.ssafy.chocolate.stream;
+package com.ssafy.chocolate.kurento.service;
 
 
 import com.google.gson.JsonObject;
+import com.ssafy.chocolate.kurento.dto.UserSession;
 import lombok.Getter;
 import org.kurento.client.*;
 import org.kurento.jsonrpc.JsonUtils;
@@ -16,15 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @Getter
-public class BuskingImpl implements Busking, Closeable {
-    private final Logger log = LoggerFactory.getLogger(BuskingImpl.class);
+public class BuskingService implements Busking, Closeable {
+    private final Logger log = LoggerFactory.getLogger(BuskingService.class);
     private final ConcurrentHashMap<String, UserSession> audiences = new ConcurrentHashMap<>();
     private final String buskerName;
     private final KurentoClient kurentoClient;
     private MediaPipeline buskerPipeline;
     private UserSession buskerSession;
 
-    public BuskingImpl(String buskerName, WebSocketSession session, KurentoClient kurentoClient, JsonObject jsonMessage) throws IOException {
+    public BuskingService(String buskerName, WebSocketSession session, KurentoClient kurentoClient, JsonObject jsonMessage) throws IOException {
         this.buskerName = buskerName;
         this.kurentoClient = kurentoClient;
         log.debug("Busking is Start!");

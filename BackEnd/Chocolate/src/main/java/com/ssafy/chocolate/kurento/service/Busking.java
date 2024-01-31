@@ -1,5 +1,6 @@
-package com.ssafy.chocolate.stream;
+package com.ssafy.chocolate.kurento.service;
 
+import com.ssafy.chocolate.kurento.dto.UserSession;
 import org.springframework.web.socket.WebSocketSession;
 
 public interface Busking{
