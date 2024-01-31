@@ -2,12 +2,16 @@ package com.ssafy.chocolate.kurento.service;
 
 
 import com.google.gson.JsonObject;
+import com.ssafy.chocolate.kurento.dto.BuskerOfferReceive;
 import com.ssafy.chocolate.kurento.dto.UserSession;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.kurento.client.*;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -22,58 +26,50 @@ public class BuskingService implements Busking, Closeable {
     private final ConcurrentHashMap<String, UserSession> audiences = new ConcurrentHashMap<>();
     private final String buskerName;
     private final KurentoClient kurentoClient;
+    private final IceMessageSendService iceMessageSendService;
     private MediaPipeline buskerPipeline;
     private UserSession buskerSession;
 
-    public BuskingService(String buskerName, WebSocketSession session, KurentoClient kurentoClient, JsonObject jsonMessage) throws IOException {
+    public BuskingService(String buskerName, KurentoClient kurentoClient, IceMessageSendService iceMessageSendService) {
         this.buskerName = buskerName;
         this.kurentoClient = kurentoClient;
-        log.debug("Busking is Start!");
-        BuskingStart(session,jsonMessage);
+        this.iceMessageSendService = iceMessageSendService;
     }
 
-    public void BuskingStart(WebSocketSession session, JsonObject jsonMessage) throws IOException {
-        buskerSession = new UserSession(session);
+
+    public JsonObject BuskingStart( BuskerOfferReceive offerMessage) throws IOException {
+//        log.info("Busking Start");
+        System.out.println("Busking start");
+        buskerSession = new UserSession();
         buskerPipeline = kurentoClient.createMediaPipeline();
         buskerSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(buskerPipeline).build());
 
         WebRtcEndpoint webRtcEndpoint = buskerSession.getWebRtcEndpoint();
         webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-
             @Override
             public void onEvent(IceCandidateFoundEvent iceCandidateFoundEvent) {
+                log.info("this is Busker Ice Candidate");
+
                 JsonObject response = new JsonObject();
                 response.addProperty("id", "iceCandidate");
                 response.add("candidate", JsonUtils.toJsonObject(iceCandidateFoundEvent.getCandidate()));
-                try {
-                    synchronized (session) {
-                        session.sendMessage(new TextMessage(response.toString()));
-                    }
-                } catch (IOException e) {
-                    log.debug(e.getMessage());
-                }
+                iceMessageSendService.buskerSendIceCandidate(buskerName,response);
             }
         });
 
-        String sdpOffer = jsonMessage.get("sdpOffer").getAsString();
+        String sdpOffer = offerMessage.getOffer().getSdp();
         String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
         JsonObject response = new JsonObject();
         response.addProperty("id","buskingStartResponse");
-        response.addProperty("reponse","accepted");
+        response.addProperty("response","accepted");
         response.addProperty("sdpAnswer",sdpAnswer);
 
-        synchronized (session) {
-            buskerSession.sendMessage(response);
-        }
-
-//        session.sendMessage(new TextMessage(sdpAnswer.toString()));
-
-
+        return response;
     }
 
     @Override // 방송에 참여하는 시청자
-    public UserSession join(String audience, WebSocketSession session) {
-        UserSession audienceSession = new UserSession(session);
+    public UserSession join(String audience) {
+        UserSession audienceSession = new UserSession();
         MediaPipeline mediaPipeline = kurentoClient.createMediaPipeline();
         audienceSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(mediaPipeline).build());
 
@@ -84,11 +80,7 @@ public class BuskingService implements Busking, Closeable {
                 JsonObject response = new JsonObject();
                 response.addProperty("id", "iceCandidate");
                 response.add("candidate",JsonUtils.toJsonObject(iceCandidateFoundEvent.getCandidate()));
-                try {
-                    session.sendMessage(new TextMessage(response.toString()));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+
 
             }
         });
@@ -119,7 +111,7 @@ public class BuskingService implements Busking, Closeable {
         JsonObject message = new JsonObject();
         message.addProperty("message", "방송 종료됐어요~~");
         for (UserSession user : audiences.values()) {
-            user.sendMessage(message);
+//            user.sendMessage(message);
         }
     }
 }
