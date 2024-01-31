@@ -15,7 +15,9 @@ const Main = () => {
       <Link to={'/map'}> 지도,</Link>
       <Link to={'/streaming'}> 방송송출,</Link>
       <Link to={'/watching'}> 방송시청,</Link>
-      <Link to={'/streamingpage'}> 스트리밍페이지</Link>
+      <Link to={'/streamingpage'}> 스트리밍페이지,</Link>
+      <Link to={'/user/myprofilepage'}> 내프로필페이지,</Link>
+      <Link to={'/searchresult'}> 검색결과페이지,</Link>
       </div>
 
       

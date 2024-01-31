@@ -1,26 +1,14 @@
-// 검색 결과 - 장소
-
+// 검색 결과 - 스트리밍
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-
-
-// const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호비비&page=0&size=10';
-//   axios.get(url)
-    //     .then(response => {
-    //       console.log('데이터:', response.data);
-    //       const data = response.data;
-    //     })
-    //     .catch(error => {
-    //       console.error('에러:', error);
-    //     });
-
+import VideoTmp from "./VideoTmp";
 
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
-    flex-direction: column; /* 세로 방향의 Flexbox 레이아웃 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
 `;
 
 const MapWrapper = styled.div`
@@ -39,59 +27,70 @@ const Separator = styled.div`
     margin-bottom: 20px;
 `;
 
-const ListWrapper = styled.div`
+const Streaming = styled.div`
     width: 100%;
     margin-bottom: 30px;
 `;
 
-const ListImage = styled.div`
-    width: 100%;
-    height: 400px;
+const Video = styled.div`
+    width: calc(55%);
+    height: 300px;
+    display: flex;
+    float: left;
     border-radius: 10px;
-    background: #8B8F92;
-    margin: 0px;
+    background-color: #8B8F92;
+    margin-bottom: 30px; 
 `;
 
-const ListText = styled.div`
-    width: 100%;
-    height: 150px;
+const Info = styled.div`
+    width: calc(46%);
+    padding: 2% 5%;
+    height: 300px;
     display: flex;
+    float: right;
+    color: white;
     border-radius: 10px;
-    background: #1E1D1A;
-    margin-bottom: 20px;
-    position: relative; /* 상대 위치 설정 */
+    background-color: #1E1D1A;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: -10%;
+    margin-bottom: 30px;
+`;
+
+const TagField = styled.div`
+    display: flex;
+    gap: 4px;
+`;
+
+const Tag = styled.div`
+    font-size: 10px;
+    background: #56350A;
+    color: #F7B84B;
+    border-radius: 30px;
+    padding: 6px;
 `;
 
 const StreamingTitle = styled.div`
-    margin: 10px;
     color: white;
     font-size: 24px;
-    position: absolute; /* 절대 위치 설정 */
-    top: 0;
-    left: 0;
 `;
 
 const StreamingInfo = styled.div`
-    margin: 10px;
     color: white;
-    position: absolute; /* 절대 위치 설정 */
-    top: 40px;
-    left: 0;
+    font-size: 12px;
 `;
 
 const ProfileField = styled.p`
     display: flex;
     margin: 0px;
-    position: absolute; /* 절대 위치 설정 */
-    bottom: 0;
-    left: 0;
 `;
 
 const ProfileImg = styled.img`
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin: 10px;
+    margin-right: 5px;
     color: white;
 `;
 
@@ -102,36 +101,30 @@ const ProfileName = styled.p`
     color: white;
 `;
 
-const StartTime = styled.div`
-    margin: 10px;
-    color: white;
-    position: absolute; /* 절대 위치 설정 */
-    top: 0;
-    right: 0;
+const OptionField = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 20px;
 `;
 
-const ViewerCount = styled.div`
-    margin: 10px;
+const Option = styled.p`
+    font-size: 12px;
     color: white;
-    position: absolute; /* 절대 위치 설정 */
-    bottom: 0;
-    right: 0;
+    margin-top: 20px;
 `;
 
-const PlaceResult = () => {
+const SearchStreaming = () => {
     const [data, setData] = useState();
-    const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호비비&page=0&size=10';
+    const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호 비비&page=0&size=10';
 
     useEffect(() => {
-        // Axios를 사용하여 서버로부터 데이터를 가져옵니다.
         axios.get(url)
           .then(response => {
-            // 성공적으로 데이터를 받아왔을 때의 처리
             console.log('데이터:', response.data);
             setData(response.data.content); 
           })
           .catch(error => {
-            // 에러가 발생했을 때의 처리
             console.error('에러:', error);
           });
       }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
@@ -151,28 +144,33 @@ const PlaceResult = () => {
     
       return (
         <Wrapper>
-            <MapWrapper>지도</MapWrapper>
+            <MapWrapper></MapWrapper>
             <Separator />
-            <ListWrapper>
+            <Streaming>
                 {/* 데이터가 있고 배열이면 매핑하여 출력 */}
                 {data && Array.isArray(data) ? data.map((e, i) => (
                     <div key={i}>
-                        <ListImage></ListImage>
-                        <ListText>
+                        <Info>
+                            <TagField><Tag>#{e.tag}</Tag></TagField>
                             <StreamingTitle>{e.title}</StreamingTitle>
                             <StreamingInfo>{e.introduction}</StreamingInfo>
                             <ProfileField>
-                                <ProfileImg src={e.userImage} alt="User" />
-                                <ProfileName>{e.userName}</ProfileName>
+                                <ProfileImg src={e.profileImagePath} alt="User" />
+                                <ProfileName>{e.nickName}</ProfileName>
                             </ProfileField>
-                            <StartTime>{getTimeFromStartTime(e.startTime)}부터</StartTime>
-                            <ViewerCount>{e.maxViewer}명 시청중</ViewerCount>
-                        </ListText>
+                            <OptionField>
+                                <Option>{getTimeFromStartTime(e.startTime)}부터 {e.maxViewer}명 시청중</Option>
+                            </OptionField>
+                        </Info>
+
+                        <Video>
+                            <VideoTmp />
+                        </Video>
                     </div>
                 )) : null}
-            </ListWrapper>
+            </Streaming>
         </Wrapper>
       );
     };
   
-  export default PlaceResult;
+  export default SearchStreaming;

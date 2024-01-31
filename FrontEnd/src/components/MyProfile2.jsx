@@ -6,9 +6,10 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     width: 100%;
     height: 150px;
+    margin-top: 10px;
     display: flex;
     border-radius: 10px;
-    background-color: #1E1D1A;
+    background-color: #2C2A26;
     justify-content: space-evenly;
 `;
 

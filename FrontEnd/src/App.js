@@ -8,6 +8,8 @@ import UserInfo from './pages/UserInfo';
 import {  NavLayout,NavLayoutWithoutDefault } from './Layouts/DefaultLayout';
 import ErrorPage from './pages/ErrorPage';
 import MainMapPage from './pages/MainMapPage'
+import MyProfilePage from './pages/MyProfilePage';
+import SearchResultPage from './pages/SearchResultPage';
 
 import ChatApp from './components/ChatApp'
 import Streaming from './pages/Streaming'
@@ -25,9 +27,6 @@ import Audience from "./pages/Watching";
 import Watching from "./pages/Watching";
 
 
-import SearchResult from './Search/SearchResult';
-
-
 
 function App() {
   return (
@@ -39,6 +38,7 @@ function App() {
           <Route path='/page/:pageId' element={<Page />} />
           <Route path='/streaming' element={<Streaming />} />
           <Route path='/watching' element={<Watching />} />
+          <Route path='/searchresult' element={<SearchResultPage />} />
         </Route>
         <Route element={<NavLayoutWithoutDefault />}>
           <Route path='/map' element={<MainMapPage />} />
@@ -49,6 +49,7 @@ function App() {
           <Route path='logout' element={<Login />} />
           <Route path='signup' element={<SignUpForm />} />
           <Route path='info' element={<UserInfo />} />
+          <Route path='myprofilepage' element={<MyProfilePage />} />
         </Route>
         <Route path="/error" render={(props) => <ErrorPage {...props} />} />
       </Routes>
