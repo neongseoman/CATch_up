@@ -103,6 +103,13 @@ public class LiveStreamSessionRepository {
                     user.setNickName(resultSet.getString("nickname"));
                     user.setProfileImagePath(resultSet.getString("profile_image_path"));
                     user.setIntroduction(resultSet.getString("introduction"));
+
+
+                    user.setStreamingTime(resultSet.getLong("streaming_time"));
+                    user.setStreamingCount(resultSet.getLong("streaming_count"));
+                    user.setUserNo(resultSet.getLong("user_no"));
+                    user.setFollower(resultSet.getLong("follower"));
+                    user.setFollowing(resultSet.getLong("following"));
                     return user;
                 }
         );
@@ -123,8 +130,8 @@ public class LiveStreamSessionRepository {
                 "LIMIT ? OFFSET ?";
 
         int totalResults = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM user_info " +
-                        "WHERE MATCH(nickname) AGAINST (? IN NATURAL LANGUAGE MODE)",
+                "SELECT COUNT(*) FROM stream_short_clips " +
+                        "WHERE MATCH(title) AGAINST (? IN NATURAL LANGUAGE MODE)",
                 new Object[]{query},
                 Integer.class
         );
