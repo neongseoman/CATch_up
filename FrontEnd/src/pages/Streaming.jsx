@@ -9,18 +9,14 @@ import login from "./Login";
 
 const pc = new RTCPeerConnection(PCConfig);
 const userId = "testId"
-let count =0;
-let count2 = 0;
 
 // 대체 왜 이게 2번이나 마운트되는거야?
 const Streaming =  () => {
-    // Establish Web Socket
 
-    console.log("count2 : "+count2++)
     // Set Peer Connection
     useEffect(() => {
         const constraints = {video: true, audio: false}
-        console.log(count++)
+
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
                 const videoElement = document.getElementById("streamingVideo")
@@ -61,26 +57,13 @@ const Streaming =  () => {
         client.onConnect = (frame) => {
             console.log(frame);
 
-            const subscription = client.subscribe(
-                '/busker', (res) => {
-                    console.log('신호 수신:', res);
-                    const parsedBody = JSON.parse(res.body);
-                    console.log('파싱된 메시지:', parsedBody);
-                });
-
-            const sdpReceive = client.subscribe(
-                `/busker/${userId}/answer`,(res)=>{
-                    // console.log(res)
-                    console.log("connect answer: ",JSON.parse(res.body))
-                })
-
             client.publish({
                 destination:`/app/busker`,
                 // destination:`/app/busker/${buskerName}`,
                 body:JSON.stringify({buskerName:userId+" is connect!"})
             })
 
-            const sdpOffer = pc.createOffer({
+            pc.createOffer({
                 iceRestart: true,
             }).then((offer) => {
                 console.log(offer)
@@ -95,11 +78,11 @@ const Streaming =  () => {
                         })
                     })
             })
-                .catch((error) => {
-                    console.log(error)
-                })
+            .catch((error) => {
+                console.log(error)
+            })
 
-            const sdpAnswer = client.subscribe(
+            client.subscribe(
                 `/busker/${userId}/sdpAnswer`, (res) => {
                     // console.log('신호 수신:', res);
                     const offerResponse = JSON.parse(res.body);
@@ -107,12 +90,12 @@ const Streaming =  () => {
                     const response = offerResponse.response
                     const sdpAnswer = offerResponse.sdpAnswer
                     console.log(sdpAnswer)
-                    pc.setRemoteDescription({
-                        type:"answer",
-                        sdp:sdpAnswer
-                    })
-                        .then( r=> console.log("set remote : " + r))
-                        .catch(e=> console.log(e))
+                        pc.setRemoteDescription({
+                            type: "answer",
+                            sdp: sdpAnswer
+                        })
+                            .then(r => console.log("set remote : " + r))
+                            .catch(e => console.log(e))
                 });
         };
 
@@ -121,10 +104,7 @@ const Streaming =  () => {
             console.log('Additional details: ' + frame.body);
         };
 
-        if (!client.connected) { // 이 시발 연결이 되어 있는데 왜 자꾸 연결하는거야 미친놈아
-            client.activate();
-        }
-        // PeerConnection Let's Go
+        client.activate();
 
 
     }, []);
