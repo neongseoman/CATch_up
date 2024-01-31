@@ -48,7 +48,7 @@ public class SignalController {
     @MessageMapping("/busker/{userId}/offer")
     public void buskerOfferReceive(@DestinationVariable String userId, @Payload BuskerOfferReceive offerMessage) throws NoBuskingException, IOException {
         System.out.println(userId+" send Offer");
-        System.out.println(offerMessage.toString());
+//        System.out.println(offerMessage.toString());
 //        if (offerMessage != null)
         try {
 

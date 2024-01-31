@@ -26,29 +26,34 @@ public class BuskingService implements Busking, Closeable {
     private final ConcurrentHashMap<String, UserSession> audiences = new ConcurrentHashMap<>();
     private final String buskerName;
     private final KurentoClient kurentoClient;
+    private final IceMessageSendService iceMessageSendService;
     private MediaPipeline buskerPipeline;
     private UserSession buskerSession;
 
-    public BuskingService(String buskerName, KurentoClient kurentoClient, BuskerOfferReceive jsonMessage) throws IOException {
+    public BuskingService(String buskerName, KurentoClient kurentoClient, IceMessageSendService iceMessageSendService) {
         this.buskerName = buskerName;
         this.kurentoClient = kurentoClient;
-        log.debug("Busking is Start!");
+        this.iceMessageSendService = iceMessageSendService;
     }
 
+
     public JsonObject BuskingStart( BuskerOfferReceive offerMessage) throws IOException {
+//        log.info("Busking Start");
+        System.out.println("Busking start");
         buskerSession = new UserSession();
         buskerPipeline = kurentoClient.createMediaPipeline();
         buskerSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(buskerPipeline).build());
 
         WebRtcEndpoint webRtcEndpoint = buskerSession.getWebRtcEndpoint();
         webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-
             @Override
             public void onEvent(IceCandidateFoundEvent iceCandidateFoundEvent) {
+                log.info("this is Busker Ice Candidate");
+
                 JsonObject response = new JsonObject();
                 response.addProperty("id", "iceCandidate");
                 response.add("candidate", JsonUtils.toJsonObject(iceCandidateFoundEvent.getCandidate()));
-
+                iceMessageSendService.buskerSendIceCandidate(buskerName,response);
             }
         });
 
@@ -56,7 +61,7 @@ public class BuskingService implements Busking, Closeable {
         String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
         JsonObject response = new JsonObject();
         response.addProperty("id","buskingStartResponse");
-        response.addProperty("reponse","accepted");
+        response.addProperty("response","accepted");
         response.addProperty("sdpAnswer",sdpAnswer);
 
         return response;

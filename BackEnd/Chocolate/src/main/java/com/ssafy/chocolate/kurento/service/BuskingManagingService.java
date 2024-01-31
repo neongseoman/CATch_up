@@ -48,21 +48,21 @@ public class BuskingManagingService implements BuskingManager {
 
     public void startBusking(BuskerOfferReceive message) throws NoBuskingException, IOException {
         String buskerId = message.getUserId();
+        log.debug("start Busking is ok");
         System.out.println("여기까지는 괜찮고");
         BuskingService buskingService = null;
-        try {
-            if (!buskingManaging.containsKey(buskerId)) {
-
-                buskingService = new BuskingService(buskerId, kurentoClient, message);
+//        try {
+//            if (!buskingManaging.containsKey(buskerId)) {
+                buskingService = new BuskingService(buskerId,kurentoClient,new IceMessageSendService());
                 JsonObject resMessage = buskingService.BuskingStart(message);
-                buskingManaging.put(buskerId, buskingService);
-                System.out.println("\nresMessage check : " + resMessage);
+//                buskingManaging.put(buskerId, buskingService);
+                System.out.println("\n resMessage check : " + resMessage);
                 simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
                         resMessage.toString());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//            }else{}
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
 //        } else{
