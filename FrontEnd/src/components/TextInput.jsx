@@ -16,7 +16,7 @@ const Input = styled.input`
     padding: 16px;
     padding-right: ${(props) => (props.icon ? "48px" : "")};
     outline-style: solid;
-    outline-width: 1px;
+    outline-width: 2px;
     font-weight: ${(props) => (props.weight ? props.weight : "var(--bold)")};
     width: 100%;
     outline-color: var(--line-gray);
@@ -31,8 +31,8 @@ const Input = styled.input`
   &:focus {
     filter: ${(props) =>
       props.error
-        ? "drop-shadow(0px 0px 2px var(--alert-red))"
-        : "drop-shadow(0px 0px 2px var(--main))"};
+        ? "drop-shadow(0px 0px 15px var(--alert-red))"
+        : "drop-shadow(0px 0px 15px var(--main))"};
     color: var(--font-main);
   }
 `;

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import PlaceResult from './PlaceResult';
-import ProfileResult from './ProfileResult';
-import ShortsResult from './ShortsResult';
+import SearchStreaming from '../components/SearchStreaming';
+import SearchProfile from '../components/SearchProfile';
+import SearchShorts from '../components/SearchShorts';
 
 const Wrapper = styled.div`
-    width: 60%;
+    width: 100%;
+    margin: 0px;
     display: flex;
-    flex-direction: column; /* 세로 방향의 Flexbox 레이아웃 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
 `;
 
 const PageTitle = styled.p`
@@ -34,9 +35,9 @@ const ResultButton =styled.button`
     cursor: pointer;
 `;
 
-const SearchResult = () => {
+const SearchResultPage = () => {
     var tmp = {
-        viewPlaceResult: true,
+        viewStreamingResult: true,
         viewProfileResult: false,
         viewShortsResult: false,
     };
@@ -45,54 +46,52 @@ const SearchResult = () => {
         tmp = JSON.parse(localStorage.getItem('viewState'))
     }
 
-    const [viewPlaceResult, setViewPlaceResult] = useState(tmp.viewPlaceResult);
+    const [viewStreamingResult, setViewStreamingResult] = useState(tmp.viewStreamingResult);
     const [viewProfileResult, setViewProfileResult] = useState(tmp.viewProfileResult);
     const [viewShortsResult, setViewShortsResult] = useState(tmp.viewShortsResult);
     
     // 상태가 변경될 때마다 로컬 스토리지에 저장
     useEffect(() => {
         const viewState = {
-            viewPlaceResult,
+            viewStreamingResult,
             viewProfileResult,
             viewShortsResult,
         };
         console.log(JSON.stringify(viewState))
         localStorage.setItem('viewState', JSON.stringify(viewState));
-    }, [viewPlaceResult, viewProfileResult, viewShortsResult]);
+    }, [viewStreamingResult, viewProfileResult, viewShortsResult]);
 
-    const handlePlaceClick = () => {
-        setViewPlaceResult(true);
+    const handleStreamingClick = () => {
+        setViewStreamingResult(true);
         setViewProfileResult(false);
         setViewShortsResult(false);
     };
 
     const handleProfileClick = () => {
-        setViewPlaceResult(false);
+        setViewStreamingResult(false);
         setViewProfileResult(true);
         setViewShortsResult(false);
     };
 
     const handleShortsClick = () => {
-        setViewPlaceResult(false);
+        setViewStreamingResult(false);
         setViewProfileResult(false);
         setViewShortsResult(true);
     };
 
     return (
-        <center>
-            <Wrapper>
-                <PageTitle>검색 결과</PageTitle>
-                <Buttons>
-                    <ResultButton onClick={handlePlaceClick} style={{ background: viewPlaceResult ? '#F7B84B' : '#5E6468' }}>장소</ResultButton>
-                    <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#F7B84B' : '#5E6468' }}>프로필</ResultButton>
-                    <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#F7B84B' : '#5E6468' }}>쇼츠</ResultButton>
-                </Buttons>
-                {viewPlaceResult && <PlaceResult />}
-                {viewProfileResult && <ProfileResult />}
-                {viewShortsResult && <ShortsResult />}
-            </Wrapper>
-        </center>
+        <Wrapper>
+            <PageTitle>검색 결과</PageTitle>
+            <Buttons>
+                <ResultButton onClick={handleStreamingClick} style={{ background: viewStreamingResult ? '#F7B84B' : '#5E6468' }}>스트리밍</ResultButton>
+                <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#F7B84B' : '#5E6468' }}>프로필</ResultButton>
+                <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#F7B84B' : '#5E6468' }}>쇼츠</ResultButton>
+            </Buttons>
+            {viewStreamingResult && <SearchStreaming />}
+            {viewProfileResult && <SearchProfile />}
+            {viewShortsResult && <SearchShorts />}
+        </Wrapper>
     );
 };
 
-export default SearchResult;
+export default SearchResultPage;
