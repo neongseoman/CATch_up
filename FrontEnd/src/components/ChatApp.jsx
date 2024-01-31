@@ -26,8 +26,6 @@ const ChatApp = () => {
 
 
   const joinChatRoom = () => {
-
-
     // disconnect();
     
     const connectedRoomId = "public";
@@ -50,7 +48,7 @@ const ChatApp = () => {
     if(stompClient)
       disconnect();
 
-    const socket = new SockJS('http://127.0.0.1:8081/chat');
+    const socket = new SockJS('http://127.0.0.1:8080/chat');
     const client = new Client(); // Create a new 'Client' instance
     client.webSocketFactory = () => socket;
     client.onConnect = (frame) => {

@@ -21,6 +21,7 @@ import Watching from "./pages/Watching";
 
 
 import SearchResult from './Search/SearchResult';
+import StreamingInfo from "./pages/StreamingInfo";
 
 function App() {
   return (
@@ -30,8 +31,8 @@ function App() {
                   <Route element={<NavLayout />}>
                       <Route path='/' element={<Main />} />
                       <Route path='/page/:pageId' element={<Page />} />
-                      <Route path='/streaming' element={<Streaming />} />
-                      <Route path='/watching' element={<Watching />} />
+                      {/*<Route path='/streaming' element={<Streaming />} />*/}
+                      {/*<Route path='/watching' element={<Watching />} />*/}
                   </Route>
                   <Route path="user" element={<Layout />}>
                       <Route path='login' element={<Login />} />
@@ -39,6 +40,13 @@ function App() {
                   </Route>
                   <Route path="streamingpage" element={<StreamingPage />}>
                   </Route>
+                  {/*// 방송하기*/}
+                  <Route path="streaming" element={<Layout />}>
+                      <Route path='info' element={<StreamingInfo />} />
+                      <Route path='onAir' element={<Streaming />} />
+                  </Route>
+                  {/*시청하기*/}
+                  {/*<Route path='/watching' element={<Watching />} />*/}
               </Routes>
           </BrowserRouter>
       </RecoilRoot>
