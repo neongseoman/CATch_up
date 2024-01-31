@@ -31,8 +31,6 @@ function App() {
                   <Route element={<NavLayout />}>
                       <Route path='/' element={<Main />} />
                       <Route path='/page/:pageId' element={<Page />} />
-                      {/*<Route path='/streaming' element={<Streaming />} />*/}
-                      {/*<Route path='/watching' element={<Watching />} />*/}
                   </Route>
                   <Route path="user" element={<Layout />}>
                       <Route path='login' element={<Login />} />

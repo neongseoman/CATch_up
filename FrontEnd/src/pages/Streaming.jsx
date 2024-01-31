@@ -1,33 +1,35 @@
 import React, {useEffect, useState} from "react";
 import CustomText from "../components/CustomText";
 import {PCConfig} from "../WebRTC/RTCConfig";
-import {stompClient} from "../WebRTC/StompClientSington";
+// import {stompClient} from "../WebRTC/StompClientSington";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import login from "./Login";
 
 
-
 const pc = new RTCPeerConnection(PCConfig);
 const userId = "testId"
+let count =0;
+let count2 = 0;
+
+// 대체 왜 이게 2번이나 마운트되는거야?
 const Streaming =  () => {
-    const client = stompClient;
     // Establish Web Socket
+
+    console.log("count2 : "+count2++)
     // Set Peer Connection
     useEffect(() => {
         const constraints = {video: true, audio: false}
-
+        console.log(count++)
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
                 const videoElement = document.getElementById("streamingVideo")
                 videoElement.srcObject = stream;
                 //
                 stream.getVideoTracks()
-                    .map((stream) =>
-                    {
-                //         console.log(stream.getSettings())}
-                pc.addTrack(stream)}
-                )
+                    .map((stream) => {
+                        pc.addTrack(stream)
+                    })
 
             }).catch(error => {
             if (error.name === "OverconstrainedError") {
@@ -42,29 +44,35 @@ const Streaming =  () => {
                 console.error(`getUserMedia error: ${error.name}`, error);
             }
         })
-        // PeerConnection Let's Go
-        if (client.connected){ // 이걸 비동기로 만들어야해.
+
+        //Stomp socket connection
+
+        const client = new StompJS.Client({
+            brokerURL: "ws://127.0.0.1:8081/signal"
+        });
+
+        if (typeof WebSocket !== 'function') {
+            client.webSocketFactory = function () {
+                console.log("Stomp error sockjs is running");
+                return new SockJS('http://127.0.0.1:8081/signal');
+            };
+        }
+
+        client.onConnect = (frame) => {
+            console.log(frame);
+
             const subscription = client.subscribe(
                 '/busker', (res) => {
                     console.log('신호 수신:', res);
                     const parsedBody = JSON.parse(res.body);
                     console.log('파싱된 메시지:', parsedBody);
                 });
-            const sdpAnswer = client.subscribe(
-                `/busker/${userId}/sdpAnswer`, (res) => {
-                    // console.log('신호 수신:', res);
-                    const sdpAnswer = JSON.parse(res.body);
-                    console.log('sdpAnswer:', sdpAnswer);
-                    pc.setRemoteDescription(sdpAnswer)
-                        .then( r=> console.log("set remote : " + r));
-                });
 
             const sdpReceive = client.subscribe(
                 `/busker/${userId}/answer`,(res)=>{
                     // console.log(res)
                     console.log("connect answer: ",JSON.parse(res.body))
-                }
-            )
+                })
 
             client.publish({
                 destination:`/app/busker`,
@@ -72,27 +80,52 @@ const Streaming =  () => {
                 body:JSON.stringify({buskerName:userId+" is connect!"})
             })
 
-            const sdpOffer =
-                pc.createOffer({
-                    iceRestart: true,
-                }).then((offer) => {
-                    console.log(offer)
-                    pc.setLocalDescription(offer)
-                        .then(()=>{
-                            client.publish({
-                                destination: `/app/busker/${userId}/offer`,
-                                body: JSON.stringify({
-                                    userId,
-                                    offer,
-                                })
+            const sdpOffer = pc.createOffer({
+                iceRestart: true,
+            }).then((offer) => {
+                console.log(offer)
+                pc.setLocalDescription(offer)
+                    .then(()=>{
+                        client.publish({
+                            destination: `/app/busker/${userId}/offer`,
+                            body: JSON.stringify({
+                                userId,
+                                offer,
                             })
                         })
-                })
+                    })
+            })
                 .catch((error) => {
                     console.log(error)
                 })
 
+            const sdpAnswer = client.subscribe(
+                `/busker/${userId}/sdpAnswer`, (res) => {
+                    // console.log('신호 수신:', res);
+                    const offerResponse = JSON.parse(res.body);
+                    const answerId = offerResponse.id;
+                    const response = offerResponse.response
+                    const sdpAnswer = offerResponse.sdpAnswer
+                    console.log(sdpAnswer)
+                    pc.setRemoteDescription({
+                        type:"answer",
+                        sdp:sdpAnswer
+                    })
+                        .then( r=> console.log("set remote : " + r))
+                        .catch(e=> console.log(e))
+                });
+        };
+
+        client.onStompError = (frame) => {
+            console.log('Broker reported error: ' + frame.headers['message']);
+            console.log('Additional details: ' + frame.body);
+        };
+
+        if (!client.connected) { // 이 시발 연결이 되어 있는데 왜 자꾸 연결하는거야 미친놈아
+            client.activate();
         }
+        // PeerConnection Let's Go
+
 
     }, []);
 
