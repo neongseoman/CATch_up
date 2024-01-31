@@ -16,7 +16,24 @@ const Main = () => {
       <Link to={'/streaming'}> 방송송출,</Link>
       <Link to={'/watching'}> 방송시청,</Link>
       <Link to={'/streamingpage'}> 스트리밍페이지</Link>
+      <br />
+      <a href="
+        http://map.naver.com/index.nhn?slng=127.03770&slat=37.4996&stext=김싸피님의 위치&elng=126.9259&elat=37.55705&etext=홍대비비 버스킹 장소&menu=route&pathType=1
+      ">길찾기</a>
+      {/* <a href="
+        http://map.naver.com/index.nhn
+        ?slng=127.03770
+        &slat=37.4996
+        &stext=김싸피님의 위치
+        &elng=126.9259
+        &elat=37.55705
+        &etext=홍대비비버스킹장소
+        &menu=route
+        &pathType=1
+      ">출발지에서 도착지까지 길찾기</a> */}
+
       </div>
+      
 
       
       <TwoColumnLayout>
