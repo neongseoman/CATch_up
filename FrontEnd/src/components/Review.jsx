@@ -5,13 +5,16 @@ const Review = ({ author, date, content, initialRating }) => {
   return (
     <ReviewContainer>
       <ReviewHeader>
-        <Rating>
-          {[...Array(5)].map((_, index) => (
-            <Star key={index} filled={index < initialRating}>
-              ★
-            </Star>
-          ))}
-        </Rating>
+        <RatingAndCount>
+          <Rating>
+            {[...Array(5)].map((_, index) => (
+              <Star key={index} filled={index < initialRating}>
+                ★
+              </Star>
+            ))}
+          </Rating>
+          <RatingCount>{initialRating}/5</RatingCount>
+        </RatingAndCount>
         <AuthorAndDate>
           <Author>{author}</Author>
           <Date>{date}</Date>
@@ -35,11 +38,23 @@ const ReviewHeader = styled.div`
   margin-bottom: 10px;
 `;
 
-const Rating = styled.div``;
+const RatingAndCount = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Rating = styled.div`
+  font-size: 24px;
+`;
 
 const Star = styled.span`
   cursor: pointer;
   color: ${props => props.filled ? '#ffc107' : '#e4e5e9'};
+`;
+
+const RatingCount = styled.span`
+  margin-left: 10px;
+  font-size: 18px;
 `;
 
 const AuthorAndDate = styled.div`
