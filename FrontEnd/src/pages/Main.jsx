@@ -3,6 +3,8 @@ import CustomText from "../components/CustomText";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
+import Review from "../components/Review";
+
 const Main = () => {
   return (
     <>
@@ -31,6 +33,12 @@ const Main = () => {
         &menu=route
         &pathType=1
       ">출발지에서 도착지까지 길찾기</a> */}
+      <Review
+        author="작성자 이름"
+        date="2021-09-15"
+        content="리뷰 내용입니다."
+        initialRating={3}
+      />
 
       </div>
       

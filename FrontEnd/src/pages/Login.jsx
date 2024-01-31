@@ -35,7 +35,6 @@ function LoginForm() {
       }
 
       localStorage.setItem('user', JSON.stringify(username));
-      alert("회원가입이 정상적으로 이루어졌습니다!!!")
       navigate('/'); // 메인 화면으로 이동
     } catch (error) {
       console.error('Error:', error);
