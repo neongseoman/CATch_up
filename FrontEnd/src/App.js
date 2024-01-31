@@ -26,36 +26,51 @@ import {
 import Audience from "./pages/Watching";
 import Watching from "./pages/Watching";
 
+import SearchResult from './Search/SearchResult';
+import StreamingInfo from "./pages/StreamingInfo";
+
 
 
 function App() {
   return (
-    <RecoilRoot>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<NavLayout />}>
-          <Route path='/' element={<Main />} />
-          <Route path='/page/:pageId' element={<Page />} />
-          <Route path='/streaming' element={<Streaming />} />
-          <Route path='/watching' element={<Watching />} />
-          <Route path='/searchresult' element={<SearchResultPage />} />
-        </Route>
-        <Route element={<NavLayoutWithoutDefault />}>
-          <Route path='/map' element={<MainMapPage />} />
-          <Route path="/streamingpage" element={<StreamingPage />} />
-        </Route>
-        <Route path="user" element={<NavLayout />}>
-          <Route path='login' element={<Login />} />
-          <Route path='logout' element={<Login />} />
-          <Route path='signup' element={<SignUpForm />} />
-          <Route path='info' element={<UserInfo />} />
-          <Route path='myprofilepage' element={<MyProfilePage />} />
-        </Route>
-        <Route path="/error" render={(props) => <ErrorPage {...props} />} />
-      </Routes>
-    </BrowserRouter>
-    </RecoilRoot>
-
+      <RecoilRoot>
+          <BrowserRouter>
+              <Routes>
+                  <Route element={<NavLayout />}>
+                      <Route path='/' element={<Main />} />
+                      <Route path='/page/:pageId' element={<Page />} />
+                      
+                      <Route path='/searchresult' element={<SearchResultPage />} />
+                  </Route>
+                  <Route path="user" element={<Layout />}>
+                      <Route path='login' element={<Login />} />
+                      <Route path='logout' element={<Login />} />
+                  </Route>
+                  <Route path="streamingpage" element={<StreamingPage />}>
+                  </Route>
+                  {/*// 방송하기*/}
+                  <Route path="streaming" element={<Layout />}>
+                      <Route path='info' element={<StreamingInfo />} />
+                      <Route path='onAir' element={<Streaming />} />
+                  </Route>
+                
+                  {/*시청하기*/}
+                  {/*<Route path='/watching' element={<Watching />} />*/}
+                  <Route element={<NavLayoutWithoutDefault />}>
+                    <Route path='/map' element={<MainMapPage />} />
+                    <Route path="/streamingpage" element={<StreamingPage />} />
+                  </Route>
+                  <Route path="user" element={<NavLayout />}>
+                    <Route path='login' element={<Login />} />
+                    <Route path='logout' element={<Login />} />
+                    <Route path='signup' element={<SignUpForm />} />
+                    <Route path='info' element={<UserInfo />} />
+                    <Route path='myprofilepage' element={<MyProfilePage />} />
+                  </Route>
+                  <Route path="/error" render={(props) => <ErrorPage {...props} />} />
+              </Routes>
+          </BrowserRouter>
+      </RecoilRoot>
   );
 }
 
