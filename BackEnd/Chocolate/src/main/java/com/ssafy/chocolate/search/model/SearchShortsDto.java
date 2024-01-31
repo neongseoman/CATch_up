@@ -6,6 +6,9 @@ import java.util.List;
 public class SearchShortsDto {
     private Long streamNo;
     private Long userNo;
+
+    private String nickname;
+    private String profileImagePath;
     private Long likes;
     private Long comments;
     private Long views;
@@ -18,9 +21,11 @@ public class SearchShortsDto {
     private Long streamingTime;
     private List<String> hashtags;
 
-    public SearchShortsDto(Long streamNo, Long userNo, Long likes, Long comments, Long views, Long maxViews, String title, String shortsPath, String introduction, LocalDateTime createdTime, LocalDateTime streamedTime, Long streamingTime, List<String> hashtags) {
+    public SearchShortsDto(Long streamNo, Long userNo, String nickname, String profileImagePath, Long likes, Long comments, Long views, Long maxViews, String title, String shortsPath, String introduction, LocalDateTime createdTime, LocalDateTime streamedTime, Long streamingTime, List<String> hashtags) {
         this.streamNo = streamNo;
         this.userNo = userNo;
+        this.nickname = nickname;
+        this.profileImagePath = profileImagePath;
         this.likes = likes;
         this.comments = comments;
         this.views = views;
@@ -32,6 +37,22 @@ public class SearchShortsDto {
         this.streamedTime = streamedTime;
         this.streamingTime = streamingTime;
         this.hashtags = hashtags;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 
     public SearchShortsDto() {

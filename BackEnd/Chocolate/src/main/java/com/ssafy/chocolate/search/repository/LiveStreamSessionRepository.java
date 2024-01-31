@@ -103,8 +103,6 @@ public class LiveStreamSessionRepository {
                     user.setNickName(resultSet.getString("nickname"));
                     user.setProfileImagePath(resultSet.getString("profile_image_path"));
                     user.setIntroduction(resultSet.getString("introduction"));
-
-
                     user.setStreamingTime(resultSet.getLong("streaming_time"));
                     user.setStreamingCount(resultSet.getLong("streaming_count"));
                     user.setUserNo(resultSet.getLong("user_no"));
@@ -124,10 +122,13 @@ public class LiveStreamSessionRepository {
         int pageSize = pageable.getPageSize();
         int offset = (int)pageable.getOffset();
 
-        String sql = "SELECT * " +
-                "FROM stream_short_clips " +
+        String sql = "SELECT ssc.*, ui.profile_image_path, ui.nickname " +
+                "FROM stream_short_clips ssc " +
+                "JOIN user_info ui ON ssc.user_no = ui.user_no " +
                 "WHERE MATCH(title) AGAINST (? IN NATURAL LANGUAGE MODE) " +
                 "LIMIT ? OFFSET ?";
+
+
 
         int totalResults = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM stream_short_clips " +
@@ -142,6 +143,8 @@ public class LiveStreamSessionRepository {
                 (resultSet, rowNum) -> {
                     SearchShortsDto shorts = new SearchShortsDto();
 
+                    shorts.setNickname(resultSet.getString("nickname"));
+                    shorts.setProfileImagePath(resultSet.getString("profile_image_path"));
                     shorts.setStreamNo(resultSet.getLong("stream_no"));
                     shorts.setUserNo(resultSet.getLong("user_no"));
                     shorts.setLikes(resultSet.getLong("likes"));
