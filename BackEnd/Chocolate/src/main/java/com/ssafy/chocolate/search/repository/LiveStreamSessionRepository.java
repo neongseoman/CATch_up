@@ -1,6 +1,7 @@
 package com.ssafy.chocolate.search.repository;
 
 import com.ssafy.chocolate.search.model.LiveStreamSessionDto;
+import com.ssafy.chocolate.search.model.SearchShortsDto;
 import com.ssafy.chocolate.search.model.SearchUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -111,5 +112,52 @@ public class LiveStreamSessionRepository {
 
         return searchResultPage;
     }
+    public Page<SearchShortsDto> searchShorts(String query, Pageable pageable) {
+
+        int pageSize = pageable.getPageSize();
+        int offset = (int)pageable.getOffset();
+
+        String sql = "SELECT * " +
+                "FROM stream_short_clips " +
+                "WHERE MATCH(title) AGAINST (? IN NATURAL LANGUAGE MODE) " +
+                "LIMIT ? OFFSET ?";
+
+        int totalResults = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM user_info " +
+                        "WHERE MATCH(nickname) AGAINST (? IN NATURAL LANGUAGE MODE)",
+                new Object[]{query},
+                Integer.class
+        );
+
+        List<SearchShortsDto> searchResults = jdbcTemplate.query(
+                sql,
+                new Object[]{query, pageSize, offset},
+                (resultSet, rowNum) -> {
+                    SearchShortsDto shorts = new SearchShortsDto();
+
+                    shorts.setStreamNo(resultSet.getLong("stream_no"));
+                    shorts.setUserNo(resultSet.getLong("user_no"));
+                    shorts.setLikes(resultSet.getLong("likes"));
+                    shorts.setComments(resultSet.getLong("comments"));
+                    shorts.setViews(resultSet.getLong("views"));
+                    shorts.setMaxViews(resultSet.getLong("max_views"));
+                    shorts.setTitle(resultSet.getString("title"));
+                    shorts.setShortsPath(resultSet.getString("shorts_path"));
+                    shorts.setIntroduction(resultSet.getString("introduction"));
+                    shorts.setCreatedTime(resultSet.getTimestamp("created_time").toLocalDateTime());
+                    shorts.setStreamedTime(resultSet.getTimestamp("streamed_time").toLocalDateTime());
+                    shorts.setStreamingTime(resultSet.getLong("streaming_time"));
+
+                    return shorts;
+                }
+        );
+
+        Page<SearchShortsDto> searchResultPage = new PageImpl<>(
+                searchResults, pageable, totalResults);
+
+        return searchResultPage;
+    }
+
+
 
 }

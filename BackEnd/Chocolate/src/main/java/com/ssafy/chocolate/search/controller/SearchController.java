@@ -1,6 +1,7 @@
 package com.ssafy.chocolate.search.controller;
 
 import com.ssafy.chocolate.search.model.LiveStreamSessionDto;
+import com.ssafy.chocolate.search.model.SearchShortsDto;
 import com.ssafy.chocolate.search.model.SearchUserDto;
 import com.ssafy.chocolate.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,18 @@ public class SearchController {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<SearchUserDto> searchResult = searchService.searchUser(query, pageable);
+
+        return searchResult;
+    }
+
+    @GetMapping("/searchShorts")
+    public Page<SearchShortsDto> searchShorts(@RequestParam("query") String query,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<SearchShortsDto> searchResult = searchService.searchShorts(query, pageable);
 
         return searchResult;
     }
