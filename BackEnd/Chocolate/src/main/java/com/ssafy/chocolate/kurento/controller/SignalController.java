@@ -1,8 +1,9 @@
 package com.ssafy.chocolate.kurento.controller;
 
 import com.google.gson.JsonObject;
+import com.ssafy.chocolate.common.exception.NoBuskingException;
+import com.ssafy.chocolate.kurento.dto.BuskerOfferReceive;
 import com.ssafy.chocolate.kurento.service.BuskingManagingService;
-import com.ssafy.chocolate.kurento.CallHandler;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -19,8 +21,8 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class SignalController {
 
-    private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final BuskingManagingService buskingManagingService;
 
 //    @MessageMapping("/busker")
 //    public void listenTestStomp( @Payload String message) {
@@ -36,7 +38,6 @@ public class SignalController {
     @MessageMapping("/busker/{buskerName}")
     public void listenTestStomp2(@DestinationVariable String buskerName, @Payload String message) {
         System.out.println(buskerName+" "+message);
-//        System.out.println("");
         HashMap<String,String> map = new HashMap<>();
         map.put("buskerName","test success");
 
@@ -44,11 +45,24 @@ public class SignalController {
         return;
     }
 
+    @MessageMapping("/busker/{userId}/offer")
+    public void buskerOfferReceive(@DestinationVariable String userId, @Payload BuskerOfferReceive offerMessage) throws NoBuskingException, IOException {
+        System.out.println(userId+" send Offer");
+        System.out.println(offerMessage.toString());
+//        if (offerMessage != null)
+        try {
 
-    @MessageMapping("startBusking")
-    public void startBusking() {
+            buskingManagingService.startBusking(offerMessage);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        HashMap<String,String> map = new HashMap<>();
+        map.put("buskerName","test success");
 
+        simpMessagingTemplate.convertAndSend("/busker/"+userId+"/answer",map);
+        return;
     }
+
 
     @MessageMapping("join")
     public void joinBusking(){

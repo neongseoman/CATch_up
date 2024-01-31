@@ -5,7 +5,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 public interface Busking{
 
-    UserSession join(String audience, WebSocketSession session);
+    UserSession join(String audience);
     void leave(String audience);
     void broadCast();
 
