@@ -10,7 +10,7 @@ import ErrorPage from './pages/ErrorPage';
 import MainMapPage from './pages/MainMapPage'
 import MyProfilePage from './pages/MyProfilePage';
 import SearchResultPage from './pages/SearchResultPage';
-
+import {Layout} from "./Layouts/DefaultLayout";
 import ChatApp from './components/ChatApp'
 import Streaming from './pages/Streaming'
 import React, { useEffect } from 'react';
@@ -26,7 +26,7 @@ import {
 import Audience from "./pages/Watching";
 import Watching from "./pages/Watching";
 
-import SearchResult from './Search/SearchResult';
+// import SearchResult from './Search/SearchResult';
 import StreamingInfo from "./pages/StreamingInfo";
 
 
