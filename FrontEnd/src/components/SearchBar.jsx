@@ -25,11 +25,11 @@ const SearchInput = styled.input`
 const SearchButton = styled.button`
   background-color: var(--main);
   border: none;
-  padding: 10px 15px;
-  border-radius: 50px;
+  padding: 10px 13px;
+  border-radius: 100px;
   cursor: pointer;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   transition: background-color 0.3s;
 
   &:hover {
