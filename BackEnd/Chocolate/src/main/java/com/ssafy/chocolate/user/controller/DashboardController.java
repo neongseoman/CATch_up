@@ -53,6 +53,29 @@ public class DashboardController {
         );
     }
 
+    @GetMapping("/dashboard_test")
+    public ResponseEntity<?> dashboard_test() {
+        // Spring Security로부터 로그인한 사용자 정보를 가져옵니다.
+        String loginId = "user1@example.com";
+
+        // MySQL에서 사용자 정보를 조회합니다.
+        Optional<Member> userEntity = userRepository.findByEmail(loginId);
+
+        if (userEntity.isEmpty()) {
+            // 사용자 정보를 찾지 못한 경우 오류 응답을 반환하거나 처리합니다.
+            return ResponseEntity.status(404).body("사용자 정보를 찾을 수 없습니다.");
+        }
+
+        // 사용자 정보와 권한을 JSON 형식으로 응답합니다.
+        return ResponseEntity.ok().body(
+                Map.of(
+                        "loginId", loginId,
+                        "loginRoles", null,
+                        "additionalInfo", userEntity // 사용자 엔티티를 추가 정보로 포함할 수 있습니다.
+                )
+        );
+    }
+
     @GetMapping("/setting/admin")
     @AdminAuthorize
     public ResponseEntity<?> adminSetting() {

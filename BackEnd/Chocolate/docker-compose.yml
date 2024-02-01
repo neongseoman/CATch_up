@@ -12,6 +12,7 @@ services:
       - 3306:3306
     volumes:
       - C:\Users\SSAFY\Desktop\pjt\docker_mysql:/var/lib/mysql
+      # - /Users/debeujun/Desktop/pjt\docker_mysql:/var/lib/mysql
       # - ${MYSQL_CUSTOM_CONFIG_PATH}:/etc/mysql/conf.d
       # - ${MYSQL_DEFAULT_CONFIG_FILE}:/etc/my.cnf
 
