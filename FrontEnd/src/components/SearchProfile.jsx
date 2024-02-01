@@ -115,7 +115,7 @@ const SearchProfile = () => {
                             <TextTop>
                                 <UserName>{e.nickName}</UserName>
                                 <StreamingCount>
-                                    <LiveIcon src="/img/live.11.png" />
+                                    <LiveIcon src="/img/live.1.png" />
                                     {e.streamingCount}
                                 </StreamingCount>
                             </TextTop>

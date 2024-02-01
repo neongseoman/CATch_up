@@ -71,10 +71,4 @@ const StreamingInfo = () => {
   );
 }
 
-// const ValMsg = styled.header`
-// height: 30px; /* 메시지 영역 높이 */
-// font-size: 0.8rem;
-// margin-top: 5px; /* 입력 필드와의 간격 */
-// `;
-
 export default StreamingInfo;
