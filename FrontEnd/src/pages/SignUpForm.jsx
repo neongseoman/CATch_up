@@ -69,7 +69,7 @@ function SignUpForm() {
     };
 
     try {
-      const response = await fetch('http://i10a105.p.ssafy.io:8080/api/user/join', {
+      const response = await fetch('http://i10a105.p.ssafy.io/api/user/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
