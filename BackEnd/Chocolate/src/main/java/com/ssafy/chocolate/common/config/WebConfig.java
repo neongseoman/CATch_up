@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://i10a105.p.ssafy.io:8080")
+                .allowedOrigins("http://localhost:3000", "https://i10a105.p.ssafy.io:8080")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true) // 인증 정보 허용
                 .allowedHeaders("*") // 허용할 헤더
