@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="https://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class DashboardController {
