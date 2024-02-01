@@ -1,6 +1,4 @@
 // 내 프로필-2
-
-import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -40,10 +38,7 @@ const Text = styled.p`
     color: white;
 `;
 
-const MyProfile2 = () => {
-  const [streams, setStreams] = useState('382');
-  const [follower, setFollower] = useState('302K');
-  const [following, setFollowing] = useState('29');
+const MyProfile2 = ({ userInfo }) => {
 
   const handleStreamsClick = () => {
     // 버튼 클릭 시 수행할 작업 추가
@@ -63,15 +58,15 @@ const MyProfile2 = () => {
   return (
     <Wrapper>
       <StreamsButton onClick={handleStreamsClick}>
-        <Count>{streams}</Count>
+        <Count>{userInfo.additionalInfo.airtime}</Count>
         <Text>STREAMS</Text>
       </StreamsButton>
       <FollowerButton onClick={handleFollowerClick}>
-        <Count>{follower}</Count>
+        <Count>{userInfo.additionalInfo.follower}</Count>
         <Text>FOLLOWER</Text>
       </FollowerButton>
       <FollowingButton onClick={handleFollowingClick}>
-        <Count>{following}</Count>
+        <Count>{userInfo.additionalInfo.following}</Count>
         <Text>FOLLOWING</Text>
       </FollowingButton>
     </Wrapper>

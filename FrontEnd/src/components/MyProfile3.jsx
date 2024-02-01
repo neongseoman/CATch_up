@@ -36,9 +36,7 @@ const TitleText = styled.p`
     margin: 10px;
 `;
 
-const MyProfile3 = () => {
-  const [follower, setFollower] = useState('');
-  const [streams, setStreams] = useState('');
+const MyProfile3 = ({ userInfo }) => {
 
   return (
     <Wrapper>

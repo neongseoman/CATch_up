@@ -50,7 +50,6 @@ const SearchResultPage = () => {
     const [viewProfileResult, setViewProfileResult] = useState(tmp.viewProfileResult);
     const [viewShortsResult, setViewShortsResult] = useState(tmp.viewShortsResult);
     
-    // 상태가 변경될 때마다 로컬 스토리지에 저장
     useEffect(() => {
         const viewState = {
             viewStreamingResult,
@@ -83,9 +82,9 @@ const SearchResultPage = () => {
         <Wrapper>
             <PageTitle>검색 결과</PageTitle>
             <Buttons>
-                <ResultButton onClick={handleStreamingClick} style={{ background: viewStreamingResult ? '#F7B84B' : '#5E6468' }}>스트리밍</ResultButton>
-                <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#F7B84B' : '#5E6468' }}>프로필</ResultButton>
-                <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#F7B84B' : '#5E6468' }}>쇼츠</ResultButton>
+                <ResultButton onClick={handleStreamingClick} style={{ background: viewStreamingResult ? '#e8543d' : '#5E6468' }}>스트리밍</ResultButton>
+                <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#e8543d' : '#5E6468' }}>프로필</ResultButton>
+                <ResultButton onClick={handleShortsClick} style={{ background: viewShortsResult ? '#e8543d' : '#5E6468' }}>쇼츠</ResultButton>
             </Buttons>
             {viewStreamingResult && <SearchStreaming />}
             {viewProfileResult && <SearchProfile />}

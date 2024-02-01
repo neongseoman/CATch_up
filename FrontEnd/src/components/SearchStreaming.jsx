@@ -92,6 +92,8 @@ const ProfileImg = styled.img`
     border-radius: 50%;
     margin-right: 5px;
     color: white;
+    object-fit: cover;
+    transform: scale(1.5);
 `;
 
 const ProfileName = styled.p`
@@ -133,12 +135,9 @@ const SearchStreaming = () => {
     const getTimeFromStartTime = (startTime) => {
         // startTime을 Date 객체로 변환
         const date = new Date(startTime);
-
-        // 시간 정보 추출
         const hours = date.getHours();
         const minutes = date.getMinutes();
         
-        // 시간을 문자열로 변환하여 반환
         return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     };
     
@@ -147,7 +146,6 @@ const SearchStreaming = () => {
             <MapWrapper></MapWrapper>
             <Separator />
             <Streaming>
-                {/* 데이터가 있고 배열이면 매핑하여 출력 */}
                 {data && Array.isArray(data) ? data.map((e, i) => (
                     <div key={i}>
                         <Info>
@@ -155,8 +153,13 @@ const SearchStreaming = () => {
                             <StreamingTitle>{e.title}</StreamingTitle>
                             <StreamingInfo>{e.introduction}</StreamingInfo>
                             <ProfileField>
-                                <ProfileImg src={e.profileImagePath} alt="User" />
-                                <ProfileName>{e.nickName}</ProfileName>
+                            <ProfileImg
+                                src={e.profileImagePath}
+                                onError={(e) => {
+                                    e.target.src = '/img/logo.png';
+                                }}
+                            />
+                            <ProfileName>{e.nickName}</ProfileName>
                             </ProfileField>
                             <OptionField>
                                 <Option>{getTimeFromStartTime(e.startTime)}부터 {e.maxViewer}명 시청중</Option>

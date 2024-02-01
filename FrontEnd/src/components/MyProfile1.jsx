@@ -14,7 +14,7 @@ const InfoField = styled.div`
     width: calc(100% - 140px);
     height: 130px;
     display: flex;
-    align-items: center; /* 수직 가운데 정렬 추가 */
+    align-items: center;
     border-radius: 10px;
     background-color: #3C3A34;
 `;
@@ -24,12 +24,14 @@ const ProfileImg = styled.img`
     height: 90px;
     border-radius: 50%;
     margin-left: 20px;
+    object-fit: cover;
+    transform: scale(1.5);
 `;
 
 const TextField = styled.div`
     display: flex;
-    flex-direction: column; /* 세로 방향의 Flexbox 레이아웃 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
     margin-left: 15px;
 `;
 
@@ -62,14 +64,14 @@ const StartButton = styled.button`
     color: white;    
     font-size: 24px;
     margin-left: auto;
-    background: #F7B84B;
+    background: #e8543d;
     border: none;
     border-radius: 10px;
     width: 130px;
     height: 130px;
 `;
 
-const MyProfile1 = () => {
+const MyProfile1 = ({ userInfo }) => {
   const [userName, setUserName] = useState('사용자 닉네임');
   const [userIntro, setUserIntro] = useState('사용자 한 줄 소개');
   const [userImage, setUserImage] = useState('https://via.placeholder.com/150'); // 기본 이미지 URL
@@ -87,10 +89,15 @@ const MyProfile1 = () => {
   return (
     <Wrapper>
       <InfoField>
-        <ProfileImg src={userImage} alt="User" />
+        <ProfileImg
+            src={userInfo.profileImagePath}
+            onError={(e) => {
+                e.target.src = '/img/logo.png';
+            }}
+        />
         <TextField>
-          <UserNickname>{userName}</UserNickname>
-          <UserIntroduce>{userIntro}</UserIntroduce>
+          <UserNickname>{userInfo.additionalInfo.username}</UserNickname>
+          <UserIntroduce>{userInfo.userIntro}</UserIntroduce>
         </TextField>
         <EditButton onClick={handleEditClick}>✐edit</EditButton>
       </InfoField>
