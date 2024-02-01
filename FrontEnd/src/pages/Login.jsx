@@ -17,11 +17,11 @@ function LoginForm() {
     setLoginError(''); // 오류 메시지 초기화
 
     const formData = new URLSearchParams();
-    formData.append('userid', username);
-    formData.append('pw', password);
+    formData.append('email', username);
+    formData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:8081/api/login', {
+      const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -35,7 +35,6 @@ function LoginForm() {
       }
 
       localStorage.setItem('user', JSON.stringify(username));
-      alert("회원가입이 정상적으로 이루어졌습니다!!!")
       navigate('/'); // 메인 화면으로 이동
     } catch (error) {
       console.error('Error:', error);
