@@ -63,13 +63,13 @@ function SignUpForm() {
     }
 
     const userData = {
-      userid: username,
-      // email: email,
-      pw: password,
+      email: email,
+      nickname: username,
+      password: password,
     };
 
     try {
-      const response = await fetch('http://localhost:8081/api/user/join', {
+      const response = await fetch('http://localhost:8080/api/user/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
