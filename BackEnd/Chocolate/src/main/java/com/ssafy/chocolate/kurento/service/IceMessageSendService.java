@@ -12,6 +12,7 @@ public class IceMessageSendService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     public void buskerSendIceCandidate(String userId, JsonObject iceCandidate){
+        
         simpMessagingTemplate.convertAndSend(
                 "/busker/"+userId+"/iceCandidate", iceCandidate
 

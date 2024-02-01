@@ -17,15 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @RequiredArgsConstructor
-public class BuskingManagingService implements BuskingManager {
-
+public class BuskingManagingService {
     private final Logger log = LoggerFactory.getLogger(BuskingManagingService.class);
-    private final ConcurrentHashMap<String, BuskingService> buskingManaging = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Busking> buskingManaging = new ConcurrentHashMap<>();
     private final KurentoClient kurentoClient;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public BuskingService getBusking(String busker) {
-        BuskingService buskingImpl = buskingManaging.get(busker);
+    public Busking getBusking(String busker) {
+        Busking buskingImpl = buskingManaging.get(busker);
+//        System.out.println(buskingImpl.StateCheck);
         if (buskingImpl == null) {
             log.debug("There is no busker");
         }
@@ -34,7 +34,7 @@ public class BuskingManagingService implements BuskingManager {
 
 
     public void stopBusking(String busker) throws IOException {
-        BuskingService buskingImpl = buskingManaging.get(busker);
+        Busking buskingImpl = buskingManaging.get(busker);
         if (buskingImpl == null) {
             log.debug("There is no busker");
         }
@@ -50,41 +50,28 @@ public class BuskingManagingService implements BuskingManager {
         String buskerId = message.getUserId();
         log.debug("start Busking is ok");
         System.out.println("여기까지는 괜찮고");
-        BuskingService buskingService = null;
-//        try {
-//            if (!buskingManaging.containsKey(buskerId)) {
-                buskingService = new BuskingService(buskerId,kurentoClient,new IceMessageSendService());
-                JsonObject resMessage = buskingService.BuskingStart(message);
-//                buskingManaging.put(buskerId, buskingService);
-                System.out.println("\n resMessage check : " + resMessage);
-                simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
-                        resMessage.toString());
-//            }else{}
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
-//        } else{
-//            log.debug("There is a busker, U can not new Busking");
-//            throw new NoBuskingException("버스킹 이미 하고 있는데용?");
-//        }
+        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService());
+        JsonObject sdpAnswer = busking.BuskingStart(message);
+        buskingManaging.put(buskerId, busking);
+        System.out.println("sdpAnswer : " + sdpAnswer);
+        simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
+                sdpAnswer.toString());
 
     }
 
-    public UserSession joinBusking(WebSocketSession session, JsonObject jsonMessage) {
+    public UserSession joinBusking(JsonObject jsonMessage) {
         String busker = jsonMessage.get("busker").getAsString();
         String audience = jsonMessage.get("audience").getAsString();
-        BuskingService buskingService = buskingManaging.get(busker);
-        UserSession userSession = buskingService.join(audience);
+        Busking busking = buskingManaging.get(busker);
+        UserSession userSession = busking.audienceJoin(audience);
         return userSession;
     }
 
     public void leaveBusking(WebSocketSession session, JsonObject jsonMessage) {
         String busker = jsonMessage.get("busker").getAsString();
         String audience = jsonMessage.get("audience").getAsString();
-        BuskingService buskingService = buskingManaging.get(busker);
-        buskingService.leave(audience);
+        Busking busking = buskingManaging.get(busker);
+        busking.leave(audience);
 
     }
 }
