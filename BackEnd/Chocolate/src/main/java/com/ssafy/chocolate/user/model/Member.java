@@ -6,40 +6,74 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
+@Table(name = "user_info")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_no")
+    private Integer id;
 
-    @Column(unique = true)
-    private String userid;
+    @Column(name = "user_email", unique = true, length = 50)
+    private String email;
 
-    private String pw;
+    @Column(name = "user_password", length = 64)
+    private String password;
+
+    @Column(length = 16)
+    private String nickname;
+
+    @Column(length = 16)
+    private String category;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    private Integer following;
+    private Integer follower;
+
+    @Column(name = "streaming_time")
+    private Integer streamingTime;
+
+    @Column(name = "streaming_count")
+    private Integer streamingCount;
+
+    private String token;
+
+    @Column(name = "profile_image_path", length = 255)
+    private String profileImagePath;
+
+    @Column(length = 255)
+    private String introduction;
 
     private String roles;
 
-    private String following;
-    private String follower;
-    private String airtime;
-
-
-    public Member(Long id, String userid, String pw, String roles, String following, String follower, String airtime) {
+    public Member(Integer id, String email, String password, String nickname, String category, LocalDateTime createdDate, Integer following, Integer follower, Integer streamingTime, Integer streamingCount, String token, String profileImagePath, String introduction, String roles) {
         this.id = id;
-        this.userid = userid;
-        this.pw = pw;
-        this.roles = roles;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.category = category;
+        this.createdDate = createdDate;
         this.following = following;
         this.follower = follower;
-        this.airtime = airtime;
+        this.streamingTime = streamingTime;
+        this.streamingCount = streamingCount;
+        this.token = token;
+        this.profileImagePath = profileImagePath;
+        this.introduction = introduction;
+        this.roles=roles;
     }
 
     protected Member() {}
 
-    public static Member createUser(String userId, String pw, PasswordEncoder passwordEncoder) {
-        return new Member(null, userId, passwordEncoder.encode(pw), "USER","0","0","0");
+    public static Member createUser(String email, String password, PasswordEncoder passwordEncoder) {
+        return new Member(null, email, passwordEncoder.encode(password), null, null,
+                LocalDateTime.now(), 0, 0, 0, 0, null, null, null,"USER");
     }
 
 }

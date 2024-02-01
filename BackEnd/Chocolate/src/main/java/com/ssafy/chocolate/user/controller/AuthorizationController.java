@@ -29,10 +29,11 @@ public class AuthorizationController {
     public ResponseEntity<?> join(@RequestBody MemberJoinDto dto) {
         Map<String, String> response = new HashMap<>();
         try {
-            registerMemberService.join(dto.getUserid(), dto.getPw());
+            registerMemberService.join(dto.getEmail(), dto.getPassword());
             response.put("message", "join success");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             response.put("message", "duplicated id");
             return ResponseEntity.ok(response);
 //            return ResponseEntity.badRequest().body(e.getMessage());

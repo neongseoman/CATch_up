@@ -36,7 +36,7 @@ public class DashboardController {
         String loginId = user.getUsername();
 
         // MySQL에서 사용자 정보를 조회합니다.
-        Optional<Member> userEntity = userRepository.findByUserid(loginId);
+        Optional<Member> userEntity = userRepository.findByEmail(loginId);
 
         if (userEntity.isEmpty()) {
             // 사용자 정보를 찾지 못한 경우 오류 응답을 반환하거나 처리합니다.
