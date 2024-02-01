@@ -70,7 +70,6 @@ public class DashboardController {
         return ResponseEntity.ok().body(
                 Map.of(
                         "loginId", loginId,
-                        "loginRoles", null,
                         "additionalInfo", userEntity // 사용자 엔티티를 추가 정보로 포함할 수 있습니다.
                 )
         );
