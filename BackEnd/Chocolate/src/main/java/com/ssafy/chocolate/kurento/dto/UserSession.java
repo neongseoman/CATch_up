@@ -14,16 +14,9 @@ public class UserSession {
 
 
     private static final Logger log = LoggerFactory.getLogger(UserSession.class);
-    private final WebSocketSession session;
     private WebRtcEndpoint webRtcEndpoint;
 
-    public UserSession(WebSocketSession session) {
-        this.session = session;
-    }
 
-    public WebSocketSession getSession() {
-        return session;
-    }
 
     public WebRtcEndpoint getWebRtcEndpoint() {
         return webRtcEndpoint;
@@ -35,7 +28,4 @@ public class UserSession {
 
     public void iceCandidate(IceCandidate iceCandidate) {webRtcEndpoint.addIceCandidate(iceCandidate);}
 
-    public void sendMessage(JsonObject message) throws IOException {
-        session.sendMessage(new TextMessage(message.toString()));
-    }
 }
