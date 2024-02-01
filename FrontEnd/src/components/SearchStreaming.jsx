@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 30px;
 `;
 
 const MapWrapper = styled.div`
@@ -17,19 +18,12 @@ const MapWrapper = styled.div`
     border-radius: 5px;
     background: grey;
     background: linear-gradient(to bottom, rgba(128, 128, 128, 0.5), rgba(128, 128, 128, 0)); /* 그라데이션 추가 */
-    margin-bottom: 20px;
 `;
 
-const Separator = styled.div`
+const Streaming = styled.button`
     width: 100%;
-    height: 1px;
-    background-color: #DBDBDB;
-    margin-bottom: 20px;
-`;
-
-const Streaming = styled.div`
-    width: 100%;
-    margin-bottom: 30px;
+    height: 300px;
+    background: none;
 `;
 
 const Video = styled.div`
@@ -39,11 +33,11 @@ const Video = styled.div`
     float: left;
     border-radius: 10px;
     background-color: #8B8F92;
-    margin-bottom: 30px; 
 `;
 
 const Info = styled.div`
     width: calc(46%);
+    margin-left: -10%;
     padding: 2% 5%;
     height: 300px;
     display: flex;
@@ -54,8 +48,6 @@ const Info = styled.div`
     justify-content: space-evenly;
     flex-direction: column;
     align-items: flex-start;
-    margin-left: -10%;
-    margin-bottom: 30px;
 `;
 
 const TagField = styled.div`
@@ -74,11 +66,13 @@ const Tag = styled.div`
 const StreamingTitle = styled.div`
     color: white;
     font-size: 24px;
+    text-align: left;
 `;
 
 const StreamingInfo = styled.div`
     color: white;
     font-size: 12px;
+    text-align: left;
 `;
 
 const ProfileField = styled.p`
@@ -120,6 +114,10 @@ const SearchStreaming = () => {
     const [data, setData] = useState();
     const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호 비비&page=0&size=10';
 
+    const handleStreamingClick = () => {
+        alert('해당 스트리밍 시청 화면으로 이동!');
+    };
+
     useEffect(() => {
         axios.get(url)
           .then(response => {
@@ -144,10 +142,8 @@ const SearchStreaming = () => {
       return (
         <Wrapper>
             <MapWrapper></MapWrapper>
-            <Separator />
-            <Streaming>
                 {data && Array.isArray(data) ? data.map((e, i) => (
-                    <div key={i}>
+                    <Streaming key={i} onClick={handleStreamingClick}>
                         <Info>
                             <TagField><Tag>#{e.tag}</Tag></TagField>
                             <StreamingTitle>{e.title}</StreamingTitle>
@@ -169,9 +165,8 @@ const SearchStreaming = () => {
                         <Video>
                             <VideoTmp />
                         </Video>
-                    </div>
+                    </Streaming>
                 )) : null}
-            </Streaming>
         </Wrapper>
       );
     };

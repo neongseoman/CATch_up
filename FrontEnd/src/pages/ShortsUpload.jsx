@@ -1,3 +1,4 @@
+// 쇼츠 업로드 페이지
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomText from '../components/CustomText';
@@ -6,12 +7,11 @@ import Button from '../components/Button'
 import styled from "@emotion/styled";
 
 
-const StreamingInfo = () => {
+const ShortsUpload = () => {
   const navigate = useNavigate();
-  const [buskingTitle, setBuskingTitle] = useState('');
-  const [buskingReport, setBuskingReport] = useState('');
-  const [buskingHashtag, setBuskingHashtag] = useState('');
-  const [buskingInfo, setBuskingInfo] = useState('');
+  const [shortsTitle, setShortsTitle] = useState('');
+  const [Hashtag, setHashtag] = useState(['#태그', '#이렇게', "#보여줘요"]);
+  const [shortsInfo, setShortsInfo] = useState('');
   // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
 
   // const handleStreaming = async (event) => {
@@ -50,31 +50,19 @@ const StreamingInfo = () => {
   return (
     <>
         <CustomText typography="h1" bold>
-          <br />방송 정보<br />
+          <br />쇼츠 업로드<br />
         </CustomText>
 
-        <TextInput placeholder="방송 제목을 입력하세요" value={buskingTitle}
-          onChange={(e) => setBuskingTitle(e.target.value)}></TextInput>
+        <TextInput placeholder="쇼츠 제목을 입력하세요" value={shortsTitle}
+          onChange={(e) => setShortsTitle(e.target.value)}></TextInput>
         
-        <TextInput placeholder="알림 메시지를 입력하세요" value={buskingReport}
-          onChange={(e) => setBuskingReport(e.target.value)}></TextInput>
-
-        <TextInput placeholder="#해시태그를 #입력하세요" value={buskingHashtag}
-          onChange={(e) => setBuskingHashtag(e.target.value)}></TextInput>
-        
-        <TextInput placeholder="방송 설명을 입력하세요" value={buskingInfo}
-          onChange={(e) => setBuskingInfo(e.target.value)} ></TextInput>
+        <TextInput placeholder="쇼츠 설명을 입력하세요" value={shortsInfo}
+          onChange={(e) => setShortsInfo(e.target.value)} ></TextInput>
 
         {/* {loginError && <CustomText typography="p" style={{ color: 'red' , height: '30px' }}>{loginError}</CustomText>} */}
-        <Button type="submit">방송 시작</Button>
+        <Button type="submit">등록하기</Button>
     </>
   );
 }
 
-// const ValMsg = styled.header`
-// height: 30px; /* 메시지 영역 높이 */
-// font-size: 0.8rem;
-// margin-top: 5px; /* 입력 필드와의 간격 */
-// `;
-
-export default StreamingInfo;
+export default ShortsUpload;

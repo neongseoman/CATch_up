@@ -15,7 +15,7 @@ const ProfileList = styled.div`
     margin-bottom: 30px;
 `;
 
-const Profile = styled.div`
+const Profile = styled.button`
     width: 100%;
     height: 150px;
     display: flex;
@@ -84,6 +84,10 @@ const SearchProfile = () => {
     const [data, setData] = useState();
     const url = 'http://i10a105.p.ssafy.io:8080/searchUser?query=Tom&page=0&size=10';
 
+    const handleProfileClick = () => {
+        alert('해당 사용자 프로필 화면으로 이동!');
+    };
+
     useEffect(() => {
         axios.get(url)
           .then(response => {
@@ -97,9 +101,9 @@ const SearchProfile = () => {
     
     return (
         <Wrapper>
-            <ProfileList>
+            {/* <ProfileList> */}
             {data && Array.isArray(data) ? data.map((e, i) => (
-                <div key={i}>
+                <ProfileList key={i} onClick={handleProfileClick}>
                     <Profile>
                         <ProfileImg
                             src={e.profileImagePath}
@@ -118,9 +122,9 @@ const SearchProfile = () => {
                             <UserInfo>{e.introduction}</UserInfo>
                         </ProfileText>
                     </Profile>
-                </div>
+                </ProfileList>
             )) : null}
-            </ProfileList>
+            {/* </ProfileList> */}
         </Wrapper>
     );
   };

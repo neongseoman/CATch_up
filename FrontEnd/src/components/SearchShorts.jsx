@@ -55,11 +55,13 @@ const Tag = styled.div`
 const ShortsTitle = styled.div`
     color: white;
     font-size: 24px;
+    text-align: left;
 `;
 
 const ShortsInfo = styled.div`
     color: white;
     font-size: 12px;
+    text-align: left;
 `;
 
 const ProfileField = styled.p`
@@ -113,6 +115,10 @@ const SearchShorts = () => {
     const [data, setData] = useState();
     const url = 'http://i10a105.p.ssafy.io:8080/searchShorts?query=두번째 &page=0&size=10';
 
+    const handleShortsClick = () => {
+        alert('해당 쇼츠 모달 띄우기!');
+    };
+
     useEffect(() => {
         axios.get(url)
           .then(response => {
@@ -155,9 +161,8 @@ const SearchShorts = () => {
     
     return (
         <Wrapper>
-            <Shorts>
             {data && Array.isArray(data) ? data.map((e, i) => (
-                <div key={i}>
+                <Shorts key={i} onClick={handleShortsClick}>
 
                 <Info>
                     <TagField>
@@ -194,9 +199,8 @@ const SearchShorts = () => {
                     </StreamingInfoField>
                 </Info>
                 <Video>{e.shortsPath}</Video>
-                </div>
+                </Shorts>
             )) : null}
-            </Shorts>
         </Wrapper>
     );
   };

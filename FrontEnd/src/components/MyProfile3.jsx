@@ -1,6 +1,5 @@
 // 내 프로필-3
-
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -17,7 +16,7 @@ const Viewer = styled.div`
     border-radius: 10px;
     background-color: #1E1D1A;
     justify-content: space-between;
-    flex-direction: column; /* 세로 방향의 Flexbox 레이아웃 */
+    flex-direction: column;
 `;
 
 const Streams = styled.div`
@@ -27,7 +26,7 @@ const Streams = styled.div`
     border-radius: 10px;
     background-color: #1E1D1A;
     justify-content: space-between;
-    flex-direction: column; /* 세로 방향의 Flexbox 레이아웃 */
+    flex-direction: column;
 `;
 
 const TitleText = styled.p`

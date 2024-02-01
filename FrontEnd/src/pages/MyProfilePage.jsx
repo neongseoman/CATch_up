@@ -4,17 +4,13 @@ import styled from 'styled-components';
 import MyProfile1 from '../components/MyProfile1';
 import MyProfile2 from '../components/MyProfile2';
 import MyProfile3 from '../components/MyProfile3';
+import CustomText from '../components/CustomText';
 
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-`;
-
-const PageTitle = styled.h2`
-    font-size: 32px;
-    color: #5E6468;
 `;
 
 const MyProfilePage = () => {
@@ -25,7 +21,7 @@ const MyProfilePage = () => {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch('http://localhost:8081/api/dashboard', {
+        const response = await fetch('http://i10a105.p.ssafy.io:8080/api/dashboard_test', {
           method: 'GET',
           credentials: 'include'
         });
@@ -51,15 +47,17 @@ const MyProfilePage = () => {
   return (
     <center>
     <Wrapper>
-      <PageTitle>내 프로필</PageTitle>
+    <CustomText typography="h1" bold>
+      <br />내 프로필<br />
+    </CustomText>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div>
-        <MyProfile1 userData={userInfo} />
-        <MyProfile2 userData={userInfo} />
-        <MyProfile3 userData={userInfo} />
-        </div>
+        <>
+          <MyProfile1 userInfo={userInfo} />
+          <MyProfile2 userInfo={userInfo} />
+          <MyProfile3 userInfo={userInfo} />
+        </>
       )}
     </Wrapper>
     </center>

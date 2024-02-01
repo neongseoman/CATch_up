@@ -1,4 +1,5 @@
 // 내 프로필-2
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -41,25 +42,34 @@ const Text = styled.p`
 const MyProfile2 = ({ userInfo }) => {
 
   const handleStreamsClick = () => {
-    // 버튼 클릭 시 수행할 작업 추가
     alert('스트리밍 기록 모달 띄우기!');
   };
 
   const handleFollowerClick = () => {
-    // 버튼 클릭 시 수행할 작업 추가
     alert('팔로워 목록 모달 띄우기!');
   };
 
   const handleFollowingClick = () => {
-    // 버튼 클릭 시 수행할 작업 추가
     alert('팔로잉 목록 모달 띄우기!');
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    } else {
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
   };
 
   return (
     <Wrapper>
       <StreamsButton onClick={handleStreamsClick}>
-        <Count>{userInfo.additionalInfo.airtime}</Count>
-        <Text>STREAMS</Text>
+        <Count>{formatTime(userInfo.additionalInfo.streamingTime)}</Count>
+        <Text>STREAMING TIME</Text>
       </StreamsButton>
       <FollowerButton onClick={handleFollowerClick}>
         <Count>{userInfo.additionalInfo.follower}</Count>
