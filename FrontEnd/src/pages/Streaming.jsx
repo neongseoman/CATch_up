@@ -5,6 +5,7 @@ import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import login from "./Login";
+import * as events from "events";
 
 
 const pc = new RTCPeerConnection(PCConfig);
@@ -83,23 +84,51 @@ const Streaming = () => {
                     console.log(error)
                 })
 
-            client.subscribe(
-                `/busker/${userId}/sdpAnswer`, (res) => {
-                    // console.log('신호 수신:', res);
-                    const offerResponse = JSON.parse(res.body);
-                    const answerId = offerResponse.id;
-                    const response = offerResponse.response
-                    const sdpAnswer = offerResponse.sdpAnswer
-                    console.log(sdpAnswer)
+            // sdpOffer를 보내고 Answer를 받음
+            client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
+                const offerResponse = JSON.parse(res.body);
+                const answerId = offerResponse.id;
+                const response = offerResponse.response;
+                const sdpAnswer = offerResponse.sdpAnswer;
+
+                console.log("Received SDP Answer: \n");
+                if(pc.connectionState !== "connected"){
                     pc.setRemoteDescription({
                         type: "answer",
                         sdp: sdpAnswer
-                    })
-                        .then(r => console.log("set remote : " + r))
-                        .catch(e => console.log(e))
-                });
+                    }).then(() => {
+                        console.log("Remote description set successfully");
+                    }).catch((error) => {
+                        console.error("Error setting remote description:", error);
+                    });
+                } else{
+                    console.log("You have already remoteDescription")
+                }
 
-            client.subscribe(`/busker/${userId}/answer`)
+            });
+            pc.onicecandidate = (event)=>{ //setLocalDescription이 불러옴.
+                if (event.candidate){
+                    console.log("candidate: " + event.candidate)
+                    client.publish({
+                        destination: `/app/busker/${userId}/iceCandidate`,
+                        body: JSON.stringify({ iceCandidate: event.candidate })
+                    });
+                }
+                if (event && event.target && event.target.iceGatheringState === 'complete') {
+                    alert('done gathering candidates - got iceGatheringState complete');
+                }
+            }
+            // IceCandidate를 받음.
+            client.subscribe(`/busker/${userId}/iceCandidate`,(res)=>{
+                const iceResponse = JSON.parse(res);
+                console.log("peer candidate: " +iceResponse.candidate)
+                if (iceResponse.id==="iceCandidate"){
+
+                    pc.addIceCandidate(iceResponse.candidate).then(r =>
+                        console.log(r)
+                    )
+                }
+            })
         }
         client.onStompError = (frame) => {
             console.log('Broker reported error: ' + frame.headers['message']);
