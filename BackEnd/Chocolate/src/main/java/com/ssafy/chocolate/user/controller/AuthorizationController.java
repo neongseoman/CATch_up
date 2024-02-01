@@ -29,7 +29,7 @@ public class AuthorizationController {
     public ResponseEntity<?> join(@RequestBody MemberJoinDto dto) {
         Map<String, String> response = new HashMap<>();
         try {
-            registerMemberService.join(dto.getEmail(), dto.getPassword());
+            registerMemberService.join(dto.getEmail(), dto.getPassword(), dto.getNickname());
             response.put("message", "join success");
             return ResponseEntity.ok(response);
         } catch (Exception e) {

@@ -71,8 +71,8 @@ public class Member {
 
     protected Member() {}
 
-    public static Member createUser(String email, String password, PasswordEncoder passwordEncoder) {
-        return new Member(null, email, passwordEncoder.encode(password), null, null,
+    public static Member createUser(String email, String password, PasswordEncoder passwordEncoder, String nickname) {
+        return new Member(null, email, passwordEncoder.encode(password), nickname, null,
                 LocalDateTime.now(), 0, 0, 0, 0, null, null, null,"USER");
     }
 
