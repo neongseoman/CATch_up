@@ -214,6 +214,7 @@ const StreamingPage = () => {
                   <VideoTmp />
                 </div>
                 <div style={middleBottomBoxStyle}>
+                  <p>gkdl</p>
                 </div>
             </div>
             <div style={rightBoxStyle}>

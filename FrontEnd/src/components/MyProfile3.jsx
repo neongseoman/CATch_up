@@ -1,6 +1,5 @@
-// 내 프로필-4
-
-import React, { useState } from 'react';
+// 내 프로필-3
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -12,41 +11,44 @@ const Wrapper = styled.div`
 
 const Viewer = styled.div`
     width: calc(60% - 5px);
-    height: 300px;
+    height: 250px;
     display: flex;
     border-radius: 10px;
     background-color: #1E1D1A;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    flex-direction: column;
 `;
 
 const Streams = styled.div`
     width: calc(40% - 5px);
-    height: 300px;
+    height: 250px;
     display: flex;
     border-radius: 10px;
     background-color: #1E1D1A;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    flex-direction: column;
 `;
 
 const TitleText = styled.p`
     color: white;
-    font-size: 18px;
+    font-size: 16px;
+    margin: 10px;
 `;
 
-const MyProfile4 = () => {
-  const [follower, setFollower] = useState('');
-  const [streams, setStreams] = useState('');
+const MyProfile3 = ({ userInfo }) => {
 
   return (
     <Wrapper>
       <Viewer>
         <TitleText>Viewer</TitleText>
+        <p>시청자 수 그래프</p>
       </Viewer>
       <Streams>
         <TitleText>Streams</TitleText>
+        <p>스트리밍 표시 달력</p>
       </Streams>
     </Wrapper>
   );
 };
 
-export default MyProfile4;
+export default MyProfile3;

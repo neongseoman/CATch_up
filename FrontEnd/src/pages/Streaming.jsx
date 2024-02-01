@@ -1,31 +1,33 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import CustomText from "../components/CustomText";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {userInfoState} from "../RecoilState/userRecoilState.js"
-import {stompConnection} from "../WebRTC/StreamerStomp";
+import {PCConfig} from "../WebRTC/RTCConfig";
+// import {stompClient} from "../WebRTC/StompClientSington";
+import * as StompJS from "@stomp/stompjs";
+import * as SockJS from "sockjs-client";
+import login from "./Login";
 
-const stompClient = stompConnection("busker")
-const Streaming =() =>{
 
-    const [userInfo,setUserInfo] = useRecoilState(userInfoState)
-    const userId = userInfo.userId
-    const userNickName = userInfo.userNickName
-    let count = 0
+const pc = new RTCPeerConnection(PCConfig);
+const userId = "testId"
 
-    // Establish Web Socket
+// 대체 왜 이게 2번이나 마운트되는거야?
+const Streaming = () => {
 
     // Set Peer Connection
+    useEffect(() => {
+        const constraints = {video: true, audio: false}
 
-    useEffect( () => {
-        const constraints = {video:true,audio:false}
-
-         navigator.mediaDevices.getUserMedia(constraints)
-            .then((stream) =>{
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
                 const videoElement = document.getElementById("streamingVideo")
-                const videoTrack = stream.getVideoTracks();
                 videoElement.srcObject = stream;
+                //
+                stream.getVideoTracks()
+                    .map((stream) => {
+                        pc.addTrack(stream)
+                    })
 
-            }).catch(error=>{
+            }).catch(error => {
             if (error.name === "OverconstrainedError") {
                 console.error(
                     `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`,
@@ -38,9 +40,78 @@ const Streaming =() =>{
                 console.error(`getUserMedia error: ${error.name}`, error);
             }
         })
+
+        //Stomp socket connection
+
+        const client = new StompJS.Client({
+            brokerURL: "ws://127.0.0.1:8080/signal"
+        });
+
+        if (typeof WebSocket !== 'function') {
+            client.webSocketFactory = function () {
+                console.log("Stomp error sockjs is running");
+                return new SockJS('http://127.0.0.1:8080/signal');
+            };
+        }
+
+        client.onConnect = (frame) => {
+            console.log(frame);
+
+            client.publish({
+                destination: `/app/busker`,
+                // destination:`/app/busker/${buskerName}`,
+                body: JSON.stringify({buskerName: userId + " is connect!"})
+            })
+
+            pc.createOffer({
+                iceRestart: true,
+            }).then((offer) => {
+                console.log(offer)
+                pc.setLocalDescription(offer)
+                    .then((r) => {
+                        client.publish({
+                            destination: `/app/busker/${userId}/offer`,
+                            body: JSON.stringify({
+                                userId,
+                                offer,
+                            })
+                        })
+                        console.log(r)
+                    })
+            })
+                .catch((error) => {
+                    console.log(error)
+                })
+
+            client.subscribe(
+                `/busker/${userId}/sdpAnswer`, (res) => {
+                    // console.log('신호 수신:', res);
+                    const offerResponse = JSON.parse(res.body);
+                    const answerId = offerResponse.id;
+                    const response = offerResponse.response
+                    const sdpAnswer = offerResponse.sdpAnswer
+                    console.log(sdpAnswer)
+                    pc.setRemoteDescription({
+                        type: "answer",
+                        sdp: sdpAnswer
+                    })
+                        .then(r => console.log("set remote : " + r))
+                        .catch(e => console.log(e))
+                });
+
+            client.subscribe(`/busker/${userId}/answer`)
+        }
+        client.onStompError = (frame) => {
+            console.log('Broker reported error: ' + frame.headers['message']);
+            console.log('Additional details: ' + frame.body);
+        };
+
+        client.activate();
+
+
     }, []);
 
-    return(
+    return (
         <>
             <CustomText typography="h1" bold>
                 방송하기 입니다
@@ -50,5 +121,7 @@ const Streaming =() =>{
         </>
     )
 }
+
+
 
 export default Streaming;
