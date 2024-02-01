@@ -101,7 +101,7 @@ const Header = styled.header`
   display: flex; /* 플렉스 컨테이너로 설정 */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  ${props => props.isMainPage ? 'flex-direction: column; ' : ''};
+  ${props => props.isMainPage ? 'flex-direction: column; ' : ''}
   // 모바일 화면에 대한 스타일
   @media (max-width: 768px) {
     flex-direction: column; // 세로 방향으로 쌓기

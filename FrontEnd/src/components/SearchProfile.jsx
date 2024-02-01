@@ -15,22 +15,28 @@ const ProfileList = styled.div`
     margin-bottom: 30px;
 `;
 
-const Profile = styled.div`
+const Profile = styled.button`
     width: 100%;
-    background: black;
+    height: 150px;
     display: flex;
+    color: white;
+    border-radius: 10px;
+    background-color: #1E1D1A;
+    align-items: flex-start;
     margin-bottom: 30px;
 `;
 
 const ProfileImg = styled.img`
     width: 140px;
     height: 140px;
+    margin-top: 15px;
+    margin-left: 10px;
     border-radius: 50%;
-    background: none;
+    object-fit: cover;
+    transform: scale(1.3);
 `;
 
 const ProfileText = styled.div`
-    margin-left: 30px;
     margin-top: auto;
     margin-bottom: auto;
     display: flex;
@@ -38,12 +44,34 @@ const ProfileText = styled.div`
     align-items: flex-start;
 `;
 
+const TextTop = styled.p`
+    display: flex;
+`;
+
 const UserName = styled.p`
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     color: white;
-    margin-bottom: 10px;
-    margin-top: 0px;
+    margin-bottom: 8px;
+    margin-right: 10px;
+    height: 40px;
+`;
+
+const StreamingCount = styled.p`
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    background: #8B8F92;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+`;
+
+const LiveIcon = styled.img`
+    width: 30px;
+    margin-right: 5px;
 `;
 
 const UserInfo = styled.p`
@@ -55,6 +83,10 @@ const UserInfo = styled.p`
 const SearchProfile = () => {
     const [data, setData] = useState();
     const url = 'http://i10a105.p.ssafy.io:8080/searchUser?query=Tom&page=0&size=10';
+
+    const handleProfileClick = () => {
+        alert('해당 사용자 프로필 화면으로 이동!');
+    };
 
     useEffect(() => {
         axios.get(url)
@@ -69,20 +101,30 @@ const SearchProfile = () => {
     
     return (
         <Wrapper>
-            <ProfileList>
-            {/* 데이터가 있고 배열이면 매핑하여 출력 */}
+            {/* <ProfileList> */}
             {data && Array.isArray(data) ? data.map((e, i) => (
-                <div key={i}>
+                <ProfileList key={i} onClick={handleProfileClick}>
                     <Profile>
-                        <ProfileImg src={e.profileImagePath} onerror="this.src='../../public/img/logo.png'" />
+                        <ProfileImg
+                            src={e.profileImagePath}
+                            onError={(e) => {
+                                e.target.src = "/img/logo.png";
+                            }}
+                        />
                         <ProfileText>
-                            <UserName>{e.nickName}</UserName>
+                            <TextTop>
+                                <UserName>{e.nickName}</UserName>
+                                <StreamingCount>
+                                    <LiveIcon src="/img/live.1.png" />
+                                    {e.streamingCount}
+                                </StreamingCount>
+                            </TextTop>
                             <UserInfo>{e.introduction}</UserInfo>
                         </ProfileText>
                     </Profile>
-                </div>
+                </ProfileList>
             )) : null}
-            </ProfileList>
+            {/* </ProfileList> */}
         </Wrapper>
     );
   };
