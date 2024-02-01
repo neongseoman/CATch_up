@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class BuskingManagingService {
     private final Logger log = LoggerFactory.getLogger(BuskingManagingService.class);
@@ -50,7 +51,7 @@ public class BuskingManagingService {
         String buskerId = message.getUserId();
         log.debug("start Busking is ok");
         System.out.println("여기까지는 괜찮고");
-        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService());
+        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService(simpMessagingTemplate));
         JsonObject sdpAnswer = busking.BuskingStart(message);
         buskingManaging.put(buskerId, busking);
         System.out.println("sdpAnswer : " + sdpAnswer);

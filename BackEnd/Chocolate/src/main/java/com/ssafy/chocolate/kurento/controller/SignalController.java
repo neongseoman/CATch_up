@@ -77,20 +77,12 @@ public class SignalController {
         Busking busking = buskingManagingService.getBusking(userId);
         if (busking != null) {
             IceCandidate iceCandidate = iceCandidateMessage.getIceCandidate();
-            System.out.println("iceCandidate : " + iceCandidate.getCandidate());
             WebRtcEndpoint rtcEndpoint = busking.getWebRtcEndpoint();
-            log.info(busking.getWebRtcEndpoint().toString());
+//          System.out.println("iceCandidate : " + iceCandidate.getCandidate());
+//
+//            log.info(busking.getWebRtcEndpoint().toString());
             rtcEndpoint.addIceCandidate(
-                    iceCandidate, new Continuation<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) throws Exception {
-                            log.info("add IceCandidate is success");
-                        }
-                        @Override
-                        public void onError(Throwable throwable) throws Exception {
-                            log.info("add IceCandidate is fail");
-                        }
-                    }
+                    iceCandidate
             );
 //        System.out.println(buskingService.getWebRtcEndpoint().getMediaState());
         }
