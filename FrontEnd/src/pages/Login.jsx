@@ -21,7 +21,7 @@ function LoginForm() {
     formData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch('http://i10a105.p.ssafy.io:8080/api/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
