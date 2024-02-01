@@ -52,10 +52,10 @@ function App() {
                   <Route path="streaming" element={<Layout />}>
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onAir' element={<Streaming />} />
+                      {/*시청하기*/}
+                      <Route path="watching" element={<Watching />} />
                   </Route>
-                
-                  {/*시청하기*/}
-                  <Route path="watching" element={<Watching />} />
+
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='/map' element={<MainMapPage />} />
                     <Route path="/streamingpage" element={<StreamingPage />} />

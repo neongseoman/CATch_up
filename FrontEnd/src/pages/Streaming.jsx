@@ -114,19 +114,19 @@ const Streaming = () => {
                         body: JSON.stringify({ iceCandidate: event.candidate })
                     });
                 }
-                if (event && event.target && event.target.iceGatheringState === 'complete') {
-                    alert('done gathering candidates - got iceGatheringState complete');
-                }
+                // if (event && event.target && event.target.iceGatheringState === 'complete') {
+                //     alert('done gathering candidates - got iceGatheringState complete');
+                // }
             }
             // IceCandidate를 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`,(res)=>{
-                const iceResponse = JSON.parse(res);
-                console.log("peer candidate: " +iceResponse.candidate)
+                const iceResponse = JSON.parse(res.body);
+                // console.log("peer candidate: " +iceResponse.candidate.candidate)
+                // console.log("peer candidate: " +iceResponse.candidate.sdpMid)
                 if (iceResponse.id==="iceCandidate"){
 
-                    pc.addIceCandidate(iceResponse.candidate).then(r =>
-                        console.log(r)
-                    )
+                    pc.addIceCandidate(iceResponse.candidate)
+                        .then()
                 }
             })
         }
