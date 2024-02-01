@@ -53,8 +53,8 @@ public class SpringSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(login -> login
                         .loginProcessingUrl("/api/login")
-                        .usernameParameter("userid")
-                        .passwordParameter("pw")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .successHandler(new CustomAuthenticationSuccessHandler())  // 로그인 성공 핸들러
                         .failureHandler(new CustomAuthenticationFailureHandler())  // 로그인 실패 핸들러
                 )

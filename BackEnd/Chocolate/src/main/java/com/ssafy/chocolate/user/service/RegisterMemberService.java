@@ -17,15 +17,14 @@ public class RegisterMemberService {
         this.repository = repository;
     }
 
-    public void join(String userid, String pw) {
-        Member member = Member.createUser(userid, pw, passwordEncoder);
+    public void join(String userid, String pw, String nickname) {
+        Member member = Member.createUser(userid, pw, passwordEncoder, nickname);
         validateDuplicateMember(member);
         repository.save(member);
-
     }
 
     private void validateDuplicateMember(Member member) {
-        repository.findByUserid(member.getUserid())
+        repository.findByEmail(member.getEmail())
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
