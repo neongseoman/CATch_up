@@ -36,7 +36,7 @@ const Navbar = () => {
     // 로그인 상태를 업데이트합니다.
     setIsLoggedIn(false);
 
-    fetch('http://localhost:8081/api/logout', {
+    fetch('http://localhost:8080/api/logout', {
       method: 'POST',
       credentials: 'include',
       headers: {

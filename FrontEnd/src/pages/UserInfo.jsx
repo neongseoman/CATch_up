@@ -1,5 +1,5 @@
-import React, { useState, useEffect  } from 'react';
-import { Link, useNavigate  } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Button } from "../components/Button";
 
@@ -13,7 +13,7 @@ function UserInfo() {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch('http://localhost:8081/api/dashboard', {
+        const response = await fetch('http://localhost:8080/api/dashboard', {
           method: 'GET',
           credentials: 'include'
         });
@@ -31,7 +31,7 @@ function UserInfo() {
         console.log(e)
         navigate('/user/login');
       }
-      
+
     };
 
     fetchData();
@@ -46,10 +46,16 @@ function UserInfo() {
           <h1>User Information</h1>
           <p><strong>Login ID:</strong> {userInfo.loginId}</p>
           <p><strong>Roles:</strong> {userInfo.loginRoles[0].authority}</p>
-          <p><strong>username:</strong> {userInfo.additionalInfo.username}</p>
-          <p><strong>follwing:</strong> {userInfo.additionalInfo.following}</p>
-          <p><strong>follower:</strong> {userInfo.additionalInfo.follower}</p>
-          <p><strong>airtime:</strong> {userInfo.additionalInfo.airtime}</p>
+
+          <div>
+            <p><strong>additionalInfo:</strong></p>
+            <ul>
+              {Object.entries(userInfo.additionalInfo).map(([key, value]) => (
+                <li key={key}>{`${key}: ${value}`}</li>
+              ))}
+            </ul>
+          </div>
+
           <ListWrapper>
             {pageNum.map((e, i) => {
               return (
