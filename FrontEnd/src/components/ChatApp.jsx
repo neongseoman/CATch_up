@@ -3,7 +3,6 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import './css/ChatApp.css';
 
-
 const ChatApp = () => {
   const [roomId, setRoomId] = useState('public');
   const [lastClickedItem, setLastClickedItem] = useState(null);
@@ -14,7 +13,6 @@ const ChatApp = () => {
   const chatContainerRef = useRef(null);
   const [showButton, setShowButton] = useState(true);
 
-
   const handleItemClick = (item) => {
     if (lastClickedItem !== null) {
       lastClickedItem.classList.remove('clicked');
@@ -22,8 +20,6 @@ const ChatApp = () => {
     item.classList.add('clicked');
     setLastClickedItem(item);
   };
-
-
 
   const joinChatRoom = () => {
     // disconnect();
@@ -39,9 +35,6 @@ const ChatApp = () => {
     setShowButton(false); // 버튼 숨김
 
   };
-
-
-
 
   const connect = () => {
 
@@ -63,8 +56,6 @@ const ChatApp = () => {
     client.activate(); // Activate the client
     console.log("스톰프 연결")
     setStompClient(client);
-
-    
   };
 
   const disconnect = () => {
@@ -73,8 +64,6 @@ const ChatApp = () => {
     }
     console.log('Disconnected');
   };
-
-
 
   const sendMessage = () => {
     if (stompClient !== null && stompClient.connected) {
@@ -113,8 +102,6 @@ const ChatApp = () => {
     }
   }, [chatMessages]);
 
-
-
   return (
     <div style={{
       borderLeft: '2px solid #33333C',
@@ -130,7 +117,7 @@ const ChatApp = () => {
         backgroundColor: '#000', // 배경을 검정색으로 설정
       }}> 
 
-      <div style={{ backgroundColor: '#33333C', color: 'white', height: '40px', width: '100%', position: 'fixed', top: 0, zIndex: 1 }}>
+      <div style={{ backgroundColor: '#33333C', color: 'white', height: '40px', width: '100%', position: 'fixed', top: 50, zIndex: 1 }}>
           <p style={{marginTop: '10px', color: '#fff', width: '25%', textAlign: 'center'}}>채팅</p>
         </div>
         <div id="chat-container" style={{ height: '100%', display: 'flex' }}>
@@ -252,7 +239,7 @@ const ChatApp = () => {
       marginTop: '20px'
     }}
     onClick={sendMessage}
-  ><h4 style={{fontSize: "10px", margin: '0px'}}>전송</h4>
+  ><h4 style={{fontSize: "10px", margin: '0px', color: 'white'}}>전송</h4>
   </button>
 </div>
 

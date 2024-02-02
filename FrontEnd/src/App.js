@@ -24,12 +24,11 @@ import {
     useRecoilState,
     useRecoilValue,
 } from 'recoil';
-import Audience from "./pages/Watching";
-import Watching from "./pages/Watching";
+import Audience from "./pages/WatchingPage";
 
 // import SearchResult from './Search/SearchResult';
 import StreamingInfo from "./pages/StreamingInfo";
-
+import WatchingPage from "./pages/WatchingPage";
 
 function App() {
   return (
@@ -39,28 +38,20 @@ function App() {
                   <Route element={<NavLayout />}>
                       <Route path='/' element={<Main />} />
                       <Route path='/page/:pageId' element={<Page />} />
-                      
                       <Route path='/searchresult' element={<SearchResultPage />} />
                   </Route>
+                  
                   <Route path="user" element={<Layout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
                   </Route>
-                  <Route path="streamingpage" element={<StreamingPage />}>
-                  </Route>
-                  {/*방송하기*/}
+                  
                   <Route path="streaming" element={<Layout />}>
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
                   </Route>
-                
-                  {/*시청하기*/}
-                  {/*<Route path='/watching' element={<Watching />} />*/}
-                  <Route element={<NavLayoutWithoutDefault />}>
-                    <Route path='/map' element={<MainMapPage />} />
-                    <Route path="/streamingpage" element={<StreamingPage />} />
-                  </Route>
+
                   <Route path="user" element={<NavLayout />}>
                     <Route path='login' element={<Login />} />
                     <Route path='logout' element={<Login />} />
@@ -68,6 +59,13 @@ function App() {
                     <Route path='info' element={<UserInfo />} />
                     <Route path='myprofilepage' element={<MyProfilePage />} />
                   </Route>
+
+                  <Route element={<NavLayoutWithoutDefault />}>
+                    <Route path='map' element={<MainMapPage />} />
+                    <Route path="streamingpage" element={<StreamingPage />} />
+                    <Route path="watchingpage" element={<WatchingPage />} />
+                  </Route>
+                  
                   <Route path="/error" render={(props) => <ErrorPage {...props} />} />
               </Routes>
           </BrowserRouter>

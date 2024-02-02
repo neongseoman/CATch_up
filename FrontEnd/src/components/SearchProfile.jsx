@@ -113,7 +113,7 @@ const SearchProfile = () => {
                         />
                         <ProfileText>
                             <TextTop>
-                                <UserName>{e.nickName}</UserName>
+                                <UserName>{e.nickname}</UserName>
                                 <StreamingCount>
                                     <LiveIcon src="/img/live.1.png" />
                                     {e.streamingCount}
