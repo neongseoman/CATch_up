@@ -1,47 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import CustomText from "../components/CustomText";
 import {PCConfig} from "../WebRTC/RTCConfig";
 // import {stompClient} from "../WebRTC/StompClientSington";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import login from "./Login";
-import * as events from "events";
 
 const pc = new RTCPeerConnection(PCConfig);
-const userId = "testId"
-
-// 대체 왜 이게 2번이나 마운트되는거야?
-const Streaming = () => {
+const userId = "audienceTest"
+const buskerId = "testId";
+// const remoteVideo = document.getElementById("remoteVideo")
+const Watching = () => {
 
     // Set Peer Connection
     useEffect(() => {
         const constraints = {video: true, audio: false}
+        const remoteVideo = document.getElementById("remoteVideo")
+        pc.ontrack = (stream) =>{
+            console.log(stream)
+            // event.streams[0]은 remote peer에서 수신한 스트림입니다.
+            // video 엘리먼트의 소스로 remote 스트림을 설정합니다.
+            remoteVideo.srcObject = stream.streams[0];
+        }
 
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then((stream) => {
-                const videoElement = document.getElementById("streamingVideo")
-                videoElement.srcObject = stream;
-                //
-                stream.getVideoTracks()
-                    .map((stream) => {
-                        pc.addTrack(stream)
-                    })
-
-            }).catch(error => {
-            if (error.name === "OverconstrainedError") {
-                console.error(
-                    `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`,
-                );
-            } else if (error.name === "NotAllowedError") {
-                console.error(
-                    "You need to grant this page permission to access your camera and microphone.",
-                );
-            } else {
-                console.error(`getUserMedia error: ${error.name}`, error);
-            }
-        })
-
-        //Stomp socket connection
 
         const client = new StompJS.Client({
             brokerURL: "ws://127.0.0.1:8080/signal"
@@ -56,10 +36,11 @@ const Streaming = () => {
 
         client.onConnect = (frame) => {
             console.log(frame);
-            //connection check
+
             client.publish({
-                destination: `/app/busker`,
-                body: JSON.stringify({buskerName: userId + " is connect!"})
+                destination: `/app/audience`,
+                // destination:`/app/busker/${buskerName}`,
+                body: JSON.stringify({audienceId: userId + " is connect!"})
             })
 
             pc.createOffer({
@@ -69,21 +50,22 @@ const Streaming = () => {
                 pc.setLocalDescription(offer)
                     .then((r) => {
                         client.publish({
-                            destination: `/app/busker/${userId}/offer`,
+                            destination: `/app/audience/${userId}/offer`,
                             body: JSON.stringify({
-                                userId,
+                                buskerId,
+                                audienceId:userId,
                                 offer,
                             })
                         })
-                        console.log(r)
+                        // console.log(r)
                     })
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
 
             // sdpOffer를 보내고 Answer를 받음
-            client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
+            client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
                 const answerId = offerResponse.id;
                 const response = offerResponse.response;
@@ -96,19 +78,18 @@ const Streaming = () => {
                     sdp: sdpAnswer
                 }).then(() => {
                     console.log("Remote description set successfully");
-                    console.log(pc.currentRemoteDescription)
-
                 }).catch((error) => {
                     console.error("Error setting remote description:", error);
                 });
             });
-            //
-            pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
-                if (event.candidate) {
+            // IceCandidate를 받음.
+            pc.onicecandidate = (event)=>{ //setLocalDescription call this event.
+                console.log(event)
+                if (event.candidate){
                     console.log("candidate: " + event.candidate)
                     client.publish({
-                        destination: `/app/busker/${userId}/iceCandidate`,
-                        body: JSON.stringify({iceCandidate: event.candidate})
+                        destination: `/app/audience/${userId}/iceCandidate`,
+                        body: JSON.stringify({ iceCandidate: event.candidate })
                     });
                 }
                 if (event && event.target && event.target.iceGatheringState === 'complete') {
@@ -116,16 +97,24 @@ const Streaming = () => {
                 }
             }
 
-            // IceCandidate 받음.
-            client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
+            client.subscribe(`/audience/${userId}/iceCandidate`,(res)=>{
                 const iceResponse = JSON.parse(res.body);
-
-                if (iceResponse.id === "iceCandidate") {
+                console.log("peer candidate: " +iceResponse.candidate.candidate)
+                console.log("peer candidate: " +iceResponse.candidate.sdpMid)
+                if (iceResponse.id==="iceCandidate"){
                     pc.addIceCandidate(iceResponse.candidate)
                         .then(() => console.log("peer candidate: " + iceResponse.candidate.candidate))
+                        .catch(error => console.log(error))
                 }
             })
+
+
+
+            client.subscribe(`/audience/${userId}/receiveError`,(r)=>{
+                console.log(r)
+            })
         }
+
         client.onStompError = (frame) => {
             console.log('Broker reported error: ' + frame.headers['message']);
             console.log('Additional details: ' + frame.body);
@@ -133,14 +122,18 @@ const Streaming = () => {
 
         client.activate();
 
-    }, []);
 
+    }, []);
 
     return (
         <>
-            <video id="streamingVideo" style={{width: '100%'}} autoPlay controls></video>
+            <CustomText typography="h1" bold>
+                시청하기 입니다
+            </CustomText>
+            <video id="remoteVideo" autoPlay controls></video>
+
         </>
     )
 }
 
-export default Streaming;
+export default Watching;

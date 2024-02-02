@@ -50,8 +50,14 @@ function App() {
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
+                      <Route path='watching' element={<Watching />} />
                   </Route>
-
+                
+                  {/*시청하기*/}
+                  <Route element={<NavLayoutWithoutDefault />}>
+                    <Route path='/map' element={<MainMapPage />} />
+                    <Route path="/streamingpage" element={<StreamingPage />} />
+                  </Route>
                   <Route path="user" element={<NavLayout />}>
                     <Route path='login' element={<Login />} />
                     <Route path='logout' element={<Login />} />
@@ -72,5 +78,6 @@ function App() {
       </RecoilRoot>
   );
 }
+
 
 export default App;

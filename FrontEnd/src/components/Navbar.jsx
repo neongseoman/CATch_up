@@ -36,7 +36,7 @@ const Navbar = () => {
     // 로그인 상태를 업데이트합니다.
     setIsLoggedIn(false);
 
-    fetch('http://localhost:8080/api/logout', {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/api/logout`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -49,6 +49,7 @@ const Navbar = () => {
         if (response.ok) {
           // 로그아웃 성공 후 처리, 예: 로그인 상태 변경, 페이지 리다이렉션 등
           console.log('Logout successful');
+          alert("로그아웃되었습니다!!!")
           navigate('/');
         } else {
           // 서버 에러 처리
@@ -101,7 +102,7 @@ const Header = styled.header`
   display: flex; /* 플렉스 컨테이너로 설정 */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  ${props => props.isMainPage ? 'flex-direction: column; ' : ''};
+  ${props => props.isMainPage ? 'flex-direction: column; ' : ''}
   // 모바일 화면에 대한 스타일
   @media (max-width: 768px) {
     flex-direction: column; // 세로 방향으로 쌓기
