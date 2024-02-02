@@ -5,7 +5,7 @@
 ./clone_repos.sh
 
 # 8080 포트에서 실행 중인 프로세스의 PID를 찾음
-PID=$(lsof -ti:8080)
+PID=$(lsof -ti:8443)
 
 # 해당 PID가 있으면 프로세스 종료
 if [ ! -z "$PID" ]; then
