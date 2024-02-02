@@ -10,13 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.sql.Blob;
 import java.util.List;
-
-import org.springframework.jdbc.core.RowMapper;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.WKBReader;
 
 @Repository
 public class LiveStreamSessionRepository {
@@ -63,7 +57,7 @@ public class LiveStreamSessionRepository {
                     session.setMaxViewer(resultSet.getInt("max_viewer"));
 
                     session.setProfileImagePath(resultSet.getString("ui.profile_image_path"));
-                    session.setNickName(resultSet.getString("ui.nickname"));
+                    session.setNickname(resultSet.getString("ui.nickname"));
 
 
                     return session;
@@ -100,7 +94,7 @@ public class LiveStreamSessionRepository {
                 new Object[]{query, pageSize, offset},
                 (resultSet, rowNum) -> {
                     SearchUserDto user = new SearchUserDto();
-                    user.setNickName(resultSet.getString("nickname"));
+                    user.setNickname(resultSet.getString("nickname"));
                     user.setProfileImagePath(resultSet.getString("profile_image_path"));
                     user.setIntroduction(resultSet.getString("introduction"));
                     user.setStreamingTime(resultSet.getLong("streaming_time"));
