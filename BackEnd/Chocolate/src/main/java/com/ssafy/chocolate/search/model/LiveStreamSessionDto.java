@@ -1,7 +1,5 @@
 package com.ssafy.chocolate.search.model;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -32,17 +30,17 @@ public class LiveStreamSessionDto {
     private Integer maxViewer;
 
 
-    private String nickName;
+    private String nickname;
 
     private String profileImagePath;
 
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getProfileImagePath() {
@@ -65,7 +63,7 @@ public class LiveStreamSessionDto {
         this.introduction = introduction;
         this.category = category;
         this.maxViewer = maxViewer;
-        this.nickName = nickName;
+        this.nickname = nickName;
         this.profileImagePath = profileImagePath;
     }
 
