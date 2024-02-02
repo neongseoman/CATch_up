@@ -7,7 +7,7 @@ public class SearchUserDto {
     private Long streamingTime;
     private Long streamingCount;
     private String profileImagePath;
-    private String nickName;
+    private String nickname;
     private String introduction;
 
     public SearchUserDto(Long userNo, Long following, Long follower, Long streamingTime, Long streamingCount, String profileImagePath, String nickName, String introduction) {
@@ -17,7 +17,7 @@ public class SearchUserDto {
         this.streamingTime = streamingTime;
         this.streamingCount = streamingCount;
         this.profileImagePath = profileImagePath;
-        this.nickName = nickName;
+        this.nickname = nickName;
         this.introduction = introduction;
     }
 
@@ -72,12 +72,12 @@ public class SearchUserDto {
         this.profileImagePath = profileImagePath;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getIntroduction() {
