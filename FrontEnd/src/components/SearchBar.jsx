@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { TfiSearch } from "react-icons/tfi";
 
 const SearchContainer = styled.div`
   display: flex;
@@ -56,7 +55,7 @@ const SearchBar = ({ onSearch }) => {
         value={searchTerm}
         onChange={handleInputChange}
       />
-      <SearchButton onClick={handleSearchClick}><TfiSearch   /></SearchButton>
+      <SearchButton onClick={handleSearchClick}>🔍︎</SearchButton>
     </SearchContainer>
   );
 };
