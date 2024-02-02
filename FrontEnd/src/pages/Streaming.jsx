@@ -8,6 +8,7 @@ import login from "./Login";
 import * as events from "events";
 
 const pc = new RTCPeerConnection(PCConfig);
+// pc.setCodecPreferences(opus_codecs);
 const userId = "testId"
 
 // 대체 왜 이게 2번이나 마운트되는거야?
@@ -135,6 +136,27 @@ const Streaming = () => {
 
 
     }, []);
+
+    pc.oniceconnectionstatechange = function() {
+        console.log('ICE 연결 상태:', pc.iceConnectionState);
+
+        if (pc.iceConnectionState === 'connected') {
+            console.log('피어 간 연결이 성공적으로 수립되었습니다.');
+        } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
+            console.log('피어 간 연결이 실패했거나 끊어졌습니다.');
+        }
+    };
+
+// 데이터 연결 상태 확인
+    pc.onconnectionstatechange = function() {
+        console.log('데이터 연결 상태:', pc.connectionState);
+
+        if (pc.connectionState === 'connected') {
+            console.log('데이터 연결이 확립되었습니다.');
+        } else if (pc.connectionState === 'disconnected') {
+            console.log('데이터 연결이 끊어졌습니다.');
+        }
+    };
 
 
     return (
