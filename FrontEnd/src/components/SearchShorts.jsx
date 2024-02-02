@@ -55,11 +55,13 @@ const Tag = styled.div`
 const ShortsTitle = styled.div`
     color: white;
     font-size: 24px;
+    text-align: left;
 `;
 
 const ShortsInfo = styled.div`
     color: white;
     font-size: 12px;
+    text-align: left;
 `;
 
 const ProfileField = styled.p`
@@ -73,6 +75,8 @@ const ProfileImg = styled.img`
     border-radius: 50%;
     margin-right: 5px;
     color: white;
+    object-fit: cover;
+    transform: scale(1.5);
 `;
 
 const ProfileName = styled.p`
@@ -111,6 +115,10 @@ const SearchShorts = () => {
     const [data, setData] = useState();
     const url = 'http://i10a105.p.ssafy.io:8080/searchShorts?query=두번째 &page=0&size=10';
 
+    const handleShortsClick = () => {
+        alert('해당 쇼츠 모달 띄우기!');
+    };
+
     useEffect(() => {
         axios.get(url)
           .then(response => {
@@ -125,8 +133,8 @@ const SearchShorts = () => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2); // 두 자리로 표시되도록
-        const day = ('0' + date.getDate()).slice(-2); // 두 자리로 표시되도록
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
         return `${year}-${month}-${day}`;
     };
 
@@ -141,7 +149,6 @@ const SearchShorts = () => {
             result += `${hours}시간 `;
         }
     
-        // 분과 초를 표기
         if (remainingMinutes > 0) {
             result += `${remainingMinutes}분 `;
         }
@@ -154,10 +161,8 @@ const SearchShorts = () => {
     
     return (
         <Wrapper>
-            <Shorts>
-            {/* 데이터가 있고 배열이면 매핑하여 출력 */}
             {data && Array.isArray(data) ? data.map((e, i) => (
-                <div key={i}>
+                <Shorts key={i} onClick={handleShortsClick}>
 
                 <Info>
                     <TagField>
@@ -168,7 +173,12 @@ const SearchShorts = () => {
                     ))}
                     </TagField>
                     <ProfileField>
-                        <ProfileImg src={e.profileImagePath} alt="User" />
+                        <ProfileImg
+                            src={e.profileImagePath}
+                            onError={(e) => {
+                                e.target.src = '/img/logo.png';
+                            }}
+                        />
                         <ProfileName>{e.nickname}</ProfileName>
                     </ProfileField>
                     <ShortsTitle>{e.title}</ShortsTitle>
@@ -189,9 +199,8 @@ const SearchShorts = () => {
                     </StreamingInfoField>
                 </Info>
                 <Video>{e.shortsPath}</Video>
-                </div>
+                </Shorts>
             )) : null}
-            </Shorts>
         </Wrapper>
     );
   };

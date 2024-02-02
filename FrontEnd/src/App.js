@@ -15,6 +15,7 @@ import ChatApp from './components/ChatApp'
 import Streaming from './pages/Streaming'
 import React, { useEffect } from 'react';
 import StreamingPage from "./pages/StreamingPage";
+import ShortsUpload from './pages/ShortsUpload';
 import {Button} from "./components/Button";
 import {
     RecoilRoot,
@@ -28,7 +29,6 @@ import Watching from "./pages/Watching";
 
 // import SearchResult from './Search/SearchResult';
 import StreamingInfo from "./pages/StreamingInfo";
-
 
 
 function App() {
@@ -48,10 +48,11 @@ function App() {
                   </Route>
                   <Route path="streamingpage" element={<StreamingPage />}>
                   </Route>
-                  {/*// 방송하기*/}
+                  {/*방송하기*/}
                   <Route path="streaming" element={<Layout />}>
                       <Route path='info' element={<StreamingInfo />} />
-                      <Route path='onAir' element={<Streaming />} />
+                      <Route path='onair' element={<Streaming />} />
+                      <Route path='shorts' element={<ShortsUpload />} />
                   </Route>
                 
                   {/*시청하기*/}
