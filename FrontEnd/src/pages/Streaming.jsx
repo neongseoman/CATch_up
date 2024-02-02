@@ -7,7 +7,6 @@ import * as SockJS from "sockjs-client";
 import login from "./Login";
 import * as events from "events";
 
-
 const pc = new RTCPeerConnection(PCConfig);
 const userId = "testId"
 
@@ -57,10 +56,9 @@ const Streaming = () => {
 
         client.onConnect = (frame) => {
             console.log(frame);
-
+            //connection check
             client.publish({
                 destination: `/app/busker`,
-                // destination:`/app/busker/${buskerName}`,
                 body: JSON.stringify({buskerName: userId + " is connect!"})
             })
 
@@ -79,7 +77,7 @@ const Streaming = () => {
                         })
                         console.log(r)
                     })
-            })
+                })
                 .catch((error) => {
                     console.log(error)
                 })
@@ -91,42 +89,40 @@ const Streaming = () => {
                 const response = offerResponse.response;
                 const sdpAnswer = offerResponse.sdpAnswer;
 
-                console.log("Received SDP Answer: \n");
-                if(pc.connectionState !== "connected"){
-                    pc.setRemoteDescription({
-                        type: "answer",
-                        sdp: sdpAnswer
-                    }).then(() => {
-                        console.log("Remote description set successfully");
-                    }).catch((error) => {
-                        console.error("Error setting remote description:", error);
-                    });
-                } else{
-                    console.log("You have already remoteDescription")
-                }
+                console.log("Received SDP Answer \n");
+                console.log(offerResponse)
+                pc.setRemoteDescription({
+                    type: "answer",
+                    sdp: sdpAnswer
+                }).then(() => {
+                    console.log("Remote description set successfully");
+                    console.log(pc.currentRemoteDescription)
 
+                }).catch((error) => {
+                    console.error("Error setting remote description:", error);
+                });
             });
-            pc.onicecandidate = (event)=>{ //setLocalDescription이 불러옴.
-                if (event.candidate){
+            //
+            pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
+                if (event.candidate) {
                     console.log("candidate: " + event.candidate)
                     client.publish({
                         destination: `/app/busker/${userId}/iceCandidate`,
-                        body: JSON.stringify({ iceCandidate: event.candidate })
+                        body: JSON.stringify({iceCandidate: event.candidate})
                     });
                 }
-                // if (event && event.target && event.target.iceGatheringState === 'complete') {
-                //     alert('done gathering candidates - got iceGatheringState complete');
-                // }
+                if (event && event.target && event.target.iceGatheringState === 'complete') {
+                    console.log('done gathering candidates - got iceGatheringState complete');
+                }
             }
-            // IceCandidate를 받음.
-            client.subscribe(`/busker/${userId}/iceCandidate`,(res)=>{
-                const iceResponse = JSON.parse(res.body);
-                // console.log("peer candidate: " +iceResponse.candidate.candidate)
-                // console.log("peer candidate: " +iceResponse.candidate.sdpMid)
-                if (iceResponse.id==="iceCandidate"){
 
+            // IceCandidate 받음.
+            client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
+                const iceResponse = JSON.parse(res.body);
+
+                if (iceResponse.id === "iceCandidate") {
                     pc.addIceCandidate(iceResponse.candidate)
-                        .then()
+                        .then(() => console.log("peer candidate: " + iceResponse.candidate.candidate))
                 }
             })
         }
@@ -140,6 +136,7 @@ const Streaming = () => {
 
     }, []);
 
+
     return (
         <>
             <CustomText typography="h1" bold>
@@ -150,7 +147,6 @@ const Streaming = () => {
         </>
     )
 }
-
 
 
 export default Streaming;
