@@ -20,6 +20,12 @@ Catch UP 프로젝트는 다음과 같은 브랜치 구조를 가지고 있습�
 
 ## 프로젝트 아키텍쳐
 ![architecture](image.png)
+- nginx를 통하여 도메인에 https를 적용합니다.
+- docker-compose를 사용하여 kurento media server, MySQL, reddis를 띄워 사용합니다.
+- reddis를 사용하여 spring에서의 세션정보를 캐싱합니다.
+- 도커 컨테이너의 MySQL은 데이터 관리를 위해 볼륨을 설정하여 영구적으로 보관합니다.
+- 쉘스크립트를 통하여 서비스 배포를 자동화합니다.
+
 
 ## 주요 기능
 
