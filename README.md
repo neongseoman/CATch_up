@@ -1,6 +1,6 @@
 # Catch UP - 실시간 버스킹 스트리밍 서비스
 
-![logo](image-1.png)
+![logo](img/image-1.png)
 > [Catch Up](https://i10a105.p.ssafy.io/)
 
 
@@ -19,7 +19,7 @@ Catch UP 프로젝트는 다음과 같은 브랜치 구조를 가지고 있습�
 각 브랜치는 특정 개발 영역에 초점을 맞추며, 개발 과정에서 협업과 코드 리뷰를 용이하게 하기 위해 분리되어 관리됩니다.
 
 ## 프로젝트 아키텍쳐
-![architecture](image.png)
+![architecture](img/image.png)
 - nginx를 통하여 도메인에 https를 적용합니다.
 - docker-compose를 사용하여 kurento media server, MySQL, reddis를 띄워 사용합니다.
 - reddis를 사용하여 spring에서의 세션정보를 캐싱합니다.
