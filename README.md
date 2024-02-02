@@ -1,6 +1,6 @@
 # Catch UP - 실시간 버스킹 스트리밍 서비스
 
-
+![logo](image-1.png)
 > [Catch Up](https://i10a105.p.ssafy.io/)
 
 
