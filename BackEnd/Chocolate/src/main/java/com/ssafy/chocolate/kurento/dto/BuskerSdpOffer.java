@@ -1,8 +1,6 @@
 package com.ssafy.chocolate.kurento.dto;
 
-import org.kurento.client.OfferOptions;
-
-public class BuskerOfferReceive {
+public class BuskerSdpOffer{
     private String userId;
     private SDPOffer offer;
 
@@ -24,11 +22,4 @@ public class BuskerOfferReceive {
         this.offer = offer;
     }
 
-    @Override
-    public String toString() {
-        return "BuskerOfferReceive{" +
-                "userId='" + userId + '\'' +
-                ", offer=" + offer +
-                '}';
-    }
 }

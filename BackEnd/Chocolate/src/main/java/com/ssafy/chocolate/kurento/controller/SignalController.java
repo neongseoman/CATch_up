@@ -1,12 +1,12 @@
 package com.ssafy.chocolate.kurento.controller;
 
 import com.ssafy.chocolate.common.exception.NoBuskingException;
-import com.ssafy.chocolate.kurento.dto.BuskerOfferReceive;
+import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
+import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
 import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
 import com.ssafy.chocolate.kurento.service.BuskingManagingService;
 import com.ssafy.chocolate.kurento.service.Busking;
 import lombok.RequiredArgsConstructor;
-import org.kurento.client.Continuation;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
@@ -49,13 +49,12 @@ public class SignalController {
     }
 
     @MessageMapping("/busker/{userId}/offer")
-    public void buskerOfferReceive(@DestinationVariable String userId,
-//                                   @Payload BuskerOfferReceive offerMessage) throws NoBuskingException, IOException {
-                                   @Payload BuskerOfferReceive offerMessage) throws NoBuskingException, IOException {
+    public void receiveBuskerSDPOffer(@DestinationVariable String userId,
+                                      @Payload BuskerSdpOffer SdpOfferMessage) throws NoBuskingException, IOException {
         System.out.println(userId + " send Offer");
         try {
 
-            buskingManagingService.startBusking(offerMessage);
+            buskingManagingService.startBusking(SdpOfferMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,29 +67,42 @@ public class SignalController {
 
 
     @MessageMapping("/busker/{userId}/iceCandidate")
-    public void buskerIceCandidateReceive(
+    public void receiveBuskerIceCandidate(
             @DestinationVariable String userId,
             @Payload IceCandidateMessage iceCandidateMessage
     ) {
         log.info("Ice Candidate is sent");
-//        System.out.println(iceCandidateMessage.toString());
         Busking busking = buskingManagingService.getBusking(userId);
         if (busking != null) {
             IceCandidate iceCandidate = iceCandidateMessage.getIceCandidate();
-            WebRtcEndpoint rtcEndpoint = busking.getWebRtcEndpoint();
-//          System.out.println("iceCandidate : " + iceCandidate.getCandidate());
-//
-//            log.info(busking.getWebRtcEndpoint().toString());
+            WebRtcEndpoint rtcEndpoint = busking.getBuskerWebRtcEndpoint();
             rtcEndpoint.addIceCandidate(
                     iceCandidate
             );
-//        System.out.println(buskingService.getWebRtcEndpoint().getMediaState());
         }
     }
 
 
-    @MessageMapping("join")
-    public void joinBusking() {
+    @MessageMapping("/audience/{userId}/offer")
+    public void receiveAudienceSDPOffer(@DestinationVariable String userId,
+                                        @Payload AudienceSdpOffer sdpOfferMessage) throws NoBuskingException { //offer And Answer
+        System.out.println("Audience send Offer");
+//        System.out.println(sdpOfferMessage.toString());
+        try {
+            buskingManagingService.joinBusking(sdpOfferMessage);
+        } catch (NoBuskingException e) {
+            e.printStackTrace();
+        }
+        HashMap<String, String> map = new HashMap<>();
+        map.put("audience", "join busking");
+
+        simpMessagingTemplate.convertAndSend("/audience/" + userId + "/answer", map);
+
+    }
+
+    @MessageMapping("/audience/{userId}/iceCandidate")
+    public void receiveAudienceSDPOffer(@DestinationVariable String userId,
+                                        @Payload IceCandidateMessage iceCandidateMessage) { // Handle iceCandidate
 
     }
 

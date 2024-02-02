@@ -18,13 +18,21 @@ public class IceMessageSendService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void buskerSendIceCandidate(String userId, HashMap<String, Object> iceCandidate){
-        log.info(userId+ " iceCandidate send ");
-        System.out.println(iceCandidate.values());
+//        log.info(userId+ " iceCandidate send ");
+//        System.out.println(iceCandidate.values());
         simpMessagingTemplate.convertAndSend(
                 "/busker/" + userId + "/iceCandidate", iceCandidate
         );
     }
 
+    public void audienceSendIceCandidate(String userId, HashMap<String, Object> iceCandidate){
+        log.info(userId + " send IceCandidate to audience");
+        simpMessagingTemplate.convertAndSend("/audience/"+userId+"/iceCandidate",iceCandidate);
+    }
 
+    public void audienceSendSdpAnswer(String userId, JsonObject sdpAnswer){
+        log.info("Audience "+ userId + "send SDP Answer");
+        simpMessagingTemplate.convertAndSend("/audience/"+userId+"/sdpAnswer",sdpAnswer.toString());
+    }
 
 }
