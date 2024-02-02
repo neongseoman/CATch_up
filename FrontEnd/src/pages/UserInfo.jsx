@@ -13,7 +13,7 @@ function UserInfo() {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch('https://i10a105.p.ssafy.io/api/dashboard', {
+        const response = await fetch('${process.env.REACT_APP_API_BASE_URL}/api/dashboard', {
           method: 'GET',
           credentials: 'include'
         });

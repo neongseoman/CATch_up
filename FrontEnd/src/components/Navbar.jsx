@@ -36,7 +36,7 @@ const Navbar = () => {
     // 로그인 상태를 업데이트합니다.
     setIsLoggedIn(false);
 
-    fetch('https://i10a105.p.ssafy.io/api/logout', {
+    fetch('${process.env.REACT_APP_API_BASE_URL}/api/logout', {
       method: 'POST',
       credentials: 'include',
       headers: {
