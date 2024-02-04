@@ -42,7 +42,7 @@ function App() {
                       
                       <Route path='/searchresult' element={<SearchResultPage />} />
                   </Route>
-                  <Route path="user" element={<Layout />}>
+                  <Route path="user" element={<NavLayout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
                   </Route>
@@ -61,7 +61,7 @@ function App() {
                     <Route path='/map' element={<MainMapPage />} />
                     <Route path="/streamingpage" element={<StreamingPage />} />
                   </Route>
-                  <Route path="user" element={<NavLayout />}>
+                  <Route path="user" element={<Layout />}>
                     <Route path='login' element={<Login />} />
                     <Route path='logout' element={<Login />} />
                     <Route path='signup' element={<SignUpForm />} />
