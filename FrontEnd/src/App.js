@@ -41,7 +41,7 @@ function App() {
                       <Route path='/searchresult' element={<SearchResultPage />} />
                   </Route>
                   
-                  <Route path="user" element={<Layout />}>
+                  <Route path="user" element={<NavLayout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
                       <Route path='signup' element={<SignUpForm />} />
@@ -49,7 +49,7 @@ function App() {
                       <Route path='myprofilepage' element={<MyProfilePage />} />
                   </Route>
                   
-                  <Route path="streaming" element={<Layout />}>
+                  <Route path="streaming" element={<NavLayout />}>
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
