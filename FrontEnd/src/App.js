@@ -53,7 +53,7 @@ function App() {
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
-                      <Route path='watching' element={<Watching />} />
+                      {/* <Route path='watching' element={<Watching />} /> */}
                   </Route>
                 
                   {/*시청하기*/}
