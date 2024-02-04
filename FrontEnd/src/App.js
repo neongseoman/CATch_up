@@ -49,12 +49,12 @@ function App() {
                   <Route path="streamingpage" element={<StreamingPage />}>
                   </Route>
                   {/*방송하기*/}
-                  <Route path="streaming" element={<Layout />}>
+                  {/* <Route path="streaming" element={<Layout />}>
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
                       <Route path='watching' element={<Watching />} />
-                  </Route>
+                  </Route> */}
                 
                   {/*시청하기*/}
                   <Route element={<NavLayoutWithoutDefault />}>
