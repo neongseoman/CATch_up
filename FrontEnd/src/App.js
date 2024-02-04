@@ -42,9 +42,12 @@ function App() {
                       
                       <Route path='/searchresult' element={<SearchResultPage />} />
                   </Route>
-                  <Route path="user" element={<Layout />}>
+                  <Route path="user" element={<NavLayout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
+                      <Route path='signup' element={<SignUpForm />} />
+                      <Route path='info' element={<UserInfo />} />
+                      <Route path='myprofilepage' element={<MyProfilePage />} />
                   </Route>
                   <Route path="streamingpage" element={<StreamingPage />}>
                   </Route>
@@ -60,13 +63,6 @@ function App() {
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='/map' element={<MainMapPage />} />
                     <Route path="/streamingpage" element={<StreamingPage />} />
-                  </Route>
-                  <Route path="user" element={<NavLayout />}>
-                    <Route path='login' element={<Login />} />
-                    <Route path='logout' element={<Login />} />
-                    <Route path='signup' element={<SignUpForm />} />
-                    <Route path='info' element={<UserInfo />} />
-                    <Route path='myprofilepage' element={<MyProfilePage />} />
                   </Route>
                   <Route path="/error" render={(props) => <ErrorPage {...props} />} />
               </Routes>
