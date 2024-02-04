@@ -57,7 +57,7 @@ function App() {
                   </Route>
                 
                   {/*시청하기*/}
-                  <Route element={<NavLayout />}>
+                  <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='/map' element={<MainMapPage />} />
                     <Route path="/streamingpage" element={<StreamingPage />} />
                     <Route path="/watchingpage" element={<WatchingPage />} />
