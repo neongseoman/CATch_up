@@ -41,7 +41,7 @@ function App() {
                       <Route path='/searchresult' element={<SearchResultPage />} />
                   </Route>
                   
-                  <Route path="user" element={<Layout />}>
+                  <Route path="user" element={<NavLayout />}>
                       <Route path='login' element={<Login />} />
                       <Route path='logout' element={<Login />} />
                       <Route path='signup' element={<SignUpForm />} />
@@ -49,17 +49,18 @@ function App() {
                       <Route path='myprofilepage' element={<MyProfilePage />} />
                   </Route>
                   
-                  <Route path="streaming" element={<Layout />}>
+                  <Route path="streaming" element={<NavLayout />}>
                       <Route path='info' element={<StreamingInfo />} />
                       <Route path='onair' element={<Streaming />} />
                       <Route path='shorts' element={<ShortsUpload />} />
-                      <Route path='watching' element={<Watching />} />
+                      {/* <Route path='watching' element={<Watching />} /> */}
                   </Route>
                 
                   {/*시청하기*/}
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='/map' element={<MainMapPage />} />
                     <Route path="/streamingpage" element={<StreamingPage />} />
+                    <Route path="/watchingpage" element={<WatchingPage />} />
                   </Route>
                   <Route path="/error" render={(props) => <ErrorPage {...props} />} />
               </Routes>
