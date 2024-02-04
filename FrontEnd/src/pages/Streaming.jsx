@@ -133,20 +133,14 @@ const Streaming = () => {
 
         client.activate();
 
-
     }, []);
 
 
     return (
         <>
-            <CustomText typography="h1" bold>
-                방송하기 입니다
-            </CustomText>
-            <video id="streamingVideo" autoPlay controls></video>
-
+            <video id="streamingVideo" style={{width: '100%'}} autoPlay controls></video>
         </>
     )
 }
-
 
 export default Streaming;

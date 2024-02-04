@@ -155,7 +155,7 @@ const SearchStreaming = () => {
                                     e.target.src = '/img/logo.png';
                                 }}
                             />
-                            <ProfileName>{e.nickName}</ProfileName>
+                            <ProfileName>{e.nickname}</ProfileName>
                             </ProfileField>
                             <OptionField>
                                 <Option>{getTimeFromStartTime(e.startTime)}부터 {e.maxViewer}명 시청중</Option>
