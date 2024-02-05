@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins="http://localhost:3000,https://i10a105.p.ssafy.io")
+//@CrossOrigin(origins="http://localhost:3000,https://i10a105.p.ssafy.io")
 @RestController
 @RequestMapping("/api/user")
 public class AuthorizationController {
