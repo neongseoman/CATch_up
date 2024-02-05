@@ -50,6 +50,14 @@ public class FollowController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{userId}/is-following/{followingUsername}")
+    public ResponseEntity<Boolean> isFollowing(@AuthenticationPrincipal UserDetails currentUser, @PathVariable String followingUsername) {
+        String id = currentUser.getUsername();
+        Long followerId = followService.findUserIdByUsername(id);
+        Long followingId = followService.findUserIdByUsername(followingUsername);
+        boolean isFollowing = followService.isFollowing(followerId, followingId);
+        return ResponseEntity.ok(isFollowing);
+    }
 
     // 로그인한 사용자의 ID를 UserDetails에서 추출하는 메소드 (구현 필요)
     private Long getUserIdFromPrincipal(UserDetails principal) {

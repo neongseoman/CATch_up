@@ -49,4 +49,9 @@ public class FollowService {
     public Long countFollowers(Long userId) {
         return followRepository.countByFollowingId(userId);
     }
+
+    // 현재 사용자가 특정 사용자를 팔로우하고 있는지 확인하는 메서드
+    public boolean isFollowing(Long followerId, Long followingId) {
+        return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
+    }
 }
