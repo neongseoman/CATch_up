@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 이 스크립트는 특정 Git 레포지토리의 프론트엔드(FE)와 백엔드(BE) 프로젝트를 클론, 빌드 및 실행하는 과정을 자동화합니다.
-# 사용법: ./integrated_script.sh [FE_branch_name] [BE_branch_name]
+# 사용법: ./start.sh [FE_branch_name] [BE_branch_name]
 # FE_branch_name과 BE_branch_name은 선택적입니다. 기본값은 각각 FE_develop와 BE_develop입니다.
 
 # 파라미터로 받은 브랜치 이름을 변수에 저장하거나 기본값 지정
@@ -37,7 +37,7 @@ done
 echo "Building React project..."
 cd /home/ubuntu/testJunho/F/S10P12A105/FrontEnd
 npm install
-npm run build
+NODE_ENV=production npm run build
 serve -s build &
 
 # 스프링부트 프로젝트를 빌드합니다. Gradle 래퍼를 사용하여 빌드 과정을 실행합니다.
