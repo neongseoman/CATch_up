@@ -21,6 +21,7 @@ const Main = () => {
         <Link to={"/user/shortsdetail"}> 쇼츠 상세 페이지,</Link>
         <Link to={"/user/myprofilepage"}> 내 프로필 페이지,</Link>
         <Link to={"/user/userprofilepage"}> 유저 프로필 페이지,</Link>
+        <Link to={"/tmpfollowpage"}> 팔로잉/팔로워</Link>
         <br />
         <a
           href="
