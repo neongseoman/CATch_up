@@ -8,12 +8,12 @@ function TmpFollowPage({ userId }) {
   // 팔로워 및 팔로잉 수를 가져오는 함수
   useEffect(() => {
     // 팔로잉 수
-    fetch(`/api/users/${userId}/followings/count`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/${userId}/followings/count`)
       .then((response) => response.json())
       .then((data) => setFollowingsCount(data));
 
     // 팔로워 수
-    fetch(`/api/users/${userId}/followers/count`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/${userId}/followers/count`)
       .then((response) => response.json())
       .then((data) => setFollowersCount(data));
 
@@ -26,7 +26,7 @@ function TmpFollowPage({ userId }) {
 
   // 팔로우/언팔로우 처리 함수
   const handleFollow = () => {
-    const url = isFollowing ? `/api/users/unfollow/${userId}` : `/api/users/follow/${userId}`;
+    const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userId}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userId}`;
     const method = isFollowing ? 'DELETE' : 'POST';
   
     fetch(url, {
