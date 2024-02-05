@@ -1,16 +1,23 @@
 package com.ssafy.chocolate.user.model;
 
 
+import com.ssafy.chocolate.follow.model.Follow;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user_info")
 public class Member {
     @Id
@@ -33,8 +40,11 @@ public class Member {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    private Integer following;
-    private Integer follower;
+    @OneToMany(mappedBy = "following")
+    private Set<Follow> followers = new HashSet<>();
+
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> followings = new HashSet<>();
 
     @Column(name = "streaming_time")
     private Integer streamingTime;
@@ -52,28 +62,9 @@ public class Member {
 
     private String roles;
 
-    public Member(Integer id, String email, String password, String nickname, String category, LocalDateTime createdDate, Integer following, Integer follower, Integer streamingTime, Integer streamingCount, String token, String profileImagePath, String introduction, String roles) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.category = category;
-        this.createdDate = createdDate;
-        this.following = following;
-        this.follower = follower;
-        this.streamingTime = streamingTime;
-        this.streamingCount = streamingCount;
-        this.token = token;
-        this.profileImagePath = profileImagePath;
-        this.introduction = introduction;
-        this.roles=roles;
-    }
-
-    protected Member() {}
-
     public static Member createUser(String email, String password, PasswordEncoder passwordEncoder, String nickname) {
         return new Member(null, email, passwordEncoder.encode(password), nickname, null,
-                LocalDateTime.now(), 0, 0, 0, 0, null, null, null,"USER");
+                LocalDateTime.now(), null, null, 0, 0, null, null, null,"USER");
     }
 
 }
