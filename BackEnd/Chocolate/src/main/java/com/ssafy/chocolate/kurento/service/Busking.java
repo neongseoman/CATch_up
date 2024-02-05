@@ -50,6 +50,7 @@ public class Busking extends UserSession implements  Closeable {
             response.put("candidate", candidate);
 
             try {
+                log.info("busker add ice candidate");
                 iceMessageSendService.buskerSendIceCandidate(buskerName, response);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -92,6 +93,7 @@ public class Busking extends UserSession implements  Closeable {
             response.put("candidate", candidate);
 
             try {
+                log.info("audience add ice candidate ");
                 iceMessageSendService.audienceSendIceCandidate(audienceId, response);
             } catch (Exception e) {
                 e.printStackTrace();

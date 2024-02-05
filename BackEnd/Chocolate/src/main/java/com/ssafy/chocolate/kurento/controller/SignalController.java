@@ -5,10 +5,7 @@ import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
 import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
 import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
 import com.ssafy.chocolate.kurento.service.BuskingManagingService;
-import com.ssafy.chocolate.kurento.service.Busking;
 import lombok.RequiredArgsConstructor;
-import org.kurento.client.IceCandidate;
-import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -67,24 +64,18 @@ public class SignalController {
 
 
     @MessageMapping("/busker/{userId}/iceCandidate")
-    public void receiveBuskerIceCandidate(
+    public void setBuskerIceCandidate(
             @DestinationVariable String userId,
-            @Payload IceCandidateMessage iceCandidateMessage
+            @Payload IceCandidateMessage iceCandidate
     ) {
         log.info("Ice Candidate is sent");
-        Busking busking = buskingManagingService.getBusking(userId);
-        if (busking != null) {
-            IceCandidate iceCandidate = iceCandidateMessage.getIceCandidate();
-            WebRtcEndpoint rtcEndpoint = busking.getBuskerWebRtcEndpoint();
-            rtcEndpoint.addIceCandidate(
-                    iceCandidate
-            );
-        }
+
+        buskingManagingService.setBuskingIceCandidate(userId,iceCandidate);
     }
 
 
     @MessageMapping("/audience/{userId}/offer")
-    public void receiveAudienceSDPOffer(@DestinationVariable String userId,
+    public void setAudienceIcaCandidate(@DestinationVariable String userId,
                                         @Payload AudienceSdpOffer sdpOfferMessage) throws NoBuskingException { //offer And Answer
         System.out.println("Audience send Offer");
 //        System.out.println(sdpOfferMessage.toString());
@@ -101,7 +92,7 @@ public class SignalController {
     }
 
     @MessageMapping("/audience/{userId}/iceCandidate")
-    public void receiveAudienceSDPOffer(@DestinationVariable String userId,
+    public void setAudienceIcaCandidate(@DestinationVariable String userId,
                                         @Payload IceCandidateMessage iceCandidateMessage) { // Handle iceCandidate
 
     }

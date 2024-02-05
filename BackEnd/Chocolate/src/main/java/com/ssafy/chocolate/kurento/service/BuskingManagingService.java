@@ -4,9 +4,11 @@ import com.google.gson.JsonObject;
 import com.ssafy.chocolate.common.exception.NoBuskingException;
 import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
 import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
-import com.ssafy.chocolate.kurento.dto.UserSession;
+import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
 import lombok.RequiredArgsConstructor;
+import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -14,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -26,14 +28,43 @@ public class BuskingManagingService {
     private final KurentoClient kurentoClient;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public Busking getBusking(String busker) {
-        Busking buskingImpl = buskingManaging.get(busker);
-//        System.out.println(buskingImpl.StateCheck);
-        if (buskingImpl == null) {
-            log.debug("There is no busker");
-        }
-        return buskingImpl;
+    public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
+        String buskerId = message.getUserId();
+        log.debug(message.getUserId() + " Busking is ok");
+//        System.out.println("여기까지는 괜찮고");
+        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService(simpMessagingTemplate));
+        JsonObject sdpAnswer = busking.BuskingStart(message);
+        buskingManaging.put(buskerId, busking);
+        simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
+                sdpAnswer.toString());
+
     }
+
+
+    public void setBuskingIceCandidate(String busker, IceCandidateMessage iceCandidateMessage) {
+        Busking busking = buskingManaging.get(busker);
+        if (busking == null) {
+            log.debug("There is no busker");
+        } else{
+            IceCandidate iceCandidate = iceCandidateMessage.getIceCandidate();
+            busking.addCandidate(iceCandidate);
+        }
+    }
+
+
+    public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
+        Busking busking = buskingManaging.get(offer.getBuskerId());
+        if (busking != null) {
+            busking.audienceJoin(offer);
+        } else {
+            simpMessagingTemplate.convertAndSend("/audience/" + offer.getAudienceId() + "receiveError",
+                    new HashMap<String, Object>().put("error", "busking session is null"));
+            throw new NoBuskingException("no busking");
+        }
+
+    }
+
+    public void setAudienceIceCandidate(String audience, IceCandidateMessage iceCandidateMessage) {}
 
 
     public void stopBusking(String busker) throws IOException {
@@ -44,33 +75,6 @@ public class BuskingManagingService {
         //Buking 듣던 사람들한테 안내하고 종료
         busking.close();
         buskingManaging.remove(busker);
-
-    }
-
-    public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
-        String buskerId = message.getUserId();
-        log.debug(message.getUserId() + " Busking is ok");
-//        System.out.println("여기까지는 괜찮고");
-        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService(simpMessagingTemplate));
-        JsonObject sdpAnswer = busking.BuskingStart(message);
-        buskingManaging.put(buskerId, busking);
-//        System.out.println("sdpAnswer : " + sdpAnswer);
-        simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
-                sdpAnswer.toString());
-
-    }
-
-    public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
-//        String audience = offer.getAudienceId();
-        Busking busking = buskingManaging.get(offer.getBuskerId());
-        if (busking != null) {
-//            log.info("Au");
-            busking.audienceJoin(offer);
-        } else {
-            simpMessagingTemplate.convertAndSend("/audience/" + offer.getAudienceId() + "receiveError",
-                    new HashMap<String, Object>().put("error", "busking session is null"));
-            throw new NoBuskingException("no busking");
-        }
 
     }
 
