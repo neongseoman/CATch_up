@@ -53,6 +53,8 @@ const ShortsUpload = () => {
           <br />쇼츠 업로드<br />
         </CustomText>
 
+        <p>shorts 영상</p>
+
         <TextInput placeholder="쇼츠 제목을 입력하세요" value={shortsTitle}
           onChange={(e) => setShortsTitle(e.target.value)}></TextInput>
         

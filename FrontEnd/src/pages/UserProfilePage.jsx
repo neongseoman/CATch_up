@@ -1,10 +1,9 @@
 // 내 프로필
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import MyProfile1 from '../components/MyProfile/MyProfile1';
-import MyProfile2 from '../components/MyProfile/MyProfile2';
-import MyProfile3 from '../components/MyProfile/MyProfile3';
-import CustomText from '../components/CustomText';
+import UserProfile1 from '../components/UserProfile/UserProfile1';
+import UserProfile2 from '../components/UserProfile/UserProfile2';
+import UserProfile3 from '../components/UserProfile/UserProfile3';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -13,7 +12,7 @@ const Wrapper = styled.div`
     align-items: flex-start;
 `;
 
-const MyProfilePage = () => {
+const UserProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +20,7 @@ const MyProfilePage = () => {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch('http://i10a105.p.ssafy.io:8080/api/dashboard_test', {
+        const response = await fetch('https://i10a105.p.ssafy.io/api/profile?id=2', {
           method: 'GET',
           credentials: 'include'
         });
@@ -47,16 +46,13 @@ const MyProfilePage = () => {
   return (
     <center>
     <Wrapper>
-    <CustomText typography="h1" bold>
-      <br />내 프로필<br />
-    </CustomText>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
-          <MyProfile1 userInfo={userInfo} />
-          <MyProfile2 userInfo={userInfo} />
-          <MyProfile3 userInfo={userInfo} />
+          <UserProfile1 userInfo={userInfo} />
+          <UserProfile2 userInfo={userInfo} />
+          <UserProfile3 userInfo={userInfo} />
         </>
       )}
     </Wrapper>
@@ -64,4 +60,4 @@ const MyProfilePage = () => {
   );
 };
 
-export default MyProfilePage;
+export default UserProfilePage;
