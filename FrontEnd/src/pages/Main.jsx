@@ -18,6 +18,7 @@ const Main = () => {
         <Link to={"/map"}> 지도,</Link>
         <Link to={"/streamingpage"}> 방송송출,</Link>
         <Link to={"/watchingpage"}> 방송시청,</Link>
+        <Link to={"/tmpfollowpage"}> 팔로잉/팔로워</Link>
         <br />
         <a
           href="

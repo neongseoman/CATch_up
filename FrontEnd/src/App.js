@@ -29,6 +29,7 @@ import Audience from "./pages/WatchingPage";
 // import SearchResult from './Search/SearchResult';
 import StreamingInfo from "./pages/StreamingInfo";
 import WatchingPage from "./pages/WatchingPage";
+import TmpFollowPage from "./pages/TmpFollowPage"
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                       <Route path='/' element={<Main />} />
                       <Route path='/page/:pageId' element={<Page />} />
                       <Route path='/searchresult' element={<SearchResultPage />} />
+                      <Route path='/tmpfollowpage' element={<TmpFollowPage />} />
                   </Route>
                   
                   <Route path="user" element={<NavLayout />}>
