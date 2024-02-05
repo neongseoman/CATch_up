@@ -53,4 +53,4 @@ function TmpFollowPage({ userId }) {
   );
 }
 
-export default UserInfoPage;
+export default TmpFollowPage;
