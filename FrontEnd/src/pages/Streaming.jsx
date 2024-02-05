@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
 import CustomText from "../components/CustomText";
 import {PCConfig} from "../WebRTC/RTCConfig";
-// import {stompClient} from "../WebRTC/StompClientSington";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import login from "./Login";
 import * as events from "events";
 
 const pc = new RTCPeerConnection(PCConfig);
-// pc.setCodecPreferences(opus_codecs);
 const userId = "testId"
 
 // 대체 왜 이게 2번이나 마운트되는거야?
@@ -16,6 +14,45 @@ const Streaming = () => {
 
     // Set Peer Connection
     useEffect(() => {
+        pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
+            // console.log(event)
+            if (event.candidate) {
+                console.log("candidate: " + event.candidate)
+                client.publish({
+                    destination: `/app/busker/${userId}/iceCandidate`,
+                    body: JSON.stringify({iceCandidate: event.candidate})
+                });
+            }
+            if (event && event.target && event.target.iceGatheringState === 'complete') {
+                console.log('done gathering candidates - got iceGatheringState complete');
+            }
+        }
+        pc.oniceconnectionstatechange = function(event) {
+            console.log('ICE 연결 상태:', pc.iceConnectionState);
+
+            if (pc.iceConnectionState === 'connected') {
+                console.log('피어 간 연결이 성공적으로 수립되었습니다.');
+            } else if (pc.iceConnectionState === 'disconnected'){
+                console.log('피어 간 연결이  끊어졌습니다.')
+            } else if(pc.iceConnectionState === 'failed') {
+                console.log('피어 간 연결이  실패.');
+            }
+        };
+        pc.onconnectionstatechange = function(event) { // 데이터 연결 상태 확인
+
+            console.log('데이터 연결 상태:', pc.connectionState);
+
+            if (pc.connectionState === 'connected') {
+                console.log('데이터 연결이 확립되었습니다.');
+            } else if (pc.connectionState === 'disconnected') {
+                console.log('데이터 연결이 끊어졌습니다.');
+            }
+        };
+        pc.ontrack = (event) => {}
+        pc.onnegotiationneeded = (event) => {}
+        pc.onsignalingstatechange = (event) => {
+
+        }
         const constraints = {video: true, audio: false}
 
         navigator.mediaDevices.getUserMedia(constraints)
@@ -64,9 +101,12 @@ const Streaming = () => {
             })
 
             pc.createOffer({
-                iceRestart: true,
-            }).then((offer) => {
-                console.log(offer)
+                iceRestart:false,
+                offerToReceiveAudio:true,
+                offerToReceiveVideo:true
+            })
+                .then((offer) => {
+                console.log("sdp offer created")
                 pc.setLocalDescription(offer)
                     .then((r) => {
                         client.publish({
@@ -104,26 +144,15 @@ const Streaming = () => {
                 });
             });
             //
-            pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
-                if (event.candidate) {
-                    console.log("candidate: " + event.candidate)
-                    client.publish({
-                        destination: `/app/busker/${userId}/iceCandidate`,
-                        body: JSON.stringify({iceCandidate: event.candidate})
-                    });
-                }
-                if (event && event.target && event.target.iceGatheringState === 'complete') {
-                    console.log('done gathering candidates - got iceGatheringState complete');
-                }
-            }
 
             // IceCandidate 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
-
                 if (iceResponse.id === "iceCandidate") {
-                    pc.addIceCandidate(iceResponse.candidate)
-                        .then(() => console.log("peer candidate: " + iceResponse.candidate.candidate))
+                    console.log("remote ice is sent")
+                    const icecandidate = new RTCIceCandidate(iceResponse.candidate)
+                    pc.addIceCandidate(icecandidate)
+                        .then(() => console.log("peer candidate: " + icecandidate))
                 }
             })
         }
@@ -136,27 +165,6 @@ const Streaming = () => {
 
 
     }, []);
-
-    pc.oniceconnectionstatechange = function() {
-        console.log('ICE 연결 상태:', pc.iceConnectionState);
-
-        if (pc.iceConnectionState === 'connected') {
-            console.log('피어 간 연결이 성공적으로 수립되었습니다.');
-        } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
-            console.log('피어 간 연결이 실패했거나 끊어졌습니다.');
-        }
-    };
-
-// 데이터 연결 상태 확인
-    pc.onconnectionstatechange = function() {
-        console.log('데이터 연결 상태:', pc.connectionState);
-
-        if (pc.connectionState === 'connected') {
-            console.log('데이터 연결이 확립되었습니다.');
-        } else if (pc.connectionState === 'disconnected') {
-            console.log('데이터 연결이 끊어졌습니다.');
-        }
-    };
 
 
     return (

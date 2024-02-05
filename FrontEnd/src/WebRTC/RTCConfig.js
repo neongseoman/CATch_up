@@ -5,10 +5,18 @@ export const PCConfig = {
         },
         {
             urls:"turn:i10a105.p.ssafy.io:3478",
-            username:"user1",
+            username:"username1",
             credential:"password1"
-
-
+        },
+        {
+            urls: "turn:i10a105.p.ssafy.io:3478",
+            username: "test",
+            credential: "test",
+        },
+        {
+            urls: "turn:i10a105.p.ssafy.io:3478",
+            username: "ssafy",
+            credential: "ssafy",
         }
     ]
 }
