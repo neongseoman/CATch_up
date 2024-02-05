@@ -150,7 +150,7 @@ const CommentField = styled.div`
 const ShortsDetail = () => {
     const [tagList, setTagList] = useState(['태그1', '태그2', '태그3']);
     const [data, setData] = useState();
-    const url = 'http://i10a105.p.ssafy.io:8080/searchShorts?query=두번째 &page=0&size=10';
+    const url = `${process.env.REACT_APP_API_BASE_URL}/searchShorts?query=두번째 &page=0&size=10`;
 
     useEffect(() => {
         axios.get(url)
