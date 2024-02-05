@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Busking extends UserSession implements  Closeable {
+public class Busking extends UserSession implements Closeable {
     private final Logger log = LoggerFactory.getLogger(Busking.class);
     private final ConcurrentHashMap<String, UserSession> buskingSession = new ConcurrentHashMap<>();
     private final String buskerName;
@@ -42,21 +42,31 @@ public class Busking extends UserSession implements  Closeable {
             HashMap<String, Object> response = new HashMap<>();
             HashMap<String, String> candidate = new HashMap<>();
 
-            candidate.put("candidate",eventCandidate.getCandidate());
-            candidate.put("sdpMid",eventCandidate.getSdpMid());
-            candidate.put("sdpMLineIndex",String.valueOf(eventCandidate.getSdpMLineIndex()));
+            candidate.put("candidate", eventCandidate.getCandidate());
+            candidate.put("sdpMid", eventCandidate.getSdpMid());
+            candidate.put("sdpMLineIndex", String.valueOf(eventCandidate.getSdpMLineIndex()));
 
             response.put("id", "iceCandidate");
             response.put("candidate", candidate);
 
             try {
-                log.info("busker add ice candidate");
+//                log.info("busker add ice candidate");
                 iceMessageSendService.buskerSendIceCandidate(buskerName, response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-
+        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
+            ConnectionState newState = connectionStateChangedEvent.getNewState();
+            if (newState == ConnectionState.CONNECTED) {
+                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
+                log.info("ICE connection is connected. State: " + newState);
+            } else if (newState == ConnectionState.DISCONNECTED) {
+                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
+                log.info("ICE connection is closed. State: " + newState);
+            }
+        });
+        //연결되면 로그를 찍고 싶은걸?
         String sdpOffer = offerMessage.getOffer().getSdp();
         String sdpAnswer = buskerWebRtcEndpoint.processOffer(sdpOffer);
 
@@ -66,14 +76,13 @@ public class Busking extends UserSession implements  Closeable {
         response.addProperty("id", "buskingStartResponse");
         response.addProperty("response", "accepted");
         response.addProperty("sdpAnswer", sdpAnswer);
-        log.info("buskerWebRtcEndPoint is created "+ (buskerWebRtcEndpoint.getClass()));
+//        log.info("buskerWebRtcEndPoint is created "+ (buskerWebRtcEndpoint.getClass()));
 
         return response;
     }
 
-// 방송에 참여하는 시청자
-    public void audienceJoin(AudienceSdpOffer sdpOffer) {
-        UserSession audienceSession = new UserSession();
+    // 방송에 참여하는 시청자
+    public void audienceJoin(AudienceSdpOffer sdpOffer,UserSession audienceSession) {
         String audienceId = sdpOffer.getAudienceId();
         log.info("audience Join");
 //        MediaPipeline mediaPipeline = kurentoClient.createMediaPipeline();
@@ -85,15 +94,15 @@ public class Busking extends UserSession implements  Closeable {
             HashMap<String, Object> response = new HashMap<>();
             HashMap<String, String> candidate = new HashMap<>();
 
-            candidate.put("candidate",eventCandidate.getCandidate());
-            candidate.put("sdpMid",eventCandidate.getSdpMid());
-            candidate.put("sdpMLineIndex",String.valueOf(eventCandidate.getSdpMLineIndex()));
+            candidate.put("candidate", eventCandidate.getCandidate());
+            candidate.put("sdpMid", eventCandidate.getSdpMid());
+            candidate.put("sdpMLineIndex", String.valueOf(eventCandidate.getSdpMLineIndex()));
 
             response.put("id", "iceCandidate");
             response.put("candidate", candidate);
 
             try {
-                log.info("audience add ice candidate ");
+                log.info("audience addIceCandidateListener ");
                 iceMessageSendService.audienceSendIceCandidate(audienceId, response);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -102,14 +111,14 @@ public class Busking extends UserSession implements  Closeable {
 
         String sdpAnswer = audienceWebRtcEndpoint.processOffer(sdpOffer.getOffer().getSdp());
         JsonObject sdpResponse = new JsonObject();
-        sdpResponse.addProperty("id","audienceSdpAnswer");
-        sdpResponse.addProperty("response","accepted");
-        sdpResponse.addProperty("sdpAnswer",sdpAnswer);
+        sdpResponse.addProperty("id", "audienceSdpAnswer");
+        sdpResponse.addProperty("response", "accepted");
+        sdpResponse.addProperty("sdpAnswer", sdpAnswer);
 
-        iceMessageSendService.audienceSendSdpAnswer(audienceId,sdpResponse);
+        iceMessageSendService.audienceSendSdpAnswer(audienceId, sdpResponse);
         audienceWebRtcEndpoint.gatherCandidates();
 
-        buskingSession.put(sdpOffer.getBuskerId(), audienceSession);
+        buskingSession.put(sdpOffer.getAudienceId(), audienceSession);
 
         JsonObject response = new JsonObject();
         response.addProperty("id", "audienceSdpAnswer");
@@ -129,11 +138,17 @@ public class Busking extends UserSession implements  Closeable {
         buskingSession.remove(audience);
     }
 
-    public void broadCast() {
-    }
-
     public void addCandidate(IceCandidate iceCandidate) {
         buskerWebRtcEndpoint.addIceCandidate(iceCandidate);
+    }
+
+    public void audienceAddIceCandidate(String audienceId, IceCandidate iceCandidate) {
+        UserSession audienceSession = buskingSession.get(audienceId);
+        if (audienceSession == null) {
+            log.info("no session");
+        } else {
+            audienceSession.addIceCandidate(iceCandidate);
+        }
     }
 
     @Override

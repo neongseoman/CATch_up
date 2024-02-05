@@ -2,9 +2,7 @@ package com.ssafy.chocolate.kurento.service;
 
 import com.google.gson.JsonObject;
 import com.ssafy.chocolate.common.exception.NoBuskingException;
-import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
-import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
-import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
+import com.ssafy.chocolate.kurento.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
@@ -54,17 +52,29 @@ public class BuskingManagingService {
 
     public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
         Busking busking = buskingManaging.get(offer.getBuskerId());
+        UserSession audienceSession = new UserSession();
         if (busking != null) {
-            busking.audienceJoin(offer);
+            busking.audienceJoin(offer,audienceSession);
         } else {
-            simpMessagingTemplate.convertAndSend("/audience/" + offer.getAudienceId() + "receiveError",
-                    new HashMap<String, Object>().put("error", "busking session is null"));
-            throw new NoBuskingException("no busking");
+            log.info("Audience Error");
         }
 
     }
 
-    public void setAudienceIceCandidate(String audience, IceCandidateMessage iceCandidateMessage) {}
+    public void setAudienceIceCandidate(String audienceId, AudienceIceCandidateMessage audienceIceCandidateMessage) {
+        System.out.println(audienceIceCandidateMessage.getBuskerId());
+
+//        System.out.println(buskingManaging.keys().asIterator().toString());
+
+        Busking busking = buskingManaging.get(audienceIceCandidateMessage.getBuskerId());
+        if (busking == null) {
+            log.info("Audience Ice Candidate Error");
+            return;
+        } else {
+            IceCandidate iceCandidate = audienceIceCandidateMessage.getIceCandidate();
+            busking.audienceAddIceCandidate(audienceId, iceCandidate);
+        }
+    }
 
 
     public void stopBusking(String busker) throws IOException {

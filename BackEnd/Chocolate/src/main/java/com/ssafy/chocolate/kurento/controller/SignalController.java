@@ -1,6 +1,7 @@
 package com.ssafy.chocolate.kurento.controller;
 
 import com.ssafy.chocolate.common.exception.NoBuskingException;
+import com.ssafy.chocolate.kurento.dto.AudienceIceCandidateMessage;
 import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
 import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
 import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
@@ -36,12 +37,22 @@ public class SignalController {
     }
 
     @MessageMapping("/busker/{buskerName}")
-    public void listenTestStomp2(@DestinationVariable String buskerName, @Payload String message) {
+    public void listenBusker(@DestinationVariable String buskerName, @Payload String message) {
         System.out.println(buskerName + " " + message);
         HashMap<String, String> map = new HashMap<>();
         map.put("buskerName", "test success");
 
         simpMessagingTemplate.convertAndSend("/busker/" + buskerName, map);
+        return;
+    }
+
+    @MessageMapping("/audience/{audienceId}")
+    public void listenAudience(@DestinationVariable String audienceId, @Payload String message) {
+        System.out.println(audienceId + " " + message);
+        HashMap<String, String> map = new HashMap<>();
+        map.put(audienceId, "test success");
+
+        simpMessagingTemplate.convertAndSend("/audience/" + audienceId, map);
         return;
     }
 
@@ -68,17 +79,14 @@ public class SignalController {
             @DestinationVariable String userId,
             @Payload IceCandidateMessage iceCandidate
     ) {
-        log.info("Ice Candidate is sent");
-
         buskingManagingService.setBuskingIceCandidate(userId,iceCandidate);
     }
 
 
-    @MessageMapping("/audience/{userId}/offer")
-    public void setAudienceIcaCandidate(@DestinationVariable String userId,
+    @MessageMapping("/audience/{audienceId}/offer")
+    public void receiveAudienceSDPOffer(@DestinationVariable String audienceId,
                                         @Payload AudienceSdpOffer sdpOfferMessage) throws NoBuskingException { //offer And Answer
         System.out.println("Audience send Offer");
-//        System.out.println(sdpOfferMessage.toString());
         try {
             buskingManagingService.joinBusking(sdpOfferMessage);
         } catch (NoBuskingException e) {
@@ -87,14 +95,15 @@ public class SignalController {
         HashMap<String, String> map = new HashMap<>();
         map.put("audience", "join busking");
 
-        simpMessagingTemplate.convertAndSend("/audience/" + userId + "/answer", map);
+        simpMessagingTemplate.convertAndSend("/audience/" + audienceId + "/answer", map);
 
     }
 
-    @MessageMapping("/audience/{userId}/iceCandidate")
-    public void setAudienceIcaCandidate(@DestinationVariable String userId,
-                                        @Payload IceCandidateMessage iceCandidateMessage) { // Handle iceCandidate
-
+    @MessageMapping("/audience/{audienceId}/iceCandidate")
+    public void setAudienceIceCandidate(@DestinationVariable String audienceId,
+                                        @Payload AudienceIceCandidateMessage audienceIceCandidateMessage) { // Handle iceCandidate
+        log.info("audience " + audienceId + "iceCandidate is sent");
+        buskingManagingService.setAudienceIceCandidate(audienceId,audienceIceCandidateMessage);
     }
 
     @MessageMapping("leaveBusking")

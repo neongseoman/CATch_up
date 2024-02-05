@@ -14,7 +14,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class IceMessageSendService {
 
-    private final Logger log = LoggerFactory.getLogger(BuskingManagingService.class);
+    private final Logger log = LoggerFactory.getLogger(IceMessageSendService.class);
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void buskerSendIceCandidate(String userId, HashMap<String, Object> iceCandidate){
@@ -26,7 +26,7 @@ public class IceMessageSendService {
     }
 
     public void audienceSendIceCandidate(String userId, HashMap<String, Object> iceCandidate){
-        log.info(userId + " send IceCandidate to audience");
+//        log.info("Audience " + userId + " send IceCandidate to audience");
         simpMessagingTemplate.convertAndSend("/audience/"+userId+"/iceCandidate",iceCandidate);
     }
 
