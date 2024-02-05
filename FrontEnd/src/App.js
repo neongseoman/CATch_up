@@ -9,6 +9,7 @@ import {  NavLayout,NavLayoutWithoutDefault } from './Layouts/DefaultLayout';
 import ErrorPage from './pages/ErrorPage';
 import MainMapPage from './pages/MainMapPage'
 import MyProfilePage from './pages/MyProfilePage';
+import UserProfilePage from './pages/UserProfilePage';
 import SearchResultPage from './pages/SearchResultPage';
 import {Layout} from "./Layouts/DefaultLayout";
 import ChatApp from './components/ChatApp'
@@ -16,6 +17,7 @@ import Streaming from './pages/Streaming'
 import React, { useEffect } from 'react';
 import StreamingPage from "./pages/StreamingPage";
 import ShortsUpload from './pages/ShortsUpload';
+import ShortsDetail from './pages/ShortsDetail';
 import {Button} from "./components/Button";
 import {
     RecoilRoot,
@@ -48,22 +50,24 @@ function App() {
                   
                   <Route path="streaming" element={<Layout />}>
                       <Route path='info' element={<StreamingInfo />} />
-                      <Route path='onair' element={<Streaming />} />
+                      {/* <Route path='onair' element={<Streaming />} /> */}
                       <Route path='shorts' element={<ShortsUpload />} />
-                      <Route path='watching' element={<Watching />} />
+                      {/* <Route path='watching' element={<Watching />} /> */}
                   </Route>
                 
-                  {/*시청하기*/}
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='/map' element={<MainMapPage />} />
-                    <Route path="/streamingpage" element={<StreamingPage />} />
+                    <Route path='/streamingpage' element={<StreamingPage />} />
                   </Route>
+
                   <Route path="user" element={<NavLayout />}>
                     <Route path='login' element={<Login />} />
                     <Route path='logout' element={<Login />} />
                     <Route path='signup' element={<SignUpForm />} />
                     <Route path='info' element={<UserInfo />} />
                     <Route path='myprofilepage' element={<MyProfilePage />} />
+                    <Route path='userprofilepage' element={<UserProfilePage />} />
+                    <Route path='shortsdetail' element={<ShortsDetail />} />
                   </Route>
 
                   <Route element={<NavLayoutWithoutDefault />}>
