@@ -31,7 +31,7 @@ public class IceMessageSendService {
     }
 
     public void audienceSendSdpAnswer(String userId, JsonObject sdpAnswer){
-        log.info("Audience "+ userId + "send SDP Answer");
+        log.info("Audience "+ userId + " send SDP Answer");
         simpMessagingTemplate.convertAndSend("/audience/"+userId+"/sdpAnswer",sdpAnswer.toString());
     }
 

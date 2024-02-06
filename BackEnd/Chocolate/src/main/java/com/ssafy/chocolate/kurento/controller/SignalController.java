@@ -59,9 +59,8 @@ public class SignalController {
     @MessageMapping("/busker/{userId}/offer")
     public void receiveBuskerSDPOffer(@DestinationVariable String userId,
                                       @Payload BuskerSdpOffer SdpOfferMessage) throws NoBuskingException, IOException {
-        System.out.println(userId + " send Offer");
+        log.info(userId + "Send Offer");
         try {
-
             buskingManagingService.startBusking(SdpOfferMessage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +85,7 @@ public class SignalController {
     @MessageMapping("/audience/{audienceId}/offer")
     public void receiveAudienceSDPOffer(@DestinationVariable String audienceId,
                                         @Payload AudienceSdpOffer sdpOfferMessage) throws NoBuskingException { //offer And Answer
-        System.out.println("Audience send Offer");
+        log.info("Audience send Offer");
         try {
             buskingManagingService.joinBusking(sdpOfferMessage);
         } catch (NoBuskingException e) {

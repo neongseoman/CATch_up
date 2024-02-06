@@ -56,7 +56,7 @@ public class BuskingManagingService {
         if (busking != null) {
             busking.audienceJoin(offer,audienceSession);
         } else {
-            log.info("Audience Error");
+            log.info("No Busking rooms");
         }
 
     }

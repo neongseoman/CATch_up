@@ -14,7 +14,8 @@ public class ChocolateApplication {
 
     @Bean
     public KurentoClient kurentoClient() {
-        return KurentoClient.create();
+        return KurentoClient.create("ws://i10a105.p.ssafy.io:8888/kurento"
+        );
     }
 
 

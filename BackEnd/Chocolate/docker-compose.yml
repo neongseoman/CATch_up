@@ -27,7 +27,11 @@ services:
     environment:
       - KMS_MIN_PORT=5000
       - KMS_MAX_PORT=5050
+      - GST_DEBUG="${GST_DEBUG:-2},webrtcendpoint:5,kmswebrtcsession:5,kmsiceniceagent:5"
+      - G_MESSAGES_DEBUG="libnice,libnice-stun"
     ports:
       - "8888:8888"
       - "5000-5050:5000-5050/udp"
     restart: unless-stopped
+#    volumes:
+#      - C:\kurentolocal:/etc/kurento/modules/
