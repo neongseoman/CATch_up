@@ -3,12 +3,15 @@ import styled from '@emotion/styled';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import ErrorPage from '../pages/ErrorPage';
+import { useSetRecoilState } from 'recoil';
+import { userInfoState, userInfoInitialState  } from '../RecoilState/userRecoilState';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation(); // 현재 위치를 가져옵니다.
+  const logoutUserInfo = useSetRecoilState(userInfoState);
 
   // 메인 페이지인지 확인합니다.
   const isMainPage = location.pathname === '/';
@@ -41,14 +44,13 @@ const Navbar = () => {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        // 필요하다면 여기에 추가 헤더를 포함시킬 수 있습니다
       },
-      // 필요하다면 credentials: 'include'를 추가하여 쿠키를 포함시킬 수 있습니다
     })
       .then(response => {
         if (response.ok) {
           // 로그아웃 성공 후 처리, 예: 로그인 상태 변경, 페이지 리다이렉션 등
           console.log('Logout successful');
+          logoutUserInfo(userInfoInitialState);// 로그아웃 후 사용자 정보를 atom에서 제거
           alert("로그아웃되었습니다!!!")
           navigate('/');
         } else {
