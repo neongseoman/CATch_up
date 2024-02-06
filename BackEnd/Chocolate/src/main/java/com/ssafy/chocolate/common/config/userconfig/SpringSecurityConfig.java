@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -62,8 +63,13 @@ public class SpringSecurityConfig {
                         .logoutUrl("/api/logout")
                         .addLogoutHandler(new SecurityContextLogoutHandler()) // 세션 지우기 추가
                         .deleteCookies("SESSION") // 쿠키 삭제
-                        .invalidateHttpSession(true)); // HTTP 세션 무효화
-
+                        .invalidateHttpSession(true) // HTTP 세션 무효화
+                        .logoutSuccessHandler((HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.getWriter().write("{\"message\": \"로그아웃 성공\"}");
+                        })
+                );
         return http.build();
     }
 

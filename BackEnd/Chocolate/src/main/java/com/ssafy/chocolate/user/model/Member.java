@@ -61,7 +61,7 @@ public class Member {
 
     public static Member createUser(String email, String password, PasswordEncoder passwordEncoder, String nickname) {
         return new Member(null, email, passwordEncoder.encode(password), nickname, null,
-                LocalDateTime.now(), null, null,  null, null, null, null, null,"USER");
+                LocalDateTime.now(), 0, 0,  null, null, null, null, null,"USER");
     }
 
 }
