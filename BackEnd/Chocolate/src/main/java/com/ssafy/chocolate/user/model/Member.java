@@ -40,12 +40,6 @@ public class Member {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "following")
-    private Set<Follow> followers = new HashSet<>();
-
-    @OneToMany(mappedBy = "follower")
-    private Set<Follow> followings = new HashSet<>();
-
     @Column(name = "streaming_time")
     private Integer streamingTime;
 
@@ -64,7 +58,7 @@ public class Member {
 
     public static Member createUser(String email, String password, PasswordEncoder passwordEncoder, String nickname) {
         return new Member(null, email, passwordEncoder.encode(password), nickname, null,
-                LocalDateTime.now(), null, null, 0, 0, null, null, null,"USER");
+                LocalDateTime.now(), null, null,  null, null, null,"USER");
     }
 
 }

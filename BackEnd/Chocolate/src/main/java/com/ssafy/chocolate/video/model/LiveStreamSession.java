@@ -1,4 +1,5 @@
 package com.ssafy.chocolate.video.model;
+import com.ssafy.chocolate.user.model.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,5 +49,6 @@ public class LiveStreamSession {
 
     @Column(name = "max_viewer")
     private Integer maxViewer;
+
 
 }

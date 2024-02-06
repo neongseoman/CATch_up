@@ -19,7 +19,7 @@ public class UserController {
     MemberService memberService;
 
     @GetMapping("/profile")
-    Optional<Member> getMember(@RequestParam Long id) {
+    public Optional<Member> getMember(@RequestParam Long id) {
         return memberService.getMember(id);
     }
 }

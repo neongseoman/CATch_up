@@ -21,6 +21,7 @@ public class MemberService {
     }
     public Optional<Member> getMember(Long id) {
         Optional<Member> optionalMember = repository.findById(id);
+        System.out.println(optionalMember.get());
 
         if (optionalMember.isPresent()) {
             Member m = optionalMember.get();
