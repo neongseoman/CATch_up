@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import ErrorPage from '../pages/ErrorPage';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../RecoilState/userRecoilState';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -50,6 +52,10 @@ const Navbar = () => {
           // 로그아웃 성공 후 처리, 예: 로그인 상태 변경, 페이지 리다이렉션 등
           console.log('Logout successful');
           alert("로그아웃되었습니다!!!")
+
+          const fetchedUserInfo = { isLoggedIn: false, userId: null};
+          setUserInfo(fetchedUserInfo); // 로그인 후 사용자 정보를 atom에 저장
+
           navigate('/');
         } else {
           // 서버 에러 처리
