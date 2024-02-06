@@ -1,5 +1,5 @@
 // 사용자 프로필-1
-import React , { useState, useEffect }from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../../RecoilState/userRecoilState';
@@ -155,6 +155,7 @@ const UserProfile1 = ({ userInfo }) => {
     }
 
     const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userInfo.email}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userInfo.email}`;
+
     const method = isFollowing ? 'DELETE' : 'POST';
   
     fetch(url, {

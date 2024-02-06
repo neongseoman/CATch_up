@@ -4,6 +4,8 @@ import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import styled from "@emotion/styled";
 
+
+
 function SignUpForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -67,7 +69,7 @@ function SignUpForm() {
       nickname: username,
       password: password,
     };
-
+    
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user/join`, {
         method: 'POST',

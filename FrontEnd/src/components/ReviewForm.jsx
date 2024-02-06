@@ -62,7 +62,7 @@ const TextArea = styled.textarea`
   width: 100%;
   height: 100px;
   padding: 10px;
-  resize:none;
+  resize: none;
 `;
 
 const SubmitButton = styled.button`

@@ -1,5 +1,5 @@
 // 내 프로필-2
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -40,6 +40,8 @@ const Text = styled.p`
 `;
 
 const MyProfile2 = ({ userInfo }) => {
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingsCount, setFollowingsCount] = useState(0);
 
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
@@ -65,6 +67,19 @@ const MyProfile2 = ({ userInfo }) => {
     }
   };
 
+  // 팔로워 및 팔로잉 수를 가져오는 함수
+  useEffect(() => {
+    // 팔로잉 수
+    fetch(`/api/users/${userInfo.userId}/followings/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowingsCount(data));
+
+    // 팔로워 수
+    fetch(`/api/users/${userInfo.userId}/followers/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowersCount(data));
+  }, [userInfo.userId]);
+
   return (
     <Wrapper>
       <StreamsButton onClick={handleStreamsClick}>
@@ -72,11 +87,11 @@ const MyProfile2 = ({ userInfo }) => {
         <Text>STREAMING TIME</Text>
       </StreamsButton>
       <FollowerButton onClick={handleFollowerClick}>
-        <Count>{userInfo.additionalInfo.follower}</Count>
+        <Count>{followersCount}</Count>
         <Text>FOLLOWER</Text>
       </FollowerButton>
       <FollowingButton onClick={handleFollowingClick}>
-        <Count>{userInfo.additionalInfo.following}</Count>
+        <Count>{followingsCount}</Count>
         <Text>FOLLOWING</Text>
       </FollowingButton>
     </Wrapper>
