@@ -16,8 +16,8 @@ const Main = () => {
       <div>
         Test Link:
         <Link to={"/map"}> 지도,</Link>
-        <Link to={"/streaming"}> 방송송출,</Link>
-        <Link to={"/watching"}> 방송시청,</Link>
+        <Link to={"/streaming/onair"}> 방송송출,</Link>
+        <Link to={"/streaming/watching"}> 방송시청,</Link>
         <Link to={"/streamingpage"}> 스트리밍페이지</Link>
         <br />
         <a

@@ -56,7 +56,7 @@ function LoginForm() {
         <CustomText typography="p"><br />오늘 로그인하기 참 좋은날이죠?<br /></CustomText>
 
         <br />
-        <TextInput placeholder="아이디를 입력하세요" value={username}
+        <TextInput placeholder="이메일을 입력하세요" value={username}
           onChange={(e) => setUsername(e.target.value)}></TextInput>
         
         <ValMsg></ValMsg>

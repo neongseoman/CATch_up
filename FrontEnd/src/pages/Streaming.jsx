@@ -5,7 +5,7 @@ import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
 
-const userId = "buskerID"
+// const userId = "buskerID"
 let makingOffer = false
 
 // 대체 왜 이게 2번이나 마운트되는거야?
@@ -16,9 +16,9 @@ const Streaming = () => {
             brokerURL: "ws://127.0.0.1:8080/signal",
         })
     );
-
     const pc = pcRef.current;
     const client = clientRef.current;
+    const userId = localStorage.getItem("user")
 
     // Set Peer Connection
     useEffect(() => {
@@ -90,6 +90,7 @@ const Streaming = () => {
                 for (const track of stream.getTracks()){
                     pc.addTrack(track,stream)
                 }
+                console.log(userId)
                 videoElement.srcObject = stream
             }).catch(error => {
                 if (error.name === "OverconstrainedError") {

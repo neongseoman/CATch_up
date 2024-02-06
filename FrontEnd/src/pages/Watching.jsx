@@ -5,7 +5,7 @@ import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
 
-const audienceId = "audienceID"
+// const audienceId = "audienceID"
 const buskerId = "buskerID"
 let makingOffer = false
 const Watching = () => {
@@ -18,8 +18,7 @@ const Watching = () => {
 
     const pc = pcRef.current;
     const client = clientRef.current;
-    // console.log("웨 안 대")
-    // Set Peer Connection
+    const audienceId = localStorage.getItem("user");
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
 
@@ -121,12 +120,8 @@ const Watching = () => {
                 }).catch((error) => {
                     console.error("Error setting remote description:", error);
                 });
-            });
-            //
-            // client.subscribe(`audience/${audienceID}`,(res)=>{
-            //     console.log(JSON.parse(res.body))
-            // })
-            // IceCandidate 받음.
+            })
+
             client.subscribe(`/audience/${audienceId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
                 if (iceResponse.id === "iceCandidate") {
