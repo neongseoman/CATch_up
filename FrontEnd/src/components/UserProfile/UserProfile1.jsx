@@ -1,5 +1,5 @@
 // 사용자 프로필-1
-import React from 'react';
+import React , { useState }from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -117,6 +117,10 @@ const Bar = styled.span`
 `;
 
 const UserProfile1 = ({ userInfo }) => {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(userInfo.follower);
+  const [followingsCount, setFollowingsCount] = useState(userInfo.following);
+  
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
   };
@@ -130,11 +134,20 @@ const UserProfile1 = ({ userInfo }) => {
   };
 
   const handleFollowClick = () => {
-    alert('내 팔로우 목록에 해당 사용자 추가하기')
-  };
-
-  const handleUnfollowClick = () => {
-    alert('내 팔로우 목록에서 해당 사용자 삭제하기')
+    const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userInfo.email}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userInfo.email}`;
+    const method = isFollowing ? 'DELETE' : 'POST';
+  
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // 쿠키/인증 정보를 요청과 함께 보내도록 설정
+    })
+    .then(() => {
+      setIsFollowing(!isFollowing);
+      // 팔로우 상태에 따라 팔로워 수 조정
+      setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
+    })
+    .catch((error) => console.error('Error:', error));
   };
 
   return (
@@ -151,14 +164,15 @@ const UserProfile1 = ({ userInfo }) => {
           <TextTop>
             <UserNickname>{userInfo.nickname}</UserNickname>
 
-            {/* 해당 사용자가 로그인한 사용자의 팔로잉 목록에 없으면 */}
-            <FollowButton onClick={handleFollowClick}>
-              + 팔로우
-            </FollowButton>
-            {/* 해당 사용자가 로그인한 사용자의 팔로잉 목록에 있으면 */}
-            <UnfollowButton onClick={handleUnfollowClick}>
-              ♡ 팔로잉
-            </UnfollowButton>
+            {isFollowing ? (
+              <UnfollowButton onClick={handleFollowClick}>
+                ♡ 팔로잉
+              </UnfollowButton>
+            ) : (
+              <FollowButton onClick={handleFollowClick}>
+                + 팔로우
+              </FollowButton>
+            )}
 
           </TextTop>
           <UserIntroduce>{userInfo.introduction}</UserIntroduce>
@@ -171,12 +185,12 @@ const UserProfile1 = ({ userInfo }) => {
             <Bar>&nbsp;|&nbsp;</Bar>
             <FollowerButton onClick={handleFollowerClick}>
               <Text>FOLLOWER</Text>
-              <Count>{userInfo.follower}</Count>
+              <Count>{followersCount}</Count>
             </FollowerButton>
             <Bar>&nbsp;|&nbsp;</Bar>
             <FollowingButton onClick={handleFollowingClick}>
               <Text>FOLLOWING</Text>
-              <Count>{userInfo.following}</Count>
+              <Count>{followingsCount}</Count>
             </FollowingButton>
             <Bar>&nbsp;|&nbsp;</Bar>
           </CountField>
