@@ -1,5 +1,5 @@
 // 사용자 프로필-1
-import React , { useState }from 'react';
+import React , { useState, useEffect }from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../../RecoilState/userRecoilState';
@@ -123,6 +123,18 @@ const UserProfile1 = ({ userInfo }) => {
   const [followersCount, setFollowersCount] = useState(userInfo.follower);
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
+
+
+  // 팔로워 및 팔로잉 수를 가져오는 함수
+  useEffect(() => {
+    if(recoil.isLoggedIn){
+      fetch(`/api/users/${recoil.userId}/is-following/${userInfo.id}`)
+      .then((isFollowing) =>{
+        console.log("API 응답:", isFollowing); // API 응답 확인
+        setIsFollowing(isFollowing);
+      });
+    }
+  }, [recoil.userId, userInfo.id]);
 
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
