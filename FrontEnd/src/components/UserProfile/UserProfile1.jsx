@@ -1,6 +1,8 @@
 // 사용자 프로필-1
 import React , { useState }from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../RecoilState/userRecoilState';
 
 const Wrapper = styled.div`
     margin-top: 10px;
@@ -120,7 +122,8 @@ const UserProfile1 = ({ userInfo }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(userInfo.follower);
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
-  
+  const [recoil, setUserInfo] = useRecoilState(userInfoState);
+
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
   };
@@ -134,6 +137,11 @@ const UserProfile1 = ({ userInfo }) => {
   };
 
   const handleFollowClick = () => {
+    if (!recoil.isLoggedIn) {
+      alert("로그인 후 이용가능합니다.");
+      return; // 로그인하지 않은 경우 함수 실행을 여기서 중단합니다.
+    }
+
     const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userInfo.email}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userInfo.email}`;
     const method = isFollowing ? 'DELETE' : 'POST';
   
