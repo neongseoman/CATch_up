@@ -42,7 +42,7 @@ function App() {
                       <Route path='/' element={<Main />} />
                       <Route path='/page/:pageId' element={<Page />} />
                       <Route path='/searchresult' element={<SearchResultPage />} />
-                      <Route path='/tmpfollowpage' element={<TmpFollowPage />} />
+                      <Route path='/tmpfollowpage' element={<TmpFollowPage userId={"user2@example.com"}/>} />
                   </Route>
                   
                   <Route path="user" element={<NavLayout />}>

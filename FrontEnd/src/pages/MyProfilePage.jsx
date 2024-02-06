@@ -21,7 +21,7 @@ const MyProfilePage = () => {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch('http://i10a105.p.ssafy.io:8080/api/dashboard_test', {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard_test`, {
           method: 'GET',
           credentials: 'include'
         });

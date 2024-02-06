@@ -45,7 +45,7 @@ function TmpFollowPage({ userId }) {
 
   return (
     <div>
-      <h1>사용자 정보</h1>
+      <h1>사용자 정보: {userId}</h1>
       <p>팔로워: {followersCount}</p>
       <p>팔로잉: {followingsCount}</p>
       <button onClick={handleFollow}>{isFollowing ? '팔로우됨' : '팔로우'}</button>

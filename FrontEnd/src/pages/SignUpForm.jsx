@@ -82,7 +82,7 @@ function SignUpForm() {
         alert("회원가입이 정상적으로 이뤄졌습니다.");
         navigate('/user/login');
       } else if (result.message === "duplicated id") {
-        setUsernameError("이미 존재하는 아이디입니다.");
+        setEmailError("이미 존재하는 아이디입니다.");
 
       } else {
         console.error('회원가입 실패');
@@ -96,22 +96,22 @@ function SignUpForm() {
   return (
     <div>
       <TextInput
-        placeholder="사용자 이름"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <ValMsg style={{ color: usernameError ? 'red' : 'transparent', height: '30px' }}>
-        {usernameError || '⠀'}
-      </ValMsg>
-
-      <TextInput
         type="email"
-        placeholder="이메일 주소"
+        placeholder="이메일 주소(아이디)"
         value={email}
         onChange={handleEmailChange}
       />
       <ValMsg style={{ color: emailError ? 'red' : 'transparent', height: '30px' }}>
         {emailError || '⠀'}
+      </ValMsg>
+
+      <TextInput
+        placeholder="사용자 이름(닉네임)"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <ValMsg style={{ color: usernameError ? 'red' : 'transparent', height: '30px' }}>
+        {usernameError || '⠀'}
       </ValMsg>
 
       <TextInput
