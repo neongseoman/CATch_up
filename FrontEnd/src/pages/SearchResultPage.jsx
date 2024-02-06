@@ -36,14 +36,17 @@ const ResultButton =styled.button`
 `;
 
 const SearchResultPage = () => {
-    var tmp = {
+    const tmp = {
         viewStreamingResult: true,
         viewProfileResult: false,
         viewShortsResult: false,
     };
 
     if(localStorage.getItem('viewState') != null) {
-        tmp = JSON.parse(localStorage.getItem('viewState'))
+        const data = JSON.parse(localStorage.getItem('viewState'))
+        tmp.viewStreamingResult = data.viewStreamingResult
+        tmp.viewProfileResult = data.viewProfileResult
+        tmp.viewShortsResult = data.viewShortsResult
     }
 
     const [viewStreamingResult, setViewStreamingResult] = useState(tmp.viewStreamingResult);

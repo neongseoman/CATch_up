@@ -1,6 +1,4 @@
-// 쇼츠 상세 페이지
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import CustomText from '../components/CustomText';
 import Review from '../components/Review';
@@ -24,12 +22,10 @@ const Video = styled.div`
 
 const Info = styled.div`
     width: 100%;
-    height: 180px;
     display: flex;
     color: white;
     border-radius: 10px;
     background: #1E1D1A;
-    justify-content: space-between;
     flex-direction: column;
 `;
 
@@ -77,8 +73,10 @@ const LikeField = styled.div`
     text-align: center;
 `;
 
-const LikeIcon = styled.p`
+const LikeButton = styled.button`
     font-size: 20px;
+    background: none;
+    cursor: pointer;
 `;
 
 const LikeCount = styled.p`
@@ -88,24 +86,26 @@ const LikeCount = styled.p`
 const BottomInfo = styled.div`
     display: flex;
     width: 100%;
+    height: 50px;
     justify-content: space-between;
+    margin-bottom: 15px;
 `;
 
 const ProfileField = styled.p`
     display: flex;
-    margin: 15px;
+    margin-left: 15px;
 `;
 
 const ProfileImg = styled.img`
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 5px;
     color: white;
     object-fit: cover;
-    transform: scale(1.5);
+    transform: scale(2);
 `;
 
 const ProfileName = styled.p`
@@ -120,7 +120,7 @@ const StreamingInfoField = styled.div`
     display: flex;
     justify-content: space-between;
     color: white;
-    width: 30%;
+    width: 35%;
     margin: 15px;
 `;
 
@@ -149,19 +149,36 @@ const CommentField = styled.div`
 
 const ShortsDetail = () => {
     const [tagList, setTagList] = useState(['태그1', '태그2', '태그3']);
-    const [data, setData] = useState();
-    const url = `${process.env.REACT_APP_API_BASE_URL}/searchShorts?query=두번째 &page=0&size=10`;
+    const [shortsInfo, setShortsInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(url)
-          .then(response => {
-            console.log('데이터:', response.data);
-            setData(response.data.content); 
-          })
-          .catch(error => {
-            console.error('에러:', error);
-          });
-      }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+        const fetchData = async () => {
+          try {
+            // 서버로부터 사용자 정보를 가져오는 HTTP 요청
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/3`, {
+              method: 'GET',
+              credentials: 'include'
+            });
+    
+            if (!response.ok) {
+              throw new Error('서버 응답이 실패했습니다');
+            }
+    
+            const data = await response.json();
+            
+            console.log(data)
+            setShortsInfo(data);
+            setLoading(false);
+          } catch (e) {
+            setLoading(false);
+            console.log(e)
+          }
+          
+        };
+    
+        fetchData();
+      }, []);
     
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -171,40 +188,33 @@ const ShortsDetail = () => {
         return `${year}-${month}-${day}`;
     };
 
-    const formatStreamingTime = (seconds) => {
-        const hours = Math.floor(seconds / 3600); // 초를 시간으로 변환
-        const remainingMinutes = Math.floor((seconds % 3600) / 60); // 시간을 제외한 나머지 초를 분으로 변환
-        const remainingSeconds = seconds % 60; // 남은 초
-        
-        let result = '';
-    
-        if (hours > 0) {
-            result += `${hours}시간 `;
+    const [count, setCount] = useState(shortsInfo ? shortsInfo.streamShortClips.likes : 0);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleLikeClick = () => {
+        if (isLiked) {
+          setCount(count - 1);
+        } else {
+          setCount(count + 1);
         }
-    
-        if (remainingMinutes > 0) {
-            result += `${remainingMinutes}분 `;
-        }
-        if (remainingSeconds > 0 || result === '') {
-            result += `${remainingSeconds}초`;
-        }
-    
-        return result;
-    };
+        setIsLiked(!isLiked);
+      };
     
     return (
         <Wrapper>
             <CustomText typography="h1" bold>
                 <br />쇼츠 보기<br />
             </CustomText>
-            {/* {data && Array.isArray(data) ? data.map((e, i) => (
-                <Shorts key={i}> */}
-                <Video>쇼츠 영상</Video>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <>
+                <Video>{shortsInfo.streamShortClips.shortsPath}</Video>
                 <Info>
                     <TopInfo>
-                        <TextField>
-                            <ShortsTitle>쇼츠 제목</ShortsTitle>
-                            <ShortsInfo>쇼츠 설명</ShortsInfo>
+                                                <TextField>
+                            <ShortsTitle>{shortsInfo.streamShortClips.title}</ShortsTitle>
+                            <ShortsInfo>{shortsInfo.streamShortClips.introduction}</ShortsInfo>
                             <TagField>
                             {tagList.map((tag, i) => (
                                 <div key={i}>
@@ -214,46 +224,49 @@ const ShortsDetail = () => {
                             </TagField>
                         </TextField>
                         <LikeField>
-                            <LikeIcon>하트</LikeIcon>
-                            <LikeCount>100</LikeCount>
+                            <LikeButton onClick={handleLikeClick}>
+                                {isLiked ? '좋아요 취소' : '좋아요'}
+                            </LikeButton>
+                            <LikeCount>{count}</LikeCount>
                         </LikeField>
                     </TopInfo>
                     <BottomInfo>
                         <ProfileField>
                             <ProfileImg
-                                // src={e.profileImagePath}
+                                src={shortsInfo.member.profileImagePath}
                                 onError={(e) => {
                                     e.target.src = '/img/logo.png';
                                 }}
                             />
-                            <ProfileName>업로드한 사용자 닉네임</ProfileName>
+                            <ProfileName>{shortsInfo.member.nickname}</ProfileName>
                         </ProfileField>
                         <StreamingInfoField>
                             <Options>
                                 <Option>최대 시청자 수</Option>
-                                <Data>1000명</Data>
+                                <Data>{shortsInfo.streamShortClips.maxViews}</Data>
                             </Options>
                             <Options>
                                 <Option>방송 날짜</Option>
-                                <Data>날짜</Data>
+                                <Data>{formatDate(shortsInfo.streamShortClips.streamedTime)}</Data>
                             </Options>
                             <Options>
-                                <Option>총 방송 시간</Option>
-                                <Data>시간</Data>
+                                <Option>쇼츠 업로드 날짜</Option>
+                                <Data>{formatDate(shortsInfo.streamShortClips.createdTime)}</Data>
                             </Options>
                         </StreamingInfoField>
                     </BottomInfo>
                 </Info>
-                {/* </Shorts>
-            )) : null} */}
             <CommentField>
                 <Review></Review>
                 <br />
                 <ReviewForm></ReviewForm>
             </CommentField>
+                </>
+            )}
+                
         </Wrapper>
     );
-  };
-  
-  export default ShortsDetail;
+};
+
+export default ShortsDetail;
 

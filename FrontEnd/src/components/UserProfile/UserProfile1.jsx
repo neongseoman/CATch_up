@@ -1,5 +1,5 @@
 // 사용자 프로필-1
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -64,18 +64,6 @@ const FollowButton = styled.button`
     margin-left: 10px;
 `;
 
-const UnfollowButton = styled.button`
-    border-radius: 30px;
-    font-size: 12px;
-    color: white;
-    background: #F7B84B;
-    height: 24px;
-    width: 60px;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 10px;
-`;
-
 const UserIntroduce = styled.p`
     font-size: 15px;
 `;
@@ -117,6 +105,11 @@ const Bar = styled.span`
 `;
 
 const UserProfile1 = ({ userInfo }) => {
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingsCount, setFollowingsCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  console.log(userInfo)
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
   };
@@ -129,12 +122,41 @@ const UserProfile1 = ({ userInfo }) => {
     alert('팔로잉 목록 모달 띄우기!');
   };
 
-  const handleFollowClick = () => {
-    alert('내 팔로우 목록에 해당 사용자 추가하기')
-  };
+  // 팔로워 및 팔로잉 수를 가져오는 함수
+  useEffect(() => {
+    // 팔로잉 수
+    fetch(`/api/users/${userInfo.userId}/followings/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowingsCount(data));
 
-  const handleUnfollowClick = () => {
-    alert('내 팔로우 목록에서 해당 사용자 삭제하기')
+    // 팔로워 수
+    fetch(`/api/users/${userInfo.userId}/followers/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowersCount(data));
+
+    // 현재 사용자가 팔로우하고 있는지 확인
+    const currentUserId = "현재 사용자 ID"; // 현재 사용자 ID는 인증 정보로부터 가져와야 합니다.
+    fetch(`/api/users/${currentUserId}/is-following/${userInfo.userId}`)
+      .then((response) => response.json())
+      .then((isFollowing) => setIsFollowing(isFollowing));
+  }, [userInfo.userId]);
+
+  // 팔로우/언팔로우 처리 함수
+  const handleFollow = () => {
+    const url = isFollowing ? `/api/users/unfollow/${userInfo.userId}` : `/api/users/follow/${userInfo.userId}`;
+    const method = isFollowing ? 'DELETE' : 'POST';
+  
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // 쿠키/인증 정보를 요청과 함께 보내도록 설정
+    })
+    .then(() => {
+      setIsFollowing(!isFollowing);
+      // 팔로우 상태에 따라 팔로워 수 조정
+      setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
+    })
+    .catch((error) => console.error('Error:', error));
   };
 
   return (
@@ -150,15 +172,9 @@ const UserProfile1 = ({ userInfo }) => {
         <TextField>
           <TextTop>
             <UserNickname>{userInfo.nickname}</UserNickname>
-
-            {/* 해당 사용자가 로그인한 사용자의 팔로잉 목록에 없으면 */}
-            <FollowButton onClick={handleFollowClick}>
-              + 팔로우
+            <FollowButton onClick={handleFollow} style={{ background: isFollowing ? '#F7B84B' : '#8B8F92' }}>
+              {isFollowing ? '♡ 팔로잉' : '+ 팔로우'}
             </FollowButton>
-            {/* 해당 사용자가 로그인한 사용자의 팔로잉 목록에 있으면 */}
-            <UnfollowButton onClick={handleUnfollowClick}>
-              ♡ 팔로잉
-            </UnfollowButton>
 
           </TextTop>
           <UserIntroduce>{userInfo.introduction}</UserIntroduce>
@@ -171,12 +187,12 @@ const UserProfile1 = ({ userInfo }) => {
             <Bar>&nbsp;|&nbsp;</Bar>
             <FollowerButton onClick={handleFollowerClick}>
               <Text>FOLLOWER</Text>
-              <Count>{userInfo.follower}</Count>
+              <Count>{followersCount}</Count>
             </FollowerButton>
             <Bar>&nbsp;|&nbsp;</Bar>
             <FollowingButton onClick={handleFollowingClick}>
               <Text>FOLLOWING</Text>
-              <Count>{userInfo.following}</Count>
+              <Count>{followingsCount}</Count>
             </FollowingButton>
             <Bar>&nbsp;|&nbsp;</Bar>
           </CountField>

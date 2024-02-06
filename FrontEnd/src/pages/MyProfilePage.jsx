@@ -31,6 +31,7 @@ const MyProfilePage = () => {
         }
 
         const data = await response.json();
+        
         console.log(data)
         setUserInfo(data);
         setLoading(false);
