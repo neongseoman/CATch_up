@@ -31,7 +31,7 @@ const Streaming = () => {
                     body: JSON.stringify({iceCandidate: event.candidate})
                 });
             }
-            if (event && event.target && event.target.iceGatheringState === 'complete') {
+            if ( event.target.iceGatheringState === 'complete') {
                 console.log('done gathering candidates - got iceGatheringState complete');
             }
         }
