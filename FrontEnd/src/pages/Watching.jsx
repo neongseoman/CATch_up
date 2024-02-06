@@ -1,74 +1,73 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import CustomText from "../components/CustomText";
 import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import login from "./Login";
-import * as events from "events";
+import {koreaTime} from "../WebRTC/PCEvent";
 
-const pc = new RTCPeerConnection(PCConfig);
-const userId = "audienceID"
+const audienceId = "audienceID"
 const buskerId = "buskerID"
+let makingOffer = false
+const Watching = () => {
+    const pcRef = useRef(new RTCPeerConnection(PCConfig));
+    const clientRef = useRef(
+        new StompJS.Client({
+            brokerURL: "ws://127.0.0.1:8080/signal",
+        })
+    );
 
-const Streaming = () => {
-
+    const pc = pcRef.current;
+    const client = clientRef.current;
+    // console.log("웨 안 대")
     // Set Peer Connection
     useEffect(() => {
+        const remoteVideo = document.getElementById("remoteVideo")
+
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
-            // console.log(event)
             if (event.candidate) {
-                console.log("candidate: " + event.candidate)
+                console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 client.publish({
-                    destination: `/app/audience/${userId}/iceCandidate`,
+                    destination: `/app/audience/${audienceId}/iceCandidate`,
                     body: JSON.stringify({
                         buskerId,
-                        audienceId:userId,
-                        iceCandidate: event.candidate})
+                        audienceId,
+                        iceCandidate: event.candidate
+                    })
                 });
             }
             if (event && event.target && event.target.iceGatheringState === 'complete') {
                 console.log('done gathering candidates - got iceGatheringState complete');
             }
         }
-        pc.oniceconnectionstatechange = function(event) {
-            console.log('ICE 연결 상태:', pc.iceConnectionState);
-
+        pc.oniceconnectionstatechange = (event) => {
+            if (pc.iceConnectionState === 'new'){
+                console.log(koreaTime +' 피어 연결을 시작 합니다. ')
+            }
+            console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
-                console.log('피어 간 연결이 성공적으로 수립되었습니다.');
+                console.log(pc.getStats().then(r=> console.log(koreaTime+" "+r)))
+                console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
             } else if (pc.iceConnectionState === 'disconnected'){
-                console.log('피어 간 연결이  끊어졌습니다.')
+
+                console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')
             } else if(pc.iceConnectionState === 'failed') {
-                console.log('피어 간 연결이  실패.');
+                pc.restartIce()
+                console.log(koreaTime +' 피어 간 연결이  실패.');
             }
         };
-        pc.onconnectionstatechange = function(event) { // 데이터 연결 상태 확인
-
+        pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인
             console.log('데이터 연결 상태:', pc.connectionState);
-
             if (pc.connectionState === 'connected') {
-                console.log('데이터 연결이 확립되었습니다.');
+                console.log(koreaTime +' 데이터 연결이 확립되었습니다.');
             } else if (pc.connectionState === 'disconnected') {
-                console.log('데이터 연결이 끊어졌습니다.');
+                console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');
             }
         };
-        pc.ontrack = (event) => {
-            const remoteVideo = document.getElementById("remoteVideo")
-            // console.log('gotRemoteStream', event.track, event.streams[0]);
-
-            // reset srcObject to work around minor bugs in Chrome and Edge.
-            remoteVideo.srcObject = null;
-
-            remoteVideo.srcObject = event.streams[1];
+        pc.ontrack = (event) =>{
+            remoteVideo.srcObject = event.streams[0]
         }
-        pc.onnegotiationneeded = (event) => {}
-        pc.onsignalingstatechange = (event) => {
-
+        pc.onsignalingstatechange = (event) =>{
         }
-
-        //Stomp socket connection
-        const client = new StompJS.Client({
-            brokerURL: "ws://127.0.0.1:8080/signal"
-        });
 
         if (typeof WebSocket !== 'function') {
             client.webSocketFactory = function () {
@@ -79,14 +78,9 @@ const Streaming = () => {
 
         client.onConnect = (frame) => {
             console.log(frame); // stomp status
-            //connection check
-            client.publish({
-                destination: `/app/audience`,
-                body: JSON.stringify({AudienceID: userId + " is connect!"})
-            })
 
+            makingOffer = true
             pc.createOffer({
-                iceRestart:false,
                 offerToReceiveAudio:true,
                 offerToReceiveVideo:true
             })
@@ -95,13 +89,15 @@ const Streaming = () => {
                     pc.setLocalDescription(offer)
                         .then((r) => {
                             client.publish({
-                                destination: `/app/audience/${userId}/offer`,
+                                destination: `/app/audience/${audienceId}/offer`,
                                 body: JSON.stringify({
                                     buskerId,
-                                    audienceId:userId,
+                                    audienceId,
                                     offer,
                                 })
                             })
+                            new RTCPeerConnectionIceEvent("onicecandidate")
+                            makingOffer = false
                         })
                 })
                 .catch((error) => {
@@ -109,14 +105,14 @@ const Streaming = () => {
                 })
 
             // sdpOffer를 보내고 Answer를 받음
-            client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
+            client.subscribe(`/audience/${audienceId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
                 const answerId = offerResponse.id;
                 const response = offerResponse.response;
                 const sdpAnswer = offerResponse.sdpAnswer;
 
                 // console.log("Received SDP Answer \n");
-                console.log("Received SDP Answer \n"+offerResponse)
+                console.log("Received SDP Answer \n"+offerResponse.id)
                 pc.setRemoteDescription({
                     type: "answer",
                     sdp: sdpAnswer
@@ -127,14 +123,14 @@ const Streaming = () => {
                 });
             });
             //
-            client.subscribe(`audience/${userId}`,(res)=>{
-                console.log(JSON.parse(res.body))
-            })
+            // client.subscribe(`audience/${audienceID}`,(res)=>{
+            //     console.log(JSON.parse(res.body))
+            // })
             // IceCandidate 받음.
-            client.subscribe(`/audience/${userId}/iceCandidate`, (res) => {
+            client.subscribe(`/audience/${audienceId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
                 if (iceResponse.id === "iceCandidate") {
-                    console.log("server send ice")
+                    console.log(koreaTime + " server send ice \n" + iceResponse.candidate.candidate)
                     const icecandidate = new RTCIceCandidate(iceResponse.candidate)
                     pc.addIceCandidate(icecandidate)
                         .then()
@@ -164,4 +160,4 @@ const Streaming = () => {
 }
 
 
-export default Streaming;
+export default Watching;
