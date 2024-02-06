@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.kurento.client.IceCandidate;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 @Setter
 public class IceCandidateMessage {

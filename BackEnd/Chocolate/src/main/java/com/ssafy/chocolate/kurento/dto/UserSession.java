@@ -13,7 +13,9 @@ public class UserSession {
 
     private static final Logger log = LoggerFactory.getLogger(UserSession.class);
     private WebRtcEndpoint webRtcEndpoint;
-
-    public void iceCandidate(IceCandidate iceCandidate) {webRtcEndpoint.addIceCandidate(iceCandidate);}
+    public void addIceCandidate(IceCandidate iceCandidate) {
+        log.info("audience add ice candidate");
+        webRtcEndpoint.addIceCandidate(iceCandidate);
+    }
 
 }
