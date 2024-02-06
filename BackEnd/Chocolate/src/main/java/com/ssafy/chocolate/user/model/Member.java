@@ -40,6 +40,9 @@ public class Member {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
+    private Integer following;
+    private Integer follower;
+
     @Column(name = "streaming_time")
     private Integer streamingTime;
 
