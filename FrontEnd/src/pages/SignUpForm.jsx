@@ -4,6 +4,8 @@ import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import styled from "@emotion/styled";
 
+
+
 function SignUpForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -67,9 +69,9 @@ function SignUpForm() {
       nickname: username,
       password: password,
     };
-
+    
     try {
-      const response = await fetch('http://localhost:8080/api/user/join', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/user/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +84,7 @@ function SignUpForm() {
         alert("회원가입이 정상적으로 이뤄졌습니다.");
         navigate('/user/login');
       } else if (result.message === "duplicated id") {
-        setUsernameError("이미 존재하는 아이디입니다.");
+        setEmailError("이미 존재하는 아이디입니다.");
 
       } else {
         console.error('회원가입 실패');
@@ -96,22 +98,22 @@ function SignUpForm() {
   return (
     <div>
       <TextInput
-        placeholder="사용자 이름"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <ValMsg style={{ color: usernameError ? 'red' : 'transparent', height: '30px' }}>
-        {usernameError || '⠀'}
-      </ValMsg>
-
-      <TextInput
         type="email"
-        placeholder="이메일 주소"
+        placeholder="이메일 주소(아이디)"
         value={email}
         onChange={handleEmailChange}
       />
       <ValMsg style={{ color: emailError ? 'red' : 'transparent', height: '30px' }}>
         {emailError || '⠀'}
+      </ValMsg>
+
+      <TextInput
+        placeholder="사용자 이름(닉네임)"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <ValMsg style={{ color: usernameError ? 'red' : 'transparent', height: '30px' }}>
+        {usernameError || '⠀'}
       </ValMsg>
 
       <TextInput

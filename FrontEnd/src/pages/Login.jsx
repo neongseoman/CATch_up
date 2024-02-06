@@ -4,13 +4,15 @@ import CustomText from '../components/CustomText';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button'
 import styled from "@emotion/styled";
-
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../RecoilState/userRecoilState';
 
 function LoginForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +23,7 @@ function LoginForm() {
     formData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/login`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -30,11 +32,17 @@ function LoginForm() {
         body: formData
       });
 
+
       if (!response.ok) {
         throw new Error('로그인에 실패했습니다.');
       }
 
       localStorage.setItem('user', JSON.stringify(username));
+
+
+      const fetchedUserInfo = { isLoggedIn: true, userId: username};
+      setUserInfo(fetchedUserInfo); // 로그인 후 사용자 정보를 atom에 저장
+
       navigate('/'); // 메인 화면으로 이동
     } catch (error) {
       console.error('Error:', error);
@@ -60,6 +68,7 @@ function LoginForm() {
           onChange={(e) => setUsername(e.target.value)}></TextInput>
         
         <ValMsg></ValMsg>
+        
         <TextInput type="password" placeholder="비밀번호를 입력하세요" value={password}
           onChange={(e) => setPassword(e.target.value)} ></TextInput>
 

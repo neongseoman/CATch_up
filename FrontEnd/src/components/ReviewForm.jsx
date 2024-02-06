@@ -29,9 +29,9 @@ const ReviewForm = ({ onSubmit }) => {
       <TextArea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="리뷰를 작성해주세요"
+        placeholder="댓글을 작성해 주세요"
       />
-      <SubmitButton type="submit">리뷰 작성</SubmitButton>
+      <SubmitButton type="submit">등록</SubmitButton>
     </Form>
   );
 };
@@ -62,7 +62,7 @@ const TextArea = styled.textarea`
   width: 100%;
   height: 100px;
   padding: 10px;
-  resize:none;
+  resize: none;
 `;
 
 const SubmitButton = styled.button`
