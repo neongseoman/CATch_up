@@ -15,10 +15,13 @@ function UserInfo() {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard`, {
-          method: 'GET',
-          credentials: 'include'
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/api/dashboard`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("서버 응답이 실패했습니다");
@@ -48,11 +51,14 @@ function UserInfo() {
       formData.append("image", selectedFile);
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/upload/image`, {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/api/upload/image`,
+          {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           alert("이미지 저장 완료 ^_^");
@@ -66,6 +72,42 @@ function UserInfo() {
     }
   };
 
+  const [videoFile, setVideoFile] = useState(null);
+
+  const handleVideoFileChange = (event) => {
+    const file = event.target.files[0];
+    setVideoFile(file);
+  };
+
+  const handleVideoUpload = async () => {
+    if (!videoFile) {
+      alert("동영상 파일을 선택하세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("shorts", videoFile);
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/upload/shorts`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("동영상 업로드 성공");
+      } else {
+        console.error("동영상 업로드 실패");
+      }
+    } catch (error) {
+      console.error("동영상 업로드 오류", error);
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -75,6 +117,15 @@ function UserInfo() {
           <div>
             <input type="file" accept="image/*" onChange={handleFileChange} />
             <button onClick={handleUpload}>업로드</button>
+          </div>
+
+          <div>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoFileChange}
+            />
+            <button onClick={handleVideoUpload}>업로드</button>
           </div>
 
           <h1>User Information</h1>
