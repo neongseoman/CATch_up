@@ -41,4 +41,17 @@ public class UploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 중 오류 발생");
         }
     }
+
+    @PostMapping("/shorts")
+    public ResponseEntity<String> uploadShorts(@RequestParam("shorts") MultipartFile shorts, @AuthenticationPrincipal User user) {
+        try {
+
+            String email = user.getUsername();
+            Optional<Member> userEntity = userRepository.findByEmail(email);
+            String imageUrl = imageService.uploadShorts(shorts, userEntity.get().getId());
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 중 오류 발생");
+        }
+    }
 }
