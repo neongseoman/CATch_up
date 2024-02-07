@@ -31,5 +31,7 @@ public class StreamComment {
 
     private Integer likes;
 
+    private String nickname;
+
     private LocalDateTime createdTime;
 }
