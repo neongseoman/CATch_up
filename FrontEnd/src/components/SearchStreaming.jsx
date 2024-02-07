@@ -1,16 +1,9 @@
 // 검색 결과 - 스트리밍
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-=======
-import React, {useState, useEffect} from "react";
->>>>>>> 57de31f78105ec73f7afd8a6caaff08538ac8c44
 import axios from "axios";
 import styled from "styled-components";
-import { useRecoilValue } from 'recoil';
-import { searchTermState } from '../RecoilState/userRecoilState';
 import VideoTmp from "./VideoTmp";
-import {useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -123,28 +116,6 @@ const Option = styled.p`
 `;
 
 const SearchStreaming = () => {
-<<<<<<< HEAD
-  const navigate = useNavigate();
-  const searchTerm = useRecoilValue(searchTermState);
-  const [data, setData] = useState();
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=${searchTerm}&page=0&size=10`;
-
-  const handleStreamingClick = () => {
-    navigate('/watchingpage');
-  };
-
-  useEffect(() => {
-    axios
-      .get(url)
-      .then((response) => {
-        console.log("데이터:", response.data);
-        setData(response.data.content);
-      })
-      .catch((error) => {
-        console.error("에러:", error);
-      });
-  }, [searchTerm]);
-=======
     const navigate = useNavigate();
     const [data, setData] = useState();
     const [buskerData, setBuskerData] = useState();
@@ -183,7 +154,6 @@ const SearchStreaming = () => {
         const date = new Date(startTime);
         const hours = date.getHours();
         const minutes = date.getMinutes();
->>>>>>> 57de31f78105ec73f7afd8a6caaff08538ac8c44
 
         return `${hours < 10 ? "0" + hours : hours}:${
             minutes < 10 ? "0" + minutes : minutes
