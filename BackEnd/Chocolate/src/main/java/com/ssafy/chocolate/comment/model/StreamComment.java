@@ -18,13 +18,18 @@ public class StreamComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentNo;
+    private Integer commentNo;
 
-    private Long streamNo;
+    @Column(nullable = false)
+    private Integer streamNo;
+
+    @Column(nullable = false)
     private Long userNo;
+
+    @Column(length = 255)
     private String comments;
+
     private Integer likes;
 
-    @Column(name = "created_time")
     private LocalDateTime createdTime;
 }
