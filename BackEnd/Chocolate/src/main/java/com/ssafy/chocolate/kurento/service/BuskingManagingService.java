@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -26,35 +28,62 @@ public class BuskingManagingService {
     private final KurentoClient kurentoClient;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
-        String buskerId = message.getUserId();
-        log.debug(message.getUserId() + " Busking is ok");
-//        System.out.println("여기까지는 괜찮고");
-        Busking busking = new Busking(buskerId, kurentoClient, new IceMessageSendService(simpMessagingTemplate));
-        JsonObject sdpAnswer = busking.BuskingStart(message);
-        buskingManaging.put(buskerId, busking);
-        simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
-                sdpAnswer.toString());
-
+    public void setBusking(BuskingInfoDTO infoDTO) {
+        String buskerEmail = infoDTO.getBuskerEmail();
+        Busking busking = new Busking(kurentoClient, new IceMessageSendService(simpMessagingTemplate),
+                infoDTO.getBuskerEmail(), infoDTO.getBuskingTitle(), infoDTO.getBuskingReport(),
+                infoDTO.getBuskingHashtag(), infoDTO.getBuskingInfo());
+//        System.out.println(busking);
+//        System.out.println(buskingManaging);
+        buskingManaging.put(buskerEmail, busking);
+        log.info("busker session : " + (buskingManaging.get(buskerEmail)));
     }
 
+    public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
+        String buskerId = message.getUserId();
+        log.info(buskerId + " is on set up busking");
+//        System.out.println("여기까지는 괜찮고");
+        Busking busking = buskingManaging.get(buskerId);
+        JsonObject sdpAnswer = busking.BuskingStart(message);
+        simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
+                sdpAnswer.toString());
+        log.info("Busking set up is clear");
+    }
 
     public void setBuskingIceCandidate(String busker, IceCandidateMessage iceCandidateMessage) {
         Busking busking = buskingManaging.get(busker);
+        log.info(iceCandidateMessage.getIceCandidate().getCandidate());
         if (busking == null) {
             log.debug("There is no busker");
-        } else{
+        } else {
             IceCandidate iceCandidate = iceCandidateMessage.getIceCandidate();
             busking.addCandidate(iceCandidate);
         }
     }
 
+    public List<BuskingInfoDTO> currentBusking() {
+        List<BuskingInfoDTO> buskingInfoList = new ArrayList<>();
+
+        for (Busking busking : buskingManaging.values()) {
+            BuskingInfoDTO buskingInfoDTO = new BuskingInfoDTO();
+            buskingInfoDTO.setBuskerEmail(busking.getBuskerEmail());
+            buskingInfoDTO.setBuskingTitle(busking.getBuskingTitle());
+            buskingInfoDTO.setBuskingReport(busking.getBuskingReport());
+            buskingInfoDTO.setBuskingHashtag(busking.getBuskingHashtag());
+            buskingInfoDTO.setBuskingInfo(busking.getBuskingInfo());
+
+            buskingInfoList.add(buskingInfoDTO);
+        }
+
+        return buskingInfoList;
+
+    }
 
     public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
         Busking busking = buskingManaging.get(offer.getBuskerId());
         UserSession audienceSession = new UserSession();
         if (busking != null) {
-            busking.audienceJoin(offer,audienceSession);
+            busking.audienceJoin(offer, audienceSession);
         } else {
             log.info("No Busking rooms");
         }
@@ -76,7 +105,6 @@ public class BuskingManagingService {
         }
     }
 
-
     public void stopBusking(String busker) throws IOException {
         Busking busking = buskingManaging.get(busker);
         if (busking == null) {
@@ -87,7 +115,6 @@ public class BuskingManagingService {
         buskingManaging.remove(busker);
 
     }
-
 
     public void leaveBusking(WebSocketSession session, JsonObject jsonMessage) {
         String busker = jsonMessage.get("busker").getAsString();

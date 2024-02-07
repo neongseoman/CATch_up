@@ -1,22 +1,24 @@
 package com.ssafy.chocolate.kurento.controller;
 
 import com.ssafy.chocolate.common.exception.NoBuskingException;
-import com.ssafy.chocolate.kurento.dto.AudienceIceCandidateMessage;
-import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
-import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
-import com.ssafy.chocolate.kurento.dto.IceCandidateMessage;
+import com.ssafy.chocolate.kurento.dto.*;
 import com.ssafy.chocolate.kurento.service.BuskingManagingService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,17 +61,13 @@ public class SignalController {
     @MessageMapping("/busker/{userId}/offer")
     public void receiveBuskerSDPOffer(@DestinationVariable String userId,
                                       @Payload BuskerSdpOffer SdpOfferMessage) throws NoBuskingException, IOException {
-        log.info(userId + "Send Offer");
+        log.info(userId + " Send Offer");
         try {
             buskingManagingService.startBusking(SdpOfferMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        HashMap<String, String> map = new HashMap<>();
-        map.put("buskerName", "test success");
 
-        simpMessagingTemplate.convertAndSend("/busker/" + userId + "/answer", map);
-        return;
     }
 
 
@@ -111,5 +109,15 @@ public class SignalController {
 
     @MessageMapping("stopBusking")
     public void stopBusking() {
+    }
+
+    @PostMapping("/busking/info")
+    public void buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
+        buskingManagingService.setBusking(buskingInfoDTO);
+    }
+
+    @GetMapping("/busking/buskerList")
+    public ResponseEntity<List<BuskingInfoDTO>> buskerList(){
+        return ResponseEntity.ok(buskingManagingService.currentBusking());
     }
 }

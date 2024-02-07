@@ -20,18 +20,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Busking extends UserSession implements Closeable {
     private final Logger log = LoggerFactory.getLogger(Busking.class);
     private final ConcurrentHashMap<String, UserSession> buskingSession = new ConcurrentHashMap<>();
-    private final String buskerName;
     private final KurentoClient kurentoClient;
     private final IceMessageSendService iceMessageSendService;
+    private final String buskerEmail;
+    private final String buskingTitle;
+    private final String buskingReport;
+    private final String buskingHashtag;
+    private final String buskingInfo;
     private WebRtcEndpoint buskerWebRtcEndpoint;
     private MediaPipeline buskerPipeline;
 
-    public JsonObject BuskingStart(BuskerSdpOffer offerMessage) throws IOException {
-        log.info(offerMessage.getUserId() + "Busking Start");
+    public Busking(KurentoClient kurentoClient, IceMessageSendService iceMessageSendService, String buskerEmail, String buskingTitle, String buskingReport, String buskingHashtag, String buskingInfo) {
+        this.kurentoClient = kurentoClient;
+        this.iceMessageSendService = iceMessageSendService;
+        this.buskerEmail = buskerEmail;
+        this.buskingTitle = buskingTitle;
+        this.buskingReport = buskingReport;
+        this.buskingHashtag = buskingHashtag;
+        this.buskingInfo = buskingInfo;
         buskerPipeline = kurentoClient.createMediaPipeline();
         this.setBuskerWebRtcEndpoint(new WebRtcEndpoint.Builder(buskerPipeline).build());
         WebRtcEndpoint buskerWebRtcEndpoint = this.getBuskerWebRtcEndpoint();
@@ -50,39 +59,19 @@ public class Busking extends UserSession implements Closeable {
             response.put("candidate", candidate);
 
             try {
-                log.info("busker add ice candidate");
-                iceMessageSendService.buskerSendIceCandidate(buskerName, response);
+//                log.info("busker add ice candidate");
+                iceMessageSendService.buskerSendIceCandidate(buskerEmail, response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
-            ConnectionState newState = connectionStateChangedEvent.getNewState();
-            if (newState == ConnectionState.CONNECTED) {
-                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
-                log.info("ICE connection is connected. State: " + newState);
-            } else if (newState == ConnectionState.DISCONNECTED) {
-                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
-                log.info("ICE connection is closed. State: " + newState);
-            }
-        });
-        buskerWebRtcEndpoint.addIceComponentStateChangedListener(iceComponentStateChangedEvent -> {
-            log.info(iceComponentStateChangedEvent.getState().toString());
-            log.info(String.valueOf(iceComponentStateChangedEvent.getStreamId()));
-            log.info(String.valueOf(iceComponentStateChangedEvent.getComponentId()));
-        });
-        buskerWebRtcEndpoint.addIceGatheringDoneListener(iceGatheringDoneEvent -> {
-            log.info(iceGatheringDoneEvent.getType());
-        });
-        buskerWebRtcEndpoint.addNewCandidatePairSelectedListener(newCandidatePairSelectedEvent -> {
-            log.info(newCandidatePairSelectedEvent.getCandidatePair().getStreamId());
-            log.info(String.valueOf(newCandidatePairSelectedEvent.getCandidatePair().getComponentId()));
-            log.info(newCandidatePairSelectedEvent.getCandidatePair().getLocalCandidate());
-            log.info(newCandidatePairSelectedEvent.getCandidatePair().getRemoteCandidate());
-        });
 
 
-        //연결되면 로그를 찍고 싶은걸?
+
+    }
+
+    public JsonObject BuskingStart(BuskerSdpOffer offerMessage) throws IOException {
+        log.info(offerMessage.getUserId() + " Start Busking");
         String sdpOffer = offerMessage.getOffer().getSdp();
         String sdpAnswer = buskerWebRtcEndpoint.processOffer(sdpOffer);
 
@@ -93,7 +82,7 @@ public class Busking extends UserSession implements Closeable {
         response.addProperty("response", "accepted");
         response.addProperty("sdpAnswer", sdpAnswer);
 //        log.info("buskerWebRtcEndPoint is created "+ (buskerWebRtcEndpoint.getClass()));
-
+        iceMessageSendService.createBuskerSession(offerMessage.getUserId());
         return response;
     }
 
@@ -190,4 +179,10 @@ public class Busking extends UserSession implements Closeable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Busking{" +
+                ", buskerEmail='" + buskerEmail + '\'' +
+                '}';
+    }
 }

@@ -35,4 +35,9 @@ public class IceMessageSendService {
         simpMessagingTemplate.convertAndSend("/audience/"+userId+"/sdpAnswer",sdpAnswer.toString());
     }
 
+    public void createBuskerSession(String userId) {
+        log.info("Busker "+ userId + " send session create message");
+        simpMessagingTemplate.convertAndSend("/busker/" + userId + "/createSession","created");
+
+    }
 }

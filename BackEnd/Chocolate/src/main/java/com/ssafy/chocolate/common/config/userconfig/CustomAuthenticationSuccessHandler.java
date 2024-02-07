@@ -20,7 +20,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Map<String, Object> data = new HashMap<>();
         data.put("username", authentication.getName());
         data.put("message", "로그인에 성공했습니다.");
-
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write(objectMapper.writeValueAsString(data));
