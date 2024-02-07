@@ -4,7 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="51d08d94-4974-4f6a-9bc3-eabacdcaa2b7" name="Changes" comment="" />
+    <list default="true" id="51d08d94-4974-4f6a-9bc3-eabacdcaa2b7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/RecoilState/userRecoilState.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/RecoilState/userRecoilState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/pages/Streaming.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/pages/Streaming.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/pages/StreamingInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/pages/StreamingInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/pages/Watching.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/pages/Watching.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/.jshintrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/Gruntfile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/autoclick.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/bower.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/out/adapter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/publish/adapter.debug.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/publish/adapter.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/publish/adapter.screenshare.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/publish/adapter.screenshare.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/source/adapter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/source/adapter.screenshare.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/source/pluginInfo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/test-win.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/globals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/karma.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/mac.watcher.scpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/test-main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/MediaStream.error.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/MediaStream.event.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/MediaStream.prop.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/MediaStreamTrack.event.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/MediaStreamTrack.prop.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/Plugin.ScreenSaver.behaviour.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/Plugin.features.no-spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/Plugin.object.stability.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCDTMFSender.event.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCDTMFSender.prop.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCPeerConnection.constraints.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCPeerConnection.event.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCPeerConnection.offerconstraints.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCPeerConnection.param.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/RTCPeerConnection.prop.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/VideoElement.behaviour.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/VideoElement.event.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/VideoElement.prop.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/getUserMedia.constraints.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/adapterjs/tests/unit/getUserMedia.param.spec.js" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +70,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="wild" />
+        <entry key="$PROJECT_DIR$" value="e744745fd7740c5dbe3e300606071c546edf4fce" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -54,23 +103,7 @@
                 <list>
                   <RecentBranch>
                     <option name="branchName" value="FE_develop" />
-                    <option name="lastUsedInstant" value="1707202358" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="iceCandidate" />
-                    <option name="lastUsedInstant" value="1707112095" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="wild" />
-                    <option name="lastUsedInstant" value="1707099001" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="metered" />
-                    <option name="lastUsedInstant" value="1707095980" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="frontpark" />
-                    <option name="lastUsedInstant" value="1706863600" />
+                    <option name="lastUsedInstant" value="1707269113" />
                   </RecentBranch>
                 </list>
               </option>
@@ -99,31 +132,31 @@
     <option name="showScratchesAndConsoles" value="false" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Node.js.App.js.executor": "Debug",
-    "Node.js.SignalingConnection.js.executor": "Run",
-    "Node.js.StreamerStomp.js.executor": "Run",
-    "Node.js.Streaming.jsx.executor": "Run",
-    "Node.js.Watching.jsx.executor": "Run",
-    "Node.js.index.js.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "FE__develop",
-    "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "C:/Users/SSAFY/Desktop/frontcode/S10P12A105/FrontEnd/src/WebRTC",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "settings.typescriptcompiler",
-    "ts.external.directory.path": "C:\\Users\\SSAFY\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Node.js.App.js.executor&quot;: &quot;Debug&quot;,
+    &quot;Node.js.SignalingConnection.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.StreamerStomp.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Streaming.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Watching.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.index.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;!29 on FE__develop&quot;,
+    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/Desktop/frontcode/S10P12A105/FrontEnd/src/WebRTC&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.typescriptcompiler&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\SSAFY\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\SSAFY\Desktop\frontcode\S10P12A105\FrontEnd\src\WebRTC" />
@@ -168,6 +201,7 @@
       <workItem from="1706831424509" duration="15705000" />
       <workItem from="1707093157774" duration="25201000" />
       <workItem from="1707177777795" duration="23895000" />
+      <workItem from="1707208183043" duration="7949000" />
     </task>
     <servers />
   </component>

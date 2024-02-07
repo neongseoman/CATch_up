@@ -1,5 +1,7 @@
 import { atom } from "recoil";
+import { recoilPersist } from 'recoil-persist';
 
+const { persistAtom } = recoilPersist();
 // 초기 상태 값을 별도의 변수에 저장
 export const userInfoInitialState = {
     isLoggedIn: false,
@@ -9,4 +11,6 @@ export const userInfoInitialState = {
 export const userInfoState = atom({
     key:"userInfo",
     default : userInfoInitialState,
+    effects_UNSTABLE: [persistAtom],
 });
+

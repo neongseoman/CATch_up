@@ -4,6 +4,8 @@ import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
 const buskerId = "buskerID"
@@ -15,10 +17,11 @@ const Watching = () => {
             brokerURL: "ws://127.0.0.1:8080/signal",
         })
     );
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     const pc = pcRef.current;
     const client = clientRef.current;
-    const audienceId = localStorage.getItem("user");
+    const userId = userInfo.userId
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
 
@@ -26,10 +29,10 @@ const Watching = () => {
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 client.publish({
-                    destination: `/app/audience/${audienceId}/iceCandidate`,
+                    destination: `/app/audience/${userId}/iceCandidate`,
                     body: JSON.stringify({
                         buskerId,
-                        audienceId,
+                        audienceId: userId,
                         iceCandidate: event.candidate
                     })
                 });
@@ -88,10 +91,10 @@ const Watching = () => {
                     pc.setLocalDescription(offer)
                         .then((r) => {
                             client.publish({
-                                destination: `/app/audience/${audienceId}/offer`,
+                                destination: `/app/audience/${userId}/offer`,
                                 body: JSON.stringify({
                                     buskerId,
-                                    audienceId,
+                                    audienceId: userId,
                                     offer,
                                 })
                             })
@@ -104,7 +107,7 @@ const Watching = () => {
                 })
 
             // sdpOffer를 보내고 Answer를 받음
-            client.subscribe(`/audience/${audienceId}/sdpAnswer`, (res) => {
+            client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
                 const answerId = offerResponse.id;
                 const response = offerResponse.response;
@@ -122,7 +125,7 @@ const Watching = () => {
                 });
             })
 
-            client.subscribe(`/audience/${audienceId}/iceCandidate`, (res) => {
+            client.subscribe(`/audience/${userId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
                 if (iceResponse.id === "iceCandidate") {
                     console.log(koreaTime + " server send ice \n" + iceResponse.candidate.candidate)
