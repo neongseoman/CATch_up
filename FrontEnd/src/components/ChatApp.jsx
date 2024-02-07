@@ -44,7 +44,7 @@ const ChatApp = () => {
     // const socket = new SockJS("http://127.0.0.1:8080/chat");
     // const client = new Client(); // Create a new 'Client' instance
     const client = new StompJS.Client({
-      brokerURL: "ws://127.0.0.1:8080/chat",
+      brokerURL: "wss://i10a105.p.ssafy.io/api/chat",
     });
 
     // client.webSocketFactory = () => socket;
@@ -79,7 +79,7 @@ const ChatApp = () => {
       });
 
       stompClient.publish({
-        destination: `/app/chat.sendToNewTopic`,
+        destination: `/app/api/chat.sendToNewTopic`,
         body: chatMessage,
       });
       setMessage(""); // 메시지 입력란을 비웁니다.
