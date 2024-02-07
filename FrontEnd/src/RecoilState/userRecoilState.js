@@ -4,6 +4,7 @@ import { atom } from "recoil";
 export const userInfoInitialState = {
     isLoggedIn: false,
     userId: null,
+    idno: null,
   };
 
 export const userInfoState = atom({

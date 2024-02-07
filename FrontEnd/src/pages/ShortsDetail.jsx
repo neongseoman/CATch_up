@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CustomText from '../components/CustomText';
-import Review from '../components/Review';
-import ReviewForm from '../components/ReviewForm';
+import ReviewList from '../components/ReviewList';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../RecoilState/userRecoilState';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -151,6 +152,7 @@ const ShortsDetail = () => {
     const [tagList, setTagList] = useState(['태그1', '태그2', '태그3']);
     const [shortsInfo, setShortsInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [recoil] = useRecoilState(userInfoState);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -257,9 +259,9 @@ const ShortsDetail = () => {
                     </BottomInfo>
                 </Info>
             <CommentField>
-                <Review></Review>
-                <br />
-                <ReviewForm></ReviewForm>
+
+            <ReviewList streamNo={1} currentUserNo={recoil.idno} />
+
             </CommentField>
                 </>
             )}
