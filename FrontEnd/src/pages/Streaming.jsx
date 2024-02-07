@@ -22,13 +22,17 @@ const Streaming = () => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
+    const candidateList = []
 
     // Set Peer Connection
     useEffect(() => {
+        console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
+            // 이걸 좀 이따가 실행해야 하는뎅...
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
                     destination: `/app/busker/${userId}/iceCandidate`,
                     body: JSON.stringify({iceCandidate: event.candidate})
@@ -134,6 +138,17 @@ const Streaming = () => {
                     console.error("Error setting remote description:", error);
                 });
             });
+
+            // client.subscribe(`/busker/${userId}/createSession`, (res) => {
+            //     if (res.body === "created"){
+            //         for (const candidateListElement of candidateList) {
+            //             client.publish({
+            //                 destination: `/app/busker/${userId}/iceCandidate`,
+            //                 body: JSON.stringify({iceCandidate: candidateListElement.candidate})
+            //             });
+            //         }
+            //     }
+            // });
 
             // IceCandidate 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {

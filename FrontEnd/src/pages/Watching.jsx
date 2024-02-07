@@ -148,10 +148,6 @@ const Watching = () => {
 
     return (
         <>
-            <CustomText typography="h1" bold>
-                시청하기입니다
-                드디어 만들어보는 시청자 화면....흑흑 너모 기쁜거시에요
-            </CustomText>
             <video id="remoteVideo" autoPlay controls></video>
         </>
     )

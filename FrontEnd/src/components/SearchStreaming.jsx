@@ -112,8 +112,8 @@ const Option = styled.p`
 
 const SearchStreaming = () => {
     const [data, setData] = useState();
-    const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호 비비&page=0&size=10';
-
+    // const url = 'http://i10a105.p.ssafy.io:8080/searchStreaming?query=김경호 비비&page=0&size=10';
+    const url = `${process.env.REACT_APP_API_BASE_URL}/busking/buskerList`
     const handleStreamingClick = () => {
         alert('해당 스트리밍 시청 화면으로 이동!');
     };

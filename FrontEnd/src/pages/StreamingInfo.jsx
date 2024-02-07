@@ -4,20 +4,25 @@ import CustomText from '../components/CustomText';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button'
 import styled from "@emotion/styled";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 
 const StreamingInfo = () => {
   const navigate = useNavigate();
+  const [userInfo,serUserInfo] = useRecoilState(userInfoState)
   const [buskingTitle, setBuskingTitle] = useState('');
   const [buskingReport, setBuskingReport] = useState('');
   const [buskingHashtag, setBuskingHashtag] = useState('');
   const [buskingInfo, setBuskingInfo] = useState('');
-  // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
 
+  const buskerEmail = userInfo.userId
+  // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
   const handleStreaming = async (event) => {
       // event.preventDefault();
 
       const formData = {
+          buskerEmail,
           buskingTitle: buskingTitle,
           buskingReport: buskingReport,
           buskingHashtag: buskingHashtag,
@@ -32,10 +37,11 @@ const StreamingInfo = () => {
                   'Content-Type': 'application/json', // Change content type to JSON
               },
               body: JSON.stringify(formData) // Convert formData to JSON
-          });
-
-          console.log(response)
-          navigate('/streamingpage');
+          }).then( r=> {
+                  console.log(r)
+                  navigate('/streamingpage')
+              }
+            );
 
       } catch (error) {
           console.error('Error:', error);
