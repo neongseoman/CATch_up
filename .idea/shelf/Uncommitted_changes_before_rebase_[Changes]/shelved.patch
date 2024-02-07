@@ -1,0 +1,94 @@
+Index: FrontEnd/src/pages/Streaming.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect, useState} from \"react\";\r\nimport CustomText from \"../components/CustomText\";\r\nimport {PCConfig} from \"../WebRTC/RTCConfig\";\r\n// import {stompClient} from \"../WebRTC/StompClientSington\";\r\nimport * as StompJS from \"@stomp/stompjs\";\r\nimport * as SockJS from \"sockjs-client\";\r\nimport login from \"./Login\";\r\n\r\n\r\nconst pc = new RTCPeerConnection(PCConfig);\r\nconst userId = \"testId\"\r\nlet count =0;\r\nlet count2 = 0;\r\n\r\n// 대체 왜 이게 2번이나 마운트되는거야?\r\nconst Streaming =  () => {\r\n    // Establish Web Socket\r\n\r\n    console.log(\"count2 : \"+count2++)\r\n    // Set Peer Connection\r\n    useEffect(() => {\r\n        const constraints = {video: true, audio: false}\r\n        console.log(count++)\r\n        navigator.mediaDevices.getUserMedia(constraints)\r\n            .then((stream) => {\r\n                const videoElement = document.getElementById(\"streamingVideo\")\r\n                videoElement.srcObject = stream;\r\n                //\r\n                stream.getVideoTracks()\r\n                    .map((stream) => {\r\n                        pc.addTrack(stream)\r\n                    })\r\n\r\n            }).catch(error => {\r\n            if (error.name === \"OverconstrainedError\") {\r\n                console.error(\r\n                    `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`,\r\n                );\r\n            } else if (error.name === \"NotAllowedError\") {\r\n                console.error(\r\n                    \"You need to grant this page permission to access your camera and microphone.\",\r\n                );\r\n            } else {\r\n                console.error(`getUserMedia error: ${error.name}`, error);\r\n            }\r\n        })\r\n\r\n        //Stomp socket connection\r\n\r\n        const client = new StompJS.Client({\r\n            brokerURL: \"ws://127.0.0.1:8081/signal\"\r\n        });\r\n\r\n        if (typeof WebSocket !== 'function') {\r\n            client.webSocketFactory = function () {\r\n                console.log(\"Stomp error sockjs is running\");\r\n                return new SockJS('http://127.0.0.1:8081/signal');\r\n            };\r\n        }\r\n\r\n        client.onConnect = (frame) => {\r\n            console.log(frame);\r\n\r\n            const subscription = client.subscribe(\r\n                '/busker', (res) => {\r\n                    console.log('신호 수신:', res);\r\n                    const parsedBody = JSON.parse(res.body);\r\n                    console.log('파싱된 메시지:', parsedBody);\r\n                });\r\n\r\n            const sdpReceive = client.subscribe(\r\n                `/busker/${userId}/answer`,(res)=>{\r\n                    // console.log(res)\r\n                    console.log(\"connect answer: \",JSON.parse(res.body))\r\n                })\r\n\r\n            client.publish({\r\n                destination:`/app/busker`,\r\n                // destination:`/app/busker/${buskerName}`,\r\n                body:JSON.stringify({buskerName:userId+\" is connect!\"})\r\n            })\r\n\r\n            const sdpOffer = pc.createOffer({\r\n                iceRestart: true,\r\n            }).then((offer) => {\r\n                console.log(offer)\r\n                pc.setLocalDescription(offer)\r\n                    .then(()=>{\r\n                        client.publish({\r\n                            destination: `/app/busker/${userId}/offer`,\r\n                            body: JSON.stringify({\r\n                                userId,\r\n                                offer,\r\n                            })\r\n                        })\r\n                    })\r\n            })\r\n                .catch((error) => {\r\n                    console.log(error)\r\n                })\r\n\r\n            const sdpAnswer = client.subscribe(\r\n                `/busker/${userId}/sdpAnswer`, (res) => {\r\n                    // console.log('신호 수신:', res);\r\n                    const offerResponse = JSON.parse(res.body);\r\n                    const answerId = offerResponse.id;\r\n                    const response = offerResponse.response\r\n                    const sdpAnswer = offerResponse.sdpAnswer\r\n                    console.log(sdpAnswer)\r\n                    pc.setRemoteDescription({\r\n                        type:\"answer\",\r\n                        sdp:sdpAnswer\r\n                    })\r\n                        .then( r=> console.log(\"set remote : \" + r))\r\n                        .catch(e=> console.log(e))\r\n                });\r\n        };\r\n\r\n        client.onStompError = (frame) => {\r\n            console.log('Broker reported error: ' + frame.headers['message']);\r\n            console.log('Additional details: ' + frame.body);\r\n        };\r\n\r\n        if (!client.connected) { // 이 시발 연결이 되어 있는데 왜 자꾸 연결하는거야 미친놈아\r\n            client.activate();\r\n        }\r\n        // PeerConnection Let's Go\r\n\r\n\r\n    }, []);\r\n\r\n    return (\r\n        <>\r\n            <CustomText typography=\"h1\" bold>\r\n                방송하기 입니다\r\n            </CustomText>\r\n            <video id=\"streamingVideo\" autoPlay controls></video>\r\n\r\n        </>\r\n    )\r\n}\r\n\r\nexport default Streaming;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/FrontEnd/src/pages/Streaming.jsx b/FrontEnd/src/pages/Streaming.jsx
+--- a/FrontEnd/src/pages/Streaming.jsx	(revision 81231d1313fa9427cd2d9b6f5a2d1fd71df5ce00)
++++ b/FrontEnd/src/pages/Streaming.jsx	(date 1706711731078)
+@@ -9,18 +9,15 @@
+ 
+ const pc = new RTCPeerConnection(PCConfig);
+ const userId = "testId"
+-let count =0;
+-let count2 = 0;
+ 
+ // 대체 왜 이게 2번이나 마운트되는거야?
+ const Streaming =  () => {
+     // Establish Web Socket
+ 
+-    console.log("count2 : "+count2++)
+     // Set Peer Connection
+     useEffect(() => {
+         const constraints = {video: true, audio: false}
+-        console.log(count++)
++
+         navigator.mediaDevices.getUserMedia(constraints)
+             .then((stream) => {
+                 const videoElement = document.getElementById("streamingVideo")
+@@ -61,26 +58,19 @@
+         client.onConnect = (frame) => {
+             console.log(frame);
+ 
+-            const subscription = client.subscribe(
+-                '/busker', (res) => {
+-                    console.log('신호 수신:', res);
+-                    const parsedBody = JSON.parse(res.body);
+-                    console.log('파싱된 메시지:', parsedBody);
+-                });
+-
+-            const sdpReceive = client.subscribe(
++            client.subscribe(  // socket connect test
+                 `/busker/${userId}/answer`,(res)=>{
+                     // console.log(res)
+                     console.log("connect answer: ",JSON.parse(res.body))
+                 })
+ 
+-            client.publish({
++            client.publish({  // socket connect test
+                 destination:`/app/busker`,
+                 // destination:`/app/busker/${buskerName}`,
+                 body:JSON.stringify({buskerName:userId+" is connect!"})
+             })
+ 
+-            const sdpOffer = pc.createOffer({
++            pc.createOffer({ // pc sdp offer send
+                 iceRestart: true,
+             }).then((offer) => {
+                 console.log(offer)
+@@ -94,19 +84,19 @@
+                             })
+                         })
+                     })
+-            })
++                })
+                 .catch((error) => {
+                     console.log(error)
+                 })
+ 
+-            const sdpAnswer = client.subscribe(
++            client.subscribe( // pc sdp answer receive
+                 `/busker/${userId}/sdpAnswer`, (res) => {
+                     // console.log('신호 수신:', res);
+                     const offerResponse = JSON.parse(res.body);
+                     const answerId = offerResponse.id;
+                     const response = offerResponse.response
+                     const sdpAnswer = offerResponse.sdpAnswer
+-                    console.log(sdpAnswer)
++                    console.log("sdpanswer is : \n"+ sdpAnswer)
+                     pc.setRemoteDescription({
+                         type:"answer",
+                         sdp:sdpAnswer
+@@ -114,6 +104,10 @@
+                         .then( r=> console.log("set remote : " + r))
+                         .catch(e=> console.log(e))
+                 });
++
++            client.subscribe(`/busker/${userId}/iceCandidate`,res => {
++                console.log(res)
++            })
+         };
+ 
+         client.onStompError = (frame) => {
