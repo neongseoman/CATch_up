@@ -6,6 +6,7 @@ const { persistAtom } = recoilPersist();
 export const userInfoInitialState = {
     isLoggedIn: false,
     userId: null,
+    idNo: null,
   };
 
 export const userInfoState = atom({
@@ -14,3 +15,8 @@ export const userInfoState = atom({
     effects_UNSTABLE: [persistAtom],
 });
 
+export const searchTermState = atom({
+    key: 'searchTermState',
+    default: null,
+    effects_UNSTABLE: [persistAtom],
+});

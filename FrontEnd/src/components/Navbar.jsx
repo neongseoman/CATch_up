@@ -72,8 +72,9 @@ const Navbar = () => {
         <StyledLink to={'/'}>홈</StyledLink>
         {isLoggedIn ? (
           <>
-            <StyledLink to={'/user/info'}>내정보({userInfo})</StyledLink>
+            <StyledLink to={'/user/info'}>내 프로필({userInfo})</StyledLink>
             <StyledLink as="span" onClick={handleLogout}>로그아웃</StyledLink>
+            <StyledLink to={'/streaming/info'}>방송하기</StyledLink>
           </>
         ) : (
           <StyledLink to={'/user/login'}>로그인</StyledLink>

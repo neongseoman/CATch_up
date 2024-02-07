@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CustomText from '../components/CustomText';
 import Review from '../components/Review';
 import ReviewForm from '../components/ReviewForm';
+import { useParams } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -152,11 +153,14 @@ const ShortsDetail = () => {
     const [shortsInfo, setShortsInfo] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    
+    const { streamNo } = useParams();
+
     useEffect(() => {
         const fetchData = async () => {
           try {
             // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/3`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/${streamNo}`, {
               method: 'GET',
               credentials: 'include'
             });
