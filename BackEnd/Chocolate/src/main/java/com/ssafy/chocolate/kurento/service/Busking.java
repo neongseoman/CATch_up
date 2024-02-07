@@ -33,7 +33,9 @@ public class Busking extends UserSession implements Closeable {
     private WebRtcEndpoint buskerWebRtcEndpoint;
     private MediaPipeline buskerPipeline;
 
-    public Busking(KurentoClient kurentoClient, IceMessageSendService iceMessageSendService, String buskerEmail, String buskingTitle, String buskingReport, String buskingHashtag, String buskingInfo) {
+    public Busking(KurentoClient kurentoClient, IceMessageSendService iceMessageSendService,
+                   String buskerEmail, String buskingTitle,
+                   String buskingReport, String buskingHashtag, String buskingInfo) {
         this.kurentoClient = kurentoClient;
         this.iceMessageSendService = iceMessageSendService;
         this.buskerEmail = buskerEmail;
@@ -65,7 +67,16 @@ public class Busking extends UserSession implements Closeable {
                 e.printStackTrace();
             }
         });
-
+        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
+            ConnectionState newState = connectionStateChangedEvent.getNewState();
+            if (newState == ConnectionState.CONNECTED) {
+                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
+                log.info("ICE connection is connected. State: " + newState);
+            } else if (newState == ConnectionState.DISCONNECTED) {
+                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
+                log.info("ICE connection is closed. State: " + newState);
+            }
+        });
 
 
     }
