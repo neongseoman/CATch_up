@@ -116,8 +116,9 @@ const Option = styled.p`
 
 const SearchStreaming = () => {
   const [data, setData] = useState();
+  const [buskerData,setBuskerData] = useState();
   const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=김경호 비비&page=0&size=10`;
-
+  const buskingListUrl = `${process.env.REACT_APP_API_BASE_URL}/busking/buskerList`
   const handleStreamingClick = () => {
     alert("해당 스트리밍 시청 화면으로 이동!");
   };
@@ -132,6 +133,17 @@ const SearchStreaming = () => {
       .catch((error) => {
         console.error("에러:", error);
       });
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  useEffect(() => {
+    axios
+        .get(buskingListUrl)
+        .then((response) => {
+          console.log("데이터:", response.data);
+          setBuskerData(response.data.content);
+        })
+        .catch((error) => {
+          console.error("에러:", error);
+        });
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
   // 스트리밍 시작 시간 추출

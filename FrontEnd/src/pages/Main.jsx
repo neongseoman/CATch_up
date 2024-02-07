@@ -8,14 +8,9 @@ import ReviewForm from "../components/ReviewForm";
 import Button from "../components/Button";
 
 const Main = () => {
-  const goToWatchingPage = () =>{
-    //버스커 ID는 동적임
-    const buskerId = "buskerId@test.com"
-  }
 
   return (
     <>
-      <Button onClick={goToWatchingPage}></Button>
       <CustomText typography="h1" bold>
         메인페이지 입니다
       </CustomText>
