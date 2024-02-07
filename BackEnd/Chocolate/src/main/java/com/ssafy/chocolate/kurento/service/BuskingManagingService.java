@@ -36,7 +36,7 @@ public class BuskingManagingService {
 //        System.out.println(busking);
 //        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
-        log.info("busker session : " + (buskingManaging.get(buskerEmail)));
+//        log.info("busker session : " + (buskingManaging.get(buskerEmail)));
     }
 
     public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
@@ -52,7 +52,7 @@ public class BuskingManagingService {
 
     public void setBuskingIceCandidate(String busker, IceCandidateMessage iceCandidateMessage) {
         Busking busking = buskingManaging.get(busker);
-        log.info(iceCandidateMessage.getIceCandidate().getCandidate());
+//        log.info(iceCandidateMessage.getIceCandidate().getCandidate());
         if (busking == null) {
             log.debug("There is no busker");
         } else {
