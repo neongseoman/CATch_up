@@ -12,28 +12,22 @@ import java.util.Optional;
 public class StreamCommentService {
 
     @Autowired
-    private StreamCommentRepository repository;
+    private StreamCommentRepository streamCommentRepository;
 
-    public List<StreamComment> findAllComments() {
-        return repository.findAll();
+    public List<StreamComment> getCommentsByStreamNo(Integer streamNo) {
+        return streamCommentRepository.findByStreamNo(streamNo);
     }
 
-    public Optional<StreamComment> findCommentById(Long id) {
-        return repository.findById(id);
+    public Optional<StreamComment> createOrUpdateComment(StreamComment comment) {
+        if (!streamCommentRepository.existsByStreamNoAndUserNo(comment.getStreamNo(), comment.getUserNo())) {
+            return Optional.of(streamCommentRepository.save(comment));
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public StreamComment saveComment(StreamComment comment) {
-        return repository.save(comment);
+    public void deleteComment(Integer commentNo, Long userNo) {
+        System.out.println("commentNo: "+ commentNo+"userNo: "+userNo);
+        streamCommentRepository.deleteByCommentNoAndUserNo(commentNo, userNo);
     }
-
-    public void deleteComment(Long id) {
-        repository.deleteById(id);
-    }
-
-    public boolean canEditOrDeleteComment(Long commentId, Long userId) {
-        return repository.findById(commentId)
-                .map(comment -> comment.getUserNo().equals(userId)) // 댓글의 userNo와 요청한 사용자 ID 비교
-                .orElse(false); // 댓글이 존재하지 않는 경우, 권한 없음
-    }
-
 }

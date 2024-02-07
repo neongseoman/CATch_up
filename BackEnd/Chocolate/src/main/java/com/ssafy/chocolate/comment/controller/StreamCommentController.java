@@ -2,44 +2,48 @@ package com.ssafy.chocolate.comment.controller;
 
 import com.ssafy.chocolate.comment.model.StreamComment;
 import com.ssafy.chocolate.comment.service.StreamCommentService;
+import com.ssafy.chocolate.follow.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/stream-comments")
 public class StreamCommentController {
 
     @Autowired
-    private StreamCommentService service;
+    private StreamCommentService streamCommentService;
+    @Autowired
+    private FollowService followService;
 
-    @GetMapping
-    public ResponseEntity<List<StreamComment>> getAllComments() {
-        return ResponseEntity.ok(service.findAllComments());
+    @GetMapping("/{streamNo}")
+    public List<StreamComment> getCommentsByStreamNo(@PathVariable Integer streamNo) {
+        return streamCommentService.getCommentsByStreamNo(streamNo);
     }
 
     @PostMapping
-    public ResponseEntity<StreamComment> createComment(@RequestBody StreamComment comment) {
-        return ResponseEntity.ok(service.saveComment(comment));
+    public StreamComment createOrUpdateComment(@AuthenticationPrincipal User user, @RequestBody StreamComment comment) {
+        String username = user.getUsername();
+        Long userNo = followService.findUserIdByUsername(username);
+        comment.setUserNo(userNo);
+
+        return streamCommentService.createOrUpdateComment(comment)
+                .orElseThrow(() -> new IllegalStateException("Comment already exists or cannot be created"));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<StreamComment> updateComment(@AuthenticationPrincipal UserDetails user, @PathVariable Long id, @RequestBody StreamComment comment) {
-        // 권한 검사 로직
-//        if (!service.canEditOrDeleteComment(id, user.getUsername())) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        }
-        return ResponseEntity.ok(service.saveComment(comment));
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
-        // 권한 검사 로직 필요
-        service.deleteComment(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{streamNo}")
+    public void deleteComment(@AuthenticationPrincipal User user, @PathVariable Integer streamNo, @RequestParam Long userNo) {
+        String username = user.getUsername();
+        Long userId = followService.findUserIdByUsername(username);
+        if(Objects.equals(userId, userNo)){
+            streamCommentService.deleteComment(streamNo, userId);
+        }
     }
 }
