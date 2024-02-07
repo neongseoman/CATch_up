@@ -8,9 +8,8 @@ import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
-const buskerId = "buskerID"
 let makingOffer = false
-const Watching = () => {
+const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
@@ -18,7 +17,7 @@ const Watching = () => {
         })
     );
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-
+    const buskerId= buskerEmail;
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
