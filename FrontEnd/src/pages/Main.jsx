@@ -20,7 +20,8 @@ const Main = () => {
         Test Link:
         <Link to={"/map"}> 지도,</Link>
         <Link to={"/streaming/info"}> 방송송출,</Link>
-        <Link to={"/watchingpage"}> 방송시청,</Link>
+        <Link to={"/searchresult"}> 방송시청,</Link>  {/* 방송 시청을 하려면 방송하는 버스커의 리스트를 받아와야해서 이렇게 해놧는데 그런 페이지만 따로 만드는것두,....*/}
+        {/*<Link to={"/watchingpage"}> 방송시청,</Link>*/}
         <Link to={"/user/shortsdetail"}> 쇼츠 상세 페이지,</Link>
         <Link to={"/user/myprofilepage"}> 내 프로필 페이지,</Link>
         <Link to={"/user/userprofilepage"}> 유저 프로필 페이지</Link>

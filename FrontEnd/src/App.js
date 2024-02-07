@@ -69,7 +69,7 @@ function App() {
 
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='map' element={<MainMapPage />} />
-                    {/*<Route path="streamingpage" element={<StreamingPage />} />*/}
+                    <Route path="streamingpage" element={<StreamingPage />} />
                     <Route path="watchingpage" element={<WatchingPage />} />
                   </Route>
                   
