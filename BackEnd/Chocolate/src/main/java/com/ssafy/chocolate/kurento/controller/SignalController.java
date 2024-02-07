@@ -107,8 +107,9 @@ public class SignalController {
     public void leaveBusking() {
     }
 
-    @MessageMapping("stopBusking")
-    public void stopBusking() {
+    @MessageMapping("/bukser/{buskerId}/stopBusking")
+    public void stopBusking(@DestinationVariable String buskerId) throws IOException {
+        buskingManagingService.stopBusking(buskerId);
     }
 
     @PostMapping("/busking/info")

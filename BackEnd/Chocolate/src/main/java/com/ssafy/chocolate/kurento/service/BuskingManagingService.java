@@ -82,6 +82,7 @@ public class BuskingManagingService {
     public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
         Busking busking = buskingManaging.get(offer.getBuskerId());
         UserSession audienceSession = new UserSession();
+        audienceSession.setAudienceId(offer.getAudienceId());
         if (busking != null) {
             busking.audienceJoin(offer, audienceSession);
         } else {
@@ -109,10 +110,11 @@ public class BuskingManagingService {
         Busking busking = buskingManaging.get(busker);
         if (busking == null) {
             log.debug("There is no busker");
+        }else{
+            busking.close();
+            buskingManaging.remove(busker);
         }
         //Buking 듣던 사람들한테 안내하고 종료
-        busking.close();
-        buskingManaging.remove(busker);
 
     }
 
