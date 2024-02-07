@@ -6,12 +6,13 @@ import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
 import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
+import {useNavigate} from "react-router-dom";
 
 // const userId = "buskerID"
 let makingOffer = false
 
-// 대체 왜 이게 2번이나 마운트되는거야?
-const Streaming = () => {
+
+const Streaming = ({ isStreaming }) => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -23,9 +24,19 @@ const Streaming = () => {
     const client = clientRef.current;
     const userId = userInfo.userId
     const candidateList = []
-
+    const navigate = useNavigate();
+    console.log(isStreaming)
     // Set Peer Connection
     useEffect(() => {
+        if (isStreaming === false){
+            pc.getSenders().forEach(sender => pc.removeTrack(sender))
+            pc.close()
+
+            client.publish({
+                destination: `app/busker/${userId}/stopBusking`
+            })
+            navigate("/")
+        }
         console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
@@ -138,19 +149,6 @@ const Streaming = () => {
                     console.error("Error setting remote description:", error);
                 });
             });
-
-            // client.subscribe(`/busker/${userId}/createSession`, (res) => {
-            //     if (res.body === "created"){
-            //         for (const candidateListElement of candidateList) {
-            //             client.publish({
-            //                 destination: `/app/busker/${userId}/iceCandidate`,
-            //                 body: JSON.stringify({iceCandidate: candidateListElement.candidate})
-            //             });
-            //         }
-            //     }
-            // });
-
-            // IceCandidate 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
                 if (iceResponse.id === "iceCandidate") {
@@ -168,9 +166,7 @@ const Streaming = () => {
 
         client.activate();
 
-    }, []);
-
-
+    }, [isStreaming]);
     return (
         <>
             <video id="streamingVideo" style={{width: '100%'}} autoPlay controls></video>
