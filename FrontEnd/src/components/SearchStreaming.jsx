@@ -1,7 +1,10 @@
 // 검색 결과 - 스트리밍
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { searchTermState } from '../RecoilState/userRecoilState';
 import VideoTmp from "./VideoTmp";
 
 const Wrapper = styled.div`
@@ -115,11 +118,13 @@ const Option = styled.p`
 `;
 
 const SearchStreaming = () => {
+  const navigate = useNavigate();
+  const searchTerm = useRecoilValue(searchTermState);
   const [data, setData] = useState();
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=김경호 비비&page=0&size=10`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=${searchTerm}&page=0&size=10`;
 
   const handleStreamingClick = () => {
-    alert("해당 스트리밍 시청 화면으로 이동!");
+    navigate('/watchingpage');
   };
 
   useEffect(() => {
@@ -132,7 +137,7 @@ const SearchStreaming = () => {
       .catch((error) => {
         console.error("에러:", error);
       });
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  }, [searchTerm]);
 
   // 스트리밍 시작 시간 추출
   const getTimeFromStartTime = (startTime) => {

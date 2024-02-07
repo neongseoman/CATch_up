@@ -78,7 +78,6 @@ const MyProfile1 = ({ userInfo }) => {
   const navigate = useNavigate();
 
   const handleEditClick = () => {
-    // 버튼 클릭 시 수행할 작업 추가
     alert('프로필 수정 모달 띄우기!');
   };
 

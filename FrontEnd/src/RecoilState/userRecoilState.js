@@ -4,9 +4,15 @@ import { atom } from "recoil";
 export const userInfoInitialState = {
     isLoggedIn: false,
     userId: null,
+    idNo: null,
   };
 
 export const userInfoState = atom({
     key:"userInfo",
     default : userInfoInitialState,
+});
+
+export const searchTermState = atom({
+    key: 'searchTermState',
+    default: null,
 });

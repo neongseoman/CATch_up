@@ -1,13 +1,17 @@
 // 검색 결과 - 사용자
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { searchTermState } from '../RecoilState/userRecoilState';
 
 const Wrapper = styled.div`
   margin-bottom: 30px;
   width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
 `;
 
 const ProfileList = styled.div`
@@ -81,11 +85,13 @@ const UserInfo = styled.p`
 `;
 
 const SearchProfile = () => {
+  const navigate = useNavigate();
+  const searchTerm = useRecoilValue(searchTermState);
   const [data, setData] = useState();
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchUser?query=Tom&page=0&size=10`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchUser?query=${searchTerm}&page=0&size=10`;
 
-  const handleProfileClick = () => {
-    alert("해당 사용자 프로필 화면으로 이동!");
+  const handleProfileClick = (id) => {
+    navigate(`/user/userprofilepage/${id}`);
   };
 
   useEffect(() => {
@@ -98,15 +104,14 @@ const SearchProfile = () => {
       .catch((error) => {
         console.error("에러:", error);
       });
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  }, [searchTerm]);
 
   return (
     <Wrapper>
-      {/* <ProfileList> */}
       {data && Array.isArray(data)
         ? data.map((e, i) => (
-            <ProfileList key={i} onClick={handleProfileClick}>
-              <Profile>
+            <ProfileList key={i}>
+              <Profile onClick={() => handleProfileClick(e.userNo)}>
                 <ProfileImg
                   src={e.profileImagePath}
                   onError={(e) => {
@@ -127,7 +132,6 @@ const SearchProfile = () => {
             </ProfileList>
           ))
         : null}
-      {/* </ProfileList> */}
     </Wrapper>
   );
 };

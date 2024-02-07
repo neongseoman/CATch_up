@@ -126,15 +126,28 @@ const UserProfile1 = ({ userInfo }) => {
 
 
   // 팔로워 및 팔로잉 수를 가져오는 함수
+  // useEffect(() => {
+  //   if(recoil.isLoggedIn){
+  //     fetch(`/api/users/${recoil.userId}/is-following/${userInfo.id}`)
+  //     .then((isFollowing) =>{
+  //       console.log("API 응답:", isFollowing); // API 응답 확인
+  //       setIsFollowing(isFollowing);
+  //     });
+  //   }
+  // }, [recoil.userId, userInfo.id]);
+
+  // 팔로워 및 팔로잉 수를 가져오는 함수
   useEffect(() => {
-    if(recoil.isLoggedIn){
-      fetch(`/api/users/${recoil.userId}/is-following/${userInfo.id}`)
-      .then((isFollowing) =>{
-        console.log("API 응답:", isFollowing); // API 응답 확인
-        setIsFollowing(isFollowing);
-      });
-    }
-  }, [recoil.userId, userInfo.id]);
+    // 팔로잉 수
+    fetch(`/api/users/${userInfo.userId}/followings/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowingsCount(data));
+
+    // 팔로워 수
+    fetch(`/api/users/${userInfo.userId}/followers/count`)
+      .then((response) => response.json())
+      .then((data) => setFollowersCount(data));
+  }, [userInfo.userId]);
 
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
