@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ShortsJpaRepository extends JpaRepository<StreamShortClips, Integer> {
-    List<StreamShortClips> findByUserNo(int userNo);
+    List<StreamShortClips> findByUserNo(Long userNo);
     StreamShortClips findByStreamNo(Long streamNo);
     void deleteByStreamNo(Long streamNo);
 }

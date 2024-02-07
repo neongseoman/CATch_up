@@ -6,6 +6,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShortsService {
 
@@ -37,4 +39,7 @@ public class ShortsService {
         shortsJpaRepository.deleteByStreamNo(streamNo);
     }
 
+    public List<StreamShortClips> getShortsByUserNo(Long userNo) {
+        return shortsJpaRepository.findByUserNo(userNo);
+    }
 }

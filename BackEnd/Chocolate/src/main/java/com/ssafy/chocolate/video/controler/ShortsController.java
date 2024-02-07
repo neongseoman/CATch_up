@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins="http://localhost:3000,https://i10a105.p.ssafy.io")
 @RestController
 @RequestMapping("/api")
@@ -43,6 +45,18 @@ public class ShortsController {
 
             Member member = userController.getMember(Long.valueOf(streamShortClips.getUserNo())).get();
             return ResponseEntity.ok(new ShortClipWithUser(streamShortClips, member));
+
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @GetMapping("/shorts/user/{userNo}")
+    public ResponseEntity<List<StreamShortClips>> getShortsByUserNo(@PathVariable Long userNo) {
+        List<StreamShortClips> streamShortClips = shortsService.getShortsByUserNo(userNo);
+        if (streamShortClips != null) {
+            return ResponseEntity.ok(streamShortClips);
 
         } else {
             return ResponseEntity.notFound().build();
