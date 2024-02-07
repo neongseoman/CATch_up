@@ -4,12 +4,15 @@ import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const userId = "buskerID"
 let makingOffer = false
 
 // 대체 왜 이게 2번이나 마운트되는거야?
 const Streaming = () => {
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
@@ -18,14 +21,18 @@ const Streaming = () => {
     );
     const pc = pcRef.current;
     const client = clientRef.current;
-    const userId = localStorage.getItem("user")
+    const userId = userInfo.userId
+    const candidateList = []
 
     // Set Peer Connection
     useEffect(() => {
+        console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
+            // 이걸 좀 이따가 실행해야 하는뎅...
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
                     destination: `/app/busker/${userId}/iceCandidate`,
                     body: JSON.stringify({iceCandidate: event.candidate})
@@ -90,7 +97,7 @@ const Streaming = () => {
                 for (const track of stream.getTracks()){
                     pc.addTrack(track,stream)
                 }
-                console.log(userId)
+                console.log("buskerId : "+ userId)
                 videoElement.srcObject = stream
             }).catch(error => {
                 if (error.name === "OverconstrainedError") {
@@ -113,12 +120,6 @@ const Streaming = () => {
 
         client.onConnect = (frame) => {
             console.log(frame);
-            //connection check
-            // client.publish({
-            //     destination: `/app/busker`,
-            //     body: JSON.stringify({buskerName: userId + " is connect!"})
-            // })
-
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
@@ -137,6 +138,17 @@ const Streaming = () => {
                     console.error("Error setting remote description:", error);
                 });
             });
+
+            // client.subscribe(`/busker/${userId}/createSession`, (res) => {
+            //     if (res.body === "created"){
+            //         for (const candidateListElement of candidateList) {
+            //             client.publish({
+            //                 destination: `/app/busker/${userId}/iceCandidate`,
+            //                 body: JSON.stringify({iceCandidate: candidateListElement.candidate})
+            //             });
+            //         }
+            //     }
+            // });
 
             // IceCandidate 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {

@@ -4,6 +4,8 @@ import ChatApp from "../components/ChatApp";
 import VideoTmp from "../components/VideoTmp";
 import StreamerList from "../components/StreamerList"
 import Navbar from "../components/Navbar";
+import Watching from "./Watching";
+import {useLocation} from "react-router-dom";
 
 const Wrapper = styled.div`
     overflow-y: hidden;
@@ -126,8 +128,9 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const StreamingPage = () => {
-    const [streamingInfo, setStreamingInfo] = useState(null);
+const WatchingPage = () => {
+  const { buskerEmail } = useLocation().state;
+  const [streamingInfo, setStreamingInfo] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -313,7 +316,8 @@ const StreamingPage = () => {
             </LeftBox>
             <MiddleContainer>
                 <MiddleTopBox>
-                <VideoTmp />
+                  <Watching buskerEmail={buskerEmail}/>
+                {/*<VideoTmp />*/}
                 </MiddleTopBox>
                 <MiddleBottomBox>
                 <StreamingTitle>방송 제목</StreamingTitle>
@@ -343,4 +347,4 @@ const StreamingPage = () => {
   );
 };
 
-export default StreamingPage;
+export default WatchingPage;
