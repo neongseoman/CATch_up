@@ -1,11 +1,15 @@
 package com.ssafy.chocolate.follow.controller;
 
+import com.ssafy.chocolate.follow.model.Follow;
 import com.ssafy.chocolate.follow.service.FollowService;
+import com.ssafy.chocolate.user.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -82,4 +86,11 @@ public class FollowController {
         Long followerId = followService.findUserIdByUsername(username);
         return ResponseEntity.ok(followService.countFollowers(followerId));
     }
+
+    @GetMapping("/{username}/followed/list")
+    public ResponseEntity<List<Member>> getFolloedList(@PathVariable String username) {
+        Long followerId = followService.findUserIdByUsername(username);
+        return ResponseEntity.ok(followService.getFollowedList(followerId));
+    }
+
 }
