@@ -18,6 +18,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
       } catch (error) {
         console.error("댓글을 가져오는 데 실패했습니다.", error);
       }
+      console.log(recoil.idNo, " aw ", comment.userNo)
     };
 
     fetchComments();
@@ -26,7 +27,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
   const handleDelete = async (commentNo) => {
     try {
       await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/stream-comments/${streamNo}`, {
-        params: { userNo: 22 },
+        params: { userNo: recoil.idNo },
         withCredentials: true
       });
       setComments(comments.filter(comment => comment.commentNo !== commentNo));
