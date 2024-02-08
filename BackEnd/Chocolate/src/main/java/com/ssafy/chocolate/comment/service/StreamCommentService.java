@@ -5,9 +5,9 @@ import com.ssafy.chocolate.comment.repository.StreamCommentRepository;
 import com.ssafy.chocolate.user.model.Member;
 import com.ssafy.chocolate.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +35,7 @@ public class StreamCommentService {
     }
 
     public Optional<StreamComment> createOrUpdateComment(StreamComment comment) {
+        comment.setCreatedTime(LocalDateTime.now());
         if (!streamCommentRepository.existsByStreamNoAndUserNo(comment.getStreamNo(), comment.getUserNo())) {
             return Optional.of(streamCommentRepository.save(comment));
         } else {
