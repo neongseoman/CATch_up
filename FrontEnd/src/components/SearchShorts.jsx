@@ -1,11 +1,15 @@
 // 검색 결과 - 쇼츠
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { searchTermState } from '../RecoilState/userRecoilState';
 
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
 `;
 
 const Shorts = styled.div`
@@ -112,11 +116,13 @@ const Data = styled.p`
 
 const SearchShorts = () => {
   const [tagList, setTagList] = useState(["태그1", "태그2", "태그3"]);
+  const navigate = useNavigate();
+  const searchTerm = useRecoilValue(searchTermState);
   const [data, setData] = useState();
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchShorts?query=두번째 &page=0&size=10`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchShorts?query=${searchTerm}&page=0&size=10`;
 
-  const handleShortsClick = () => {
-    alert("해당 쇼츠 모달 띄우기!");
+  const handleShortsClick = (streamNo) => {
+    navigate(`/user/shortsdetail/${streamNo}`);
   };
 
   useEffect(() => {
@@ -129,7 +135,7 @@ const SearchShorts = () => {
       .catch((error) => {
         console.error("에러:", error);
       });
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  }, [searchTerm]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -164,7 +170,10 @@ const SearchShorts = () => {
     <Wrapper>
       {data && Array.isArray(data)
         ? data.map((e, i) => (
-            <Shorts key={i} onClick={handleShortsClick}>
+            <Shorts key={i} onClick={() => {
+              console.log(e)  
+              handleShortsClick(e.streamNo)
+              }}>
               <Info>
                 <TagField>
                   {tagList.map((tag, i) => (

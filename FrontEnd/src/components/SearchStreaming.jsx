@@ -1,9 +1,9 @@
 // 검색 결과 - 스트리밍
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import VideoTmp from "./VideoTmp";
-import {useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
     width: 100%;

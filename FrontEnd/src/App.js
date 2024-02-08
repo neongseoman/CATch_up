@@ -56,11 +56,6 @@ function App() {
                       <Route path='shorts' element={<ShortsUpload />} />
                        {/*<Route path='watching' element={<Watching />} />*/}
                   </Route>
-                
-                  <Route element={<NavLayoutWithoutDefault />}>
-                    <Route path='/map' element={<MainMapPage />} />
-                    <Route path='/streamingpage' element={<StreamingPage />} />
-                  </Route>
 
                   <Route path="user" element={<NavLayout />}>
                     <Route path='login' element={<Login />} />
@@ -68,13 +63,13 @@ function App() {
                     <Route path='signup' element={<SignUpForm />} />
                     <Route path='info' element={<UserInfo />} />
                     <Route path='myprofilepage' element={<MyProfilePage />} />
-                    <Route path='userprofilepage' element={<UserProfilePage />} />
-                    <Route path='shortsdetail' element={<ShortsDetail />} />
+                    <Route path='userprofilepage/:id' element={<UserProfilePage />} />
+                    <Route path='shortsdetail/:streamNo' element={<ShortsDetail />} />
                   </Route>
 
                   <Route element={<NavLayoutWithoutDefault />}>
                     <Route path='map' element={<MainMapPage />} />
-                    {/*<Route path="streamingpage" element={<StreamingPage />} />*/}
+                    <Route path="streamingpage" element={<StreamingPage />} />
                     <Route path="watchingpage" element={<WatchingPage />} />
                   </Route>
                   

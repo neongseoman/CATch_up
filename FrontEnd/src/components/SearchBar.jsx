@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { useSetRecoilState } from 'recoil';
+import { searchTermState } from '../RecoilState/userRecoilState';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -9,6 +12,7 @@ const SearchContainer = styled.div`
   border-radius: 25px;
   margin: 0 auto;
   max-width: 500px;
+  height: 50px;
 `;
 
 const SearchInput = styled.input`
@@ -36,23 +40,24 @@ const SearchButton = styled.button`
   }
 `;
 
-const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchBar = () => {
+  const navigate = useNavigate();
+  const setSearchTerm = useSetRecoilState(searchTermState);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleSearchClick = () => {
-    onSearch(searchTerm);
+    navigate('/searchresult');
   };
 
   return (
     <SearchContainer>
       <SearchInput
         type="text"
-        placeholder="검색..."
-        value={searchTerm}
+        placeholder="검색어를 입력하세요"
+        // value={searchTerm}
         onChange={handleInputChange}
       />
       <SearchButton onClick={handleSearchClick}>🔍︎</SearchButton>
