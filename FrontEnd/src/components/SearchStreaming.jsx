@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import VideoTmp from "./VideoTmp";
+import {getCurrentBuskingInfo} from "../Apis/streamingApi";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -137,15 +138,18 @@ const SearchStreaming = () => {
             });
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
     useEffect(() => {
-        axios
-            .get(buskingListUrl)
-            .then((response) => {
-                console.log("데이터:", response.data);
-                setBuskerData(response.data);
-            })
-            .catch((error) => {
-                console.error("에러:", error);
-            });
+        const currentBuskingInfo = getCurrentBuskingInfo()
+        console.log(currentBuskingInfo)
+        setBuskerData(currentBuskingInfo.data)
+        // axios
+        //     .get(buskingListUrl)
+        //     .then((response) => {
+        //         console.log("데이터:", response.data);
+        //         setBuskerData(response.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error("에러:", error);
+        //     });
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
     // 스트리밍 시작 시간 추출

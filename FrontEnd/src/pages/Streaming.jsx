@@ -13,6 +13,7 @@ let makingOffer = false
 
 
 const Streaming = ({ isStreaming }) => {
+    // console.log(`${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`)
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -24,7 +25,6 @@ const Streaming = ({ isStreaming }) => {
     const client = clientRef.current;
     const userId = userInfo.userId
     const navigate = useNavigate();
-
     // Set Peer Connection
     useEffect(() => {
         if (isStreaming === false){
@@ -33,7 +33,7 @@ const Streaming = ({ isStreaming }) => {
             pc.close()
 
             client.publish({
-                destination: `app/busker/${userId}/stopBusking`
+                destination: `app/api/busker/${userId}/stopBusking`
             })
             navigate("/")
         }
@@ -99,7 +99,7 @@ const Streaming = ({ isStreaming }) => {
                 })
         }
 
-        const constraints = {video: true, audio: false}
+        const constraints = {video: false, audio: true}
 
          navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
@@ -128,7 +128,7 @@ const Streaming = ({ isStreaming }) => {
         }
 
         client.onConnect = (frame) => {
-            console.log(frame);
+            console.log("streaming stomp : " + frame);
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
