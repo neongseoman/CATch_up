@@ -29,6 +29,7 @@ public class BuskingManagingService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void setBusking(BuskingInfoDTO infoDTO) {
+        log.info(infoDTO.toString());
         String buskerEmail = infoDTO.getBuskerEmail();
         Busking busking = new Busking(kurentoClient, new IceMessageSendService(simpMessagingTemplate),
                 infoDTO.getBuskerEmail(), infoDTO.getBuskingTitle(), infoDTO.getBuskingReport(),
@@ -36,7 +37,7 @@ public class BuskingManagingService {
 //        System.out.println(busking);
 //        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
-//        log.info("busker session : " + (buskingManaging.get(buskerEmail)));
+        log.info("busker session : " + buskingManaging.get(buskerEmail));
     }
 
     public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {

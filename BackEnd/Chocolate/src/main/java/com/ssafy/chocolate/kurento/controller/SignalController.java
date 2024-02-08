@@ -107,14 +107,15 @@ public class SignalController {
     public void leaveBusking() {
     }
 
-    @MessageMapping("/bukser/{buskerId}/stopBusking")
+    @MessageMapping("/busker/{buskerId}/stopBusking")
     public void stopBusking(@DestinationVariable String buskerId) throws IOException {
         buskingManagingService.stopBusking(buskerId);
     }
 
     @PostMapping("/busking/info")
-    public void buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
+    public ResponseEntity buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
         buskingManagingService.setBusking(buskingInfoDTO);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/busking/buskerList")
