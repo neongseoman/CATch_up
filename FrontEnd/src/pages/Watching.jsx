@@ -13,7 +13,7 @@ const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
-            brokerURL: "ws://127.0.0.1:8080/signal",
+            brokerURL: "wss://i10a105.p.ssafy.io/api/signal",
         })
     );
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
@@ -28,7 +28,7 @@ const Watching = ({buskerEmail}) => {
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 client.publish({
-                    destination: `/app/audience/${userId}/iceCandidate`,
+                    destination: `/app/api/audience/${userId}/iceCandidate`,
                     body: JSON.stringify({
                         buskerId,
                         audienceId: userId,
@@ -73,7 +73,7 @@ const Watching = ({buskerEmail}) => {
         if (typeof WebSocket !== 'function') {
             client.webSocketFactory = function () {
                 console.log("Stomp error sockjs is running");
-                return new SockJS('http://127.0.0.1:8080/signal');
+                return new SockJS('https://i10a105.p.ssafy.io/api/signal');
             };
         }
 
@@ -90,7 +90,7 @@ const Watching = ({buskerEmail}) => {
                     pc.setLocalDescription(offer)
                         .then((r) => {
                             client.publish({
-                                destination: `/app/audience/${userId}/offer`,
+                                destination: `/app/api/audience/${userId}/offer`,
                                 body: JSON.stringify({
                                     buskerId,
                                     audienceId: userId,
