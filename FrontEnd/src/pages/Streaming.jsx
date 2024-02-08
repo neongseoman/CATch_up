@@ -17,7 +17,7 @@ const Streaming = ({ isStreaming }) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
-            brokerURL: "wss://i10a105.p.ssafy.io/api/signal",
+            brokerURL: `${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`,
         })
     );
     const pc = pcRef.current;

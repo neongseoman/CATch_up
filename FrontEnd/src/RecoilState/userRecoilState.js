@@ -20,3 +20,8 @@ export const searchTermState = atom({
     default: null,
     effects_UNSTABLE: [persistAtom],
 });
+
+export const buskerGeolocation = atom({
+    key: "buskerGeoloation",
+    default:null,
+})
