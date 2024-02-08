@@ -29,6 +29,7 @@ const Streaming = ({ isStreaming }) => {
     useEffect(() => {
         if (isStreaming === false){
             pc.getSenders().forEach(sender => pc.removeTrack(sender))
+            client.deactivate()
             pc.close()
 
             client.publish({
@@ -36,11 +37,10 @@ const Streaming = ({ isStreaming }) => {
             })
             navigate("/")
         }
-        console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
             if (event.candidate) {
-                console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
                     destination: `/app/api/busker/${userId}/iceCandidate`,
@@ -163,6 +163,13 @@ const Streaming = ({ isStreaming }) => {
         };
 
         client.activate();
+
+        return () => {
+            // Cleanup function to be executed on component unmount
+            console.log("Closing WebSocket connection and Peer Connection");
+            client.deactivate(); // Close the WebSocket connection
+            pc.close(); // Close the Peer Connection
+        };
 
     }, [isStreaming]);
     return (
