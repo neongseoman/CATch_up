@@ -20,7 +20,7 @@ const StreamingInfo = () => {
   // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
   const handleStreaming = async (event) => {
       // event.preventDefault();
-
+      console.log("Busking is on set up")
       const formData = {
           buskerEmail,
           buskingTitle: buskingTitle,
@@ -28,9 +28,10 @@ const StreamingInfo = () => {
           buskingHashtag: buskingHashtag,
           buskingInfo: buskingInfo
       };
+      console.log("busker info : " + JSON.stringify(formData))
 
       try {
-          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/busking/info`, {
+          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/busking/info`, {
               method: 'POST',
               credentials: 'include',
               headers: {
@@ -38,7 +39,7 @@ const StreamingInfo = () => {
               },
               body: JSON.stringify(formData) // Convert formData to JSON
           }).then( r=> {
-                  console.log(r)
+                  console.log(r.status)
                   navigate('/streamingpage')
               }
             );

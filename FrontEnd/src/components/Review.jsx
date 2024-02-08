@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Review = ({ author, date, content, initialRating }) => {
+const Review = ({ author, date, content, initialRating,onDelete,showDeleteButton  }) => {
   return (
     <ReviewContainer>
       <ReviewHeader>
@@ -17,10 +17,12 @@ const Review = ({ author, date, content, initialRating }) => {
         </RatingAndCount>
         <AuthorAndDate>
           <Author>{author}</Author>
-          <Date>{date}</Date>
+          <Date>{date.split('T')[0]}</Date>
+          <Date>{parseInt(date.slice(11, 13), 10) % 12 || 12}시 {date.slice(14, 16)}분에 작성됨</Date>
         </AuthorAndDate>
       </ReviewHeader>
       <Content>{content}</Content>
+      {showDeleteButton && <button onClick={onDelete}>삭제</button>}
     </ReviewContainer>
   );
 };
@@ -29,6 +31,7 @@ const ReviewContainer = styled.div`
   border: 1px solid #ddd;
   padding: 15px;
   margin: 15px 0;
+  border-radius: 15px;
 `;
 
 const ReviewHeader = styled.div`

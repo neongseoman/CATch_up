@@ -7,6 +7,7 @@ export const userInfoInitialState = {
     isLoggedIn: false,
     userId: null,
     idNo: null,
+    nickname: null,
   };
 
 export const userInfoState = atom({
