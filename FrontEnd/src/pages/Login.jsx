@@ -23,6 +23,7 @@ function LoginForm() {
     formData.append('password', password);
 
     try {
+      console.log(process.env.REACT_APP_API_BASE_URL)
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/login`, {
         method: 'POST',
         credentials: 'include',

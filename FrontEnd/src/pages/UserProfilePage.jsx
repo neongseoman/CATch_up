@@ -1,6 +1,7 @@
 // 내 프로필
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import UserProfile1 from '../components/UserProfile/UserProfile1';
 import UserProfile2 from '../components/UserProfile/UserProfile2';
 import UserProfile3 from '../components/UserProfile/UserProfile3';
@@ -13,6 +14,7 @@ const Wrapper = styled.div`
 `;
 
 const UserProfilePage = () => {
+  const { id } = useParams();
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +22,7 @@ const UserProfilePage = () => {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/profile?id=2`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/profile?id=${id}`, {
           method: 'GET',
           credentials: 'include'
         });

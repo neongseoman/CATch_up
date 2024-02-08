@@ -15,7 +15,7 @@ const ReviewForm = ({ onSubmit }) => {
       
       return; // 로그인하지 않은 경우 함수 실행을 여기서 중단합니다.
     }
-    onSubmit({ comments: content, likes: rating, userNo: 22 });
+    onSubmit({ comments: content, likes: rating, userNo: recoil.idNo });
     setContent('');
     setRating(0);
   };

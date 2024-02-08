@@ -4,48 +4,51 @@ import CustomText from '../components/CustomText';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button'
 import styled from "@emotion/styled";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 
 const StreamingInfo = () => {
   const navigate = useNavigate();
+  const [userInfo,serUserInfo] = useRecoilState(userInfoState)
   const [buskingTitle, setBuskingTitle] = useState('');
   const [buskingReport, setBuskingReport] = useState('');
   const [buskingHashtag, setBuskingHashtag] = useState('');
   const [buskingInfo, setBuskingInfo] = useState('');
-  // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
 
-  // const handleStreaming = async (event) => {
-  //   event.preventDefault();
-  //
-  //   로그인이 되어 있다면 방송을 할 수 있음.
-  //   로그인 되어 있다면 현재 방송중인지 확인하고 방송중이라면 방송을 끔.
-  //   방송중이 아니라면 방송할 수 있도록 RTC를 연결함.
-  //   try {
-  //     const response = await fetch('http://localhost:8081/api/login', {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //       body: formData
-  //     });
-  //
-  //     if (!response.ok) {
-  //       throw new Error('로그인에 실패했습니다.');
-  //     }
-  //
-  //     localStorage.setItem('user', JSON.stringify(username));
-  //     alert("회원가입이 정상적으로 이루어졌습니다!!!")
-  //     navigate('/'); // 메인 화면으로 이동
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     setLoginError(error.message); // 오류 메시지 설정
-  //   }
-  // };
-  //
-  // const handleSignUp = () => {
-  //   navigate('/streaming/onAir'); // 가정: 회원가입 페이지의 경로가 '/signup'일 경우
-  // };
+  const buskerEmail = userInfo.userId
+  // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
+  const handleStreaming = async (event) => {
+      // event.preventDefault();
+      console.log("Busking is on set up")
+      const formData = {
+          buskerEmail,
+          buskingTitle: buskingTitle,
+          buskingReport: buskingReport,
+          buskingHashtag: buskingHashtag,
+          buskingInfo: buskingInfo
+      };
+      console.log("busker info : " + JSON.stringify(formData))
+
+      try {
+          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/busking/info`, {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                  'Content-Type': 'application/json', // Change content type to JSON
+              },
+              body: JSON.stringify(formData) // Convert formData to JSON
+          }).then( r=> {
+                  console.log(r.status)
+                  navigate('/streamingpage')
+              }
+            );
+
+      } catch (error) {
+          console.error('Error:', error);
+      }
+
+  }
 
   return (
     <>
@@ -66,9 +69,11 @@ const StreamingInfo = () => {
           onChange={(e) => setBuskingInfo(e.target.value)} ></TextInput>
 
         {/* {loginError && <CustomText typography="p" style={{ color: 'red' , height: '30px' }}>{loginError}</CustomText>} */}
-        <Button type="submit">방송 시작</Button>
+        <Button type="submit" onClick={handleStreaming}>방송 시작</Button>
     </>
   );
 }
 
-export default StreamingInfo;
+export default StreamingInfo
+
+

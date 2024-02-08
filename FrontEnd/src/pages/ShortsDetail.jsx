@@ -4,6 +4,7 @@ import CustomText from '../components/CustomText';
 import ReviewList from '../components/ReviewList';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../RecoilState/userRecoilState';
+import { useParams } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -154,11 +155,14 @@ const ShortsDetail = () => {
     const [loading, setLoading] = useState(true);
     const [recoil] = useRecoilState(userInfoState);
 
+    
+    const { streamNo } = useParams();
+
     useEffect(() => {
         const fetchData = async () => {
           try {
             // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/3`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/${streamNo}`, {
               method: 'GET',
               credentials: 'include'
             });
@@ -257,12 +261,10 @@ const ShortsDetail = () => {
                             </Options>
                         </StreamingInfoField>
                     </BottomInfo>
-                </Info>
-            <CommentField>
-
-            <ReviewList streamNo={1} currentUserNo={recoil.idno} />
-
-            </CommentField>
+                    </Info>
+                    <CommentField>
+                        <ReviewList streamNo={1} currentUserNo={recoil.idNo} />
+                    </CommentField>
                 </>
             )}
                 

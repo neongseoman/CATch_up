@@ -4,30 +4,46 @@ import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
+import {useNavigate} from "react-router-dom";
 
 // const userId = "buskerID"
 let makingOffer = false
 
-// 대체 왜 이게 2번이나 마운트되는거야?
-const Streaming = () => {
+
+const Streaming = ({ isStreaming }) => {
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
-            brokerURL: "ws://127.0.0.1:8080/signal",
+            brokerURL: "wss://i10a105.p.ssafy.io/api/signal",
         })
     );
     const pc = pcRef.current;
     const client = clientRef.current;
-    const userId = localStorage.getItem("user")
+    const userId = userInfo.userId
+    const navigate = useNavigate();
 
     // Set Peer Connection
     useEffect(() => {
+        if (isStreaming === false){
+            pc.getSenders().forEach(sender => pc.removeTrack(sender))
+            pc.close()
+
+            client.publish({
+                destination: `app/busker/${userId}/stopBusking`
+            })
+            navigate("/")
+        }
+        console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
-                    destination: `/app/busker/${userId}/iceCandidate`,
+                    destination: `/app/api/busker/${userId}/iceCandidate`,
                     body: JSON.stringify({iceCandidate: event.candidate})
                 });
             }
@@ -69,7 +85,7 @@ const Streaming = () => {
                     pc.setLocalDescription(offer)
                         .then((r) => {
                             client.publish({
-                                destination: `/app/busker/${userId}/offer`,
+                                destination: `/app/api/busker/${userId}/offer`,
                                 body: JSON.stringify({
                                     userId,
                                     offer,
@@ -90,7 +106,7 @@ const Streaming = () => {
                 for (const track of stream.getTracks()){
                     pc.addTrack(track,stream)
                 }
-                console.log(userId)
+                console.log("buskerId : "+ userId)
                 videoElement.srcObject = stream
             }).catch(error => {
                 if (error.name === "OverconstrainedError") {
@@ -107,18 +123,12 @@ const Streaming = () => {
         if (typeof WebSocket !== 'function') {
             client.webSocketFactory = function () {
                 console.log("Stomp error sockjs is running");
-                return new SockJS('http://127.0.0.1:8080/signal');
+                return new SockJS(`${process.env.REACT_APP_API_BASE_URL}/api`);
             };
         }
 
         client.onConnect = (frame) => {
             console.log(frame);
-            //connection check
-            // client.publish({
-            //     destination: `/app/busker`,
-            //     body: JSON.stringify({buskerName: userId + " is connect!"})
-            // })
-
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
@@ -137,8 +147,6 @@ const Streaming = () => {
                     console.error("Error setting remote description:", error);
                 });
             });
-
-            // IceCandidate 받음.
             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
                 const iceResponse = JSON.parse(res.body);
                 if (iceResponse.id === "iceCandidate") {
@@ -156,9 +164,7 @@ const Streaming = () => {
 
         client.activate();
 
-    }, []);
-
-
+    }, [isStreaming]);
     return (
         <>
             <video id="streamingVideo" style={{width: '100%'}} autoPlay controls></video>

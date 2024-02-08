@@ -1,6 +1,8 @@
 // 내 프로필-2
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../RecoilState/userRecoilState';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -40,11 +42,13 @@ const Text = styled.p`
 `;
 
 const MyProfile2 = ({ userInfo }) => {
-  const [followersCount, setFollowersCount] = useState(0);
-  const [followingsCount, setFollowingsCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(userInfo.follower);
+  const [followingsCount, setFollowingsCount] = useState(userInfo.following);
+  const [recoil, setUserInfo] = useRecoilState(userInfoState);
 
   const handleStreamsClick = () => {
-    alert('스트리밍 기록 모달 띄우기!');
+    alert('스트리밍 기록 페이지로 이동!');
   };
 
   const handleFollowerClick = () => {
@@ -67,18 +71,29 @@ const MyProfile2 = ({ userInfo }) => {
     }
   };
 
+  // // 팔로워 및 팔로잉 수를 가져오는 함수
+  // useEffect(() => {
+  //   // 팔로잉 수
+  //   fetch(`/api/users/${userInfo.userId}/followings/count`)
+  //     .then((response) => response.json())
+  //     .then((data) => setFollowingsCount(data));
+
+  //   // 팔로워 수
+  //   fetch(`/api/users/${userInfo.userId}/followers/count`)
+  //     .then((response) => response.json())
+  //     .then((data) => setFollowersCount(data));
+  // }, [userInfo.userId]);
+
   // 팔로워 및 팔로잉 수를 가져오는 함수
   useEffect(() => {
-    // 팔로잉 수
-    fetch(`/api/users/${userInfo.userId}/followings/count`)
-      .then((response) => response.json())
-      .then((data) => setFollowingsCount(data));
-
-    // 팔로워 수
-    fetch(`/api/users/${userInfo.userId}/followers/count`)
-      .then((response) => response.json())
-      .then((data) => setFollowersCount(data));
-  }, [userInfo.userId]);
+    if(recoil.isLoggedIn){
+      fetch(`/api/users/${recoil.userId}/is-following/${userInfo.id}`)
+      .then((isFollowing) =>{
+        console.log("API 응답:", isFollowing); // API 응답 확인
+        setIsFollowing(isFollowing);
+      });
+    }
+  }, [recoil.userId, userInfo.id]);
 
   return (
     <Wrapper>

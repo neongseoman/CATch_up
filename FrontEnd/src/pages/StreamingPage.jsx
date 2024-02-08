@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { styled, createGlobalStyle } from 'styled-components';
 import ChatApp from "../components/ChatApp";
 import VideoTmp from "../components/VideoTmp";
@@ -59,17 +59,26 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const StreamingPage = () => {
-  
+  const [isStreaming,setIsStreaming] = useState(true)
+  const HandleEndButtonClick = () => {
+    // Your logic for handling "방송 종료"
+    console.log('방송 종료 버튼이 눌렸습니다.');
+    setIsStreaming(false)
+
+    // You can pass this information to the Streaming component if needed
+  };
+
+
   return (
     <Wrapper>
       <GlobalStyle />
       <Container>
         <LeftBox>
           <p>카메라, 마이크 ON/OFF</p>
-          <EndButton>방송 종료</EndButton>
+          <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
         </LeftBox>
         <MiddleBox>
-          <Streaming />
+          <Streaming isStreaming={isStreaming}  />
         </MiddleBox>
         <RightBox>
           <ChatApp />

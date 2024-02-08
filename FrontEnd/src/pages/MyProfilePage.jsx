@@ -1,6 +1,8 @@
 // 내 프로필
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { userInfoInitialState } from '../RecoilState/userRecoilState';
 import MyProfile1 from '../components/MyProfile/MyProfile1';
 import MyProfile2 from '../components/MyProfile/MyProfile2';
 import MyProfile3 from '../components/MyProfile/MyProfile3';
@@ -14,6 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const MyProfilePage = () => {
+  const idNo = useRecoilValue(userInfoInitialState);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +24,7 @@ const MyProfilePage = () => {
     const fetchData = async () => {
       try {
         // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard_test`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/profile?id=${idNo}`, {
           method: 'GET',
           credentials: 'include'
         });
