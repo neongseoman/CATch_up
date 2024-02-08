@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CustomText from '../components/CustomText';
-import Review from '../components/Review';
-import ReviewForm from '../components/ReviewForm';
+import ReviewList from '../components/ReviewList';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../RecoilState/userRecoilState';
 import { useParams } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -152,6 +153,7 @@ const ShortsDetail = () => {
     const [tagList, setTagList] = useState(['태그1', '태그2', '태그3']);
     const [shortsInfo, setShortsInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [recoil] = useRecoilState(userInfoState);
 
     
     const { streamNo } = useParams();
@@ -259,12 +261,10 @@ const ShortsDetail = () => {
                             </Options>
                         </StreamingInfoField>
                     </BottomInfo>
-                </Info>
-            <CommentField>
-                <Review></Review>
-                <br />
-                <ReviewForm></ReviewForm>
-            </CommentField>
+                    </Info>
+                    <CommentField>
+                        <ReviewList streamNo={1} currentUserNo={recoil.idNo} />
+                    </CommentField>
                 </>
             )}
                 

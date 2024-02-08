@@ -23,7 +23,7 @@ const Navbar = () => {
     // 사용자 정보가 로컬 스토리지에 있다면 로그인 상태로 간주합니다.
     if (loggedInUser) {
       setIsLoggedIn(true);
-      setUserInfo(JSON.parse(loggedInUser));
+      setUserInfo(loggedInUser);
     }
   }, [location.pathname]);
 

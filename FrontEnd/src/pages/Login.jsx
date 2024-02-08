@@ -6,6 +6,7 @@ import Button from '../components/Button'
 import styled from "@emotion/styled";
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../RecoilState/userRecoilState';
+import axios from 'axios';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -38,11 +39,17 @@ function LoginForm() {
         throw new Error('로그인에 실패했습니다.');
       }
 
-      localStorage.setItem('user', JSON.stringify(username));
+      // withCredentials: true를 설정하여 요청에 인증 정보 (예: 쿠키)를 포함시킵니다.
+      const response2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/dashboard`, {
+        withCredentials: true
+      });
+      const addInfo = response2.data.additionalInfo;
 
 
-      const fetchedUserInfo = { isLoggedIn: true, userId: username};
+      const fetchedUserInfo = { isLoggedIn: true, userId: username, idNo: addInfo.id, nickname: addInfo.nickname};
+      
       setUserInfo(fetchedUserInfo); // 로그인 후 사용자 정보를 atom에 저장
+      localStorage.setItem('user', addInfo.nickname);
 
       navigate('/'); // 메인 화면으로 이동
     } catch (error) {

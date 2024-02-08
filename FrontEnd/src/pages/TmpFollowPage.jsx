@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 
 function TmpFollowPage({ userId }) {
   const [followersCount, setFollowersCount] = useState(0);
