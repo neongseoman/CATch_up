@@ -23,8 +23,8 @@ const Streaming = ({ isStreaming }) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
-    const candidateList = []
     const navigate = useNavigate();
+
     console.log(isStreaming)
     // Set Peer Connection
     useEffect(() => {
@@ -40,7 +40,6 @@ const Streaming = ({ isStreaming }) => {
         console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
-            // 이걸 좀 이따가 실행해야 하는뎅...
             if (event.candidate) {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 // candidateList.push({iceCandidate: event.candidate})
