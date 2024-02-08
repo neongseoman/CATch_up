@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Review from './Review';
 import ReviewForm from './ReviewForm';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../RecoilState/userRecoilState';
 
 const ReviewList = ({ streamNo, currentUserNo }) => {
   const [comments, setComments] = useState([]);
+  const [recoil] = useRecoilState(userInfoState);
 
   useEffect(() => {
     // 댓글 목록을 가져오는 함수
@@ -58,7 +61,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
           content={comment.comments}
           initialRating={comment.likes}
           onDelete={() => handleDelete(comment.commentNo)}
-          showDeleteButton={22 === comment.userNo}
+          showDeleteButton={recoil.idNo === comment.userNo}
         />
       ))}
     </div>
