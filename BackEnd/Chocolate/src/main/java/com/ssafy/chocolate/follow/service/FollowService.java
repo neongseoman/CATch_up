@@ -7,6 +7,9 @@ import com.ssafy.chocolate.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class FollowService {
 
@@ -48,6 +51,16 @@ public class FollowService {
     // 팔로워 수
     public Long countFollowers(Long userId) {
         return followRepository.countByFollowingId(userId);
+    }
+
+    public List<Member> getFollowedList(Long id) {
+        List<Follow> followList = followRepository.findByFollowerId(id);
+        List<Member> memberList = new ArrayList<>();
+
+        for(Follow f : followList) {
+            memberList.add(f.getFollowing());
+        }
+        return memberList;
     }
 
     // 현재 사용자가 특정 사용자를 팔로우하고 있는지 확인하는 메서드

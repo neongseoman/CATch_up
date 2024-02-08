@@ -6,6 +6,7 @@ package com.ssafy.chocolate.chat.controller;//
 
 import com.ssafy.chocolate.chat.service.TopicService;
 import com.ssafy.chocolate.user.model.Member;
+import com.ssafy.chocolate.user.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,6 +24,9 @@ public class ChatController {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private TopicService topicService;
+
+    @Autowired
+    private MemberService memberService;
 
     public ChatController() {
     }
@@ -52,6 +56,7 @@ public class ChatController {
     @GetMapping("/api/userinfo")
     public ResponseEntity<?> getUserInfo() {
         String username = getCurrentUsername();
+
         return ResponseEntity.ok().body(username);
     }
 }
