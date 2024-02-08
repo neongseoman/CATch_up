@@ -44,7 +44,7 @@ const ChatApp = () => {
     // const socket = new SockJS("http://127.0.0.1:8080/chat");
     // const client = new Client(); // Create a new 'Client' instance
     const client = new StompJS.Client({
-      brokerURL: `${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`,
+      brokerURL: "wss://i10a105.p.ssafy.io/api/chat",
     });
 
     // client.webSocketFactory = () => socket;

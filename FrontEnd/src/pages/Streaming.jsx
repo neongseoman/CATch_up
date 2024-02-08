@@ -17,7 +17,7 @@ const Streaming = ({ isStreaming }) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
-            brokerURL: "wss://i10a105.p.ssafy.io/api/chat",
+            brokerURL: "wss://i10a105.p.ssafy.io/api/signal",
         })
     );
     const pc = pcRef.current;
@@ -25,7 +25,6 @@ const Streaming = ({ isStreaming }) => {
     const userId = userInfo.userId
     const navigate = useNavigate();
 
-    console.log(isStreaming)
     // Set Peer Connection
     useEffect(() => {
         if (isStreaming === false){
@@ -44,7 +43,7 @@ const Streaming = ({ isStreaming }) => {
                 console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
-                    destination: `/app/busker/${userId}/iceCandidate`,
+                    destination: `/app/api/busker/${userId}/iceCandidate`,
                     body: JSON.stringify({iceCandidate: event.candidate})
                 });
             }
@@ -86,7 +85,7 @@ const Streaming = ({ isStreaming }) => {
                     pc.setLocalDescription(offer)
                         .then((r) => {
                             client.publish({
-                                destination: `/app/busker/${userId}/offer`,
+                                destination: `/app/api/busker/${userId}/offer`,
                                 body: JSON.stringify({
                                     userId,
                                     offer,
@@ -124,7 +123,7 @@ const Streaming = ({ isStreaming }) => {
         if (typeof WebSocket !== 'function') {
             client.webSocketFactory = function () {
                 console.log("Stomp error sockjs is running");
-                return new SockJS('http://127.0.0.1:8080/signal');
+                return new SockJS(`${process.env.REACT_APP_API_BASE_URL}/api`);
             };
         }
 

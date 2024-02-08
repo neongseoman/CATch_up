@@ -159,7 +159,7 @@
       <workItem from="1707177777795" duration="23895000" />
       <workItem from="1707208183043" duration="11854000" />
       <workItem from="1707279748794" duration="9765000" />
-      <workItem from="1707349924411" duration="3496000" />
+      <workItem from="1707349924411" duration="5112000" />
     </task>
     <servers />
   </component>
@@ -177,7 +177,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="FE_develop" />
+                        <option value="origin/FE_develop" />
                       </list>
                     </value>
                   </entry>
