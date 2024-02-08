@@ -29,6 +29,7 @@ public class BuskingManagingService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void setBusking(BuskingInfoDTO infoDTO) {
+        log.info(infoDTO.toString());
         String buskerEmail = infoDTO.getBuskerEmail();
         Busking busking = new Busking(kurentoClient, new IceMessageSendService(simpMessagingTemplate),
                 infoDTO.getBuskerEmail(), infoDTO.getBuskingTitle(), infoDTO.getBuskingReport(),
@@ -36,7 +37,7 @@ public class BuskingManagingService {
 //        System.out.println(busking);
 //        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
-//        log.info("busker session : " + (buskingManaging.get(buskerEmail)));
+        log.info("busker session : " + buskingManaging.get(buskerEmail));
     }
 
     public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
@@ -82,6 +83,7 @@ public class BuskingManagingService {
     public void joinBusking(AudienceSdpOffer offer) throws NoBuskingException {
         Busking busking = buskingManaging.get(offer.getBuskerId());
         UserSession audienceSession = new UserSession();
+        audienceSession.setAudienceId(offer.getAudienceId());
         if (busking != null) {
             busking.audienceJoin(offer, audienceSession);
         } else {
@@ -109,10 +111,11 @@ public class BuskingManagingService {
         Busking busking = buskingManaging.get(busker);
         if (busking == null) {
             log.debug("There is no busker");
+        }else{
+            busking.close();
+            buskingManaging.remove(busker);
         }
         //Buking 듣던 사람들한테 안내하고 종료
-        busking.close();
-        buskingManaging.remove(busker);
 
     }
 

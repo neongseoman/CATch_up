@@ -2,10 +2,13 @@ package com.ssafy.chocolate.comment.service;
 
 import com.ssafy.chocolate.comment.model.StreamComment;
 import com.ssafy.chocolate.comment.repository.StreamCommentRepository;
+import com.ssafy.chocolate.user.model.Member;
+import com.ssafy.chocolate.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +18,20 @@ public class StreamCommentService {
     @Autowired
     private StreamCommentRepository streamCommentRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     public List<StreamComment> getCommentsByStreamNo(Integer streamNo) {
-        return streamCommentRepository.findByStreamNo(streamNo);
+        List<StreamComment> comments = streamCommentRepository.findByStreamNo(streamNo);
+        List<StreamComment> outputData = new ArrayList<>();
+        for(StreamComment s : comments) {
+            Member member = memberRepository.findById(s.getUserNo()).get();
+            s.setNickname(member.getNickname());
+            outputData.add(s);
+
+        }
+
+        return outputData;
     }
 
     public Optional<StreamComment> createOrUpdateComment(StreamComment comment) {

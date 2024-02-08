@@ -186,8 +186,10 @@ public class Busking extends UserSession implements Closeable {
         JsonObject message = new JsonObject();
         message.addProperty("message", "방송 종료됐어요~~");
         for (UserSession user : buskingSession.values()) {
-//            user.sendMessage(message);
+            user.getWebRtcEndpoint().release();
+            buskingSession.remove(user.getAudienceId());
         }
+        buskerWebRtcEndpoint.release();
     }
 
     @Override

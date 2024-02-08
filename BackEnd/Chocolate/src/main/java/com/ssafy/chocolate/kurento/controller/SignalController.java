@@ -27,7 +27,7 @@ public class SignalController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final BuskingManagingService buskingManagingService;
 
-    @MessageMapping("/busker")
+    @MessageMapping("/api/busker")
     public void listenTestStomp(@Payload String message) {
         System.out.println(message);
 //        System.out.println("test");
@@ -38,7 +38,7 @@ public class SignalController {
         return;
     }
 
-    @MessageMapping("/busker/{buskerName}")
+    @MessageMapping("/api/busker/{buskerName}")
     public void listenBusker(@DestinationVariable String buskerName, @Payload String message) {
         System.out.println(buskerName + " " + message);
         HashMap<String, String> map = new HashMap<>();
@@ -48,7 +48,7 @@ public class SignalController {
         return;
     }
 
-    @MessageMapping("/audience/{audienceId}")
+    @MessageMapping("/api/audience/{audienceId}")
     public void listenAudience(@DestinationVariable String audienceId, @Payload String message) {
         System.out.println(audienceId + " " + message);
         HashMap<String, String> map = new HashMap<>();
@@ -58,7 +58,7 @@ public class SignalController {
         return;
     }
 
-    @MessageMapping("/busker/{userId}/offer")
+    @MessageMapping("/api/busker/{userId}/offer")
     public void receiveBuskerSDPOffer(@DestinationVariable String userId,
                                       @Payload BuskerSdpOffer SdpOfferMessage) throws NoBuskingException, IOException {
 //        log.info(userId + " Send Offer");
@@ -71,7 +71,7 @@ public class SignalController {
     }
 
 
-    @MessageMapping("/busker/{userId}/iceCandidate")
+    @MessageMapping("/api/busker/{userId}/iceCandidate")
     public void setBuskerIceCandidate(
             @DestinationVariable String userId,
             @Payload IceCandidateMessage iceCandidate
@@ -80,7 +80,7 @@ public class SignalController {
     }
 
 
-    @MessageMapping("/audience/{audienceId}/offer")
+    @MessageMapping("/api/audience/{audienceId}/offer")
     public void receiveAudienceSDPOffer(@DestinationVariable String audienceId,
                                         @Payload AudienceSdpOffer sdpOfferMessage) throws NoBuskingException { //offer And Answer
         log.info("Audience send Offer");
@@ -96,27 +96,32 @@ public class SignalController {
 
     }
 
-    @MessageMapping("/audience/{audienceId}/iceCandidate")
+    @MessageMapping("/api/audience/{audienceId}/iceCandidate")
     public void setAudienceIceCandidate(@DestinationVariable String audienceId,
                                         @Payload AudienceIceCandidateMessage audienceIceCandidateMessage) { // Handle iceCandidate
         log.info("audience " + audienceId + "iceCandidate is sent");
         buskingManagingService.setAudienceIceCandidate(audienceId,audienceIceCandidateMessage);
     }
 
-    @MessageMapping("leaveBusking")
+    @MessageMapping("/api/leaveBusking")
     public void leaveBusking() {
     }
 
-    @MessageMapping("stopBusking")
-    public void stopBusking() {
+    @MessageMapping("/api/busker/{buskerId}/stopBusking")
+    public void stopBusking(@DestinationVariable String buskerId) throws IOException {
+        buskingManagingService.stopBusking(buskerId);
     }
 
-    @PostMapping("/busking/info")
-    public void buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
+    @PostMapping("/api/busking/info")
+    public ResponseEntity buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
+        log.info("Set busking by busking info");
+        log.info(buskingInfoDTO.toString());
         buskingManagingService.setBusking(buskingInfoDTO);
+        log.info("manager set busking");
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/busking/buskerList")
+    @GetMapping("/api/busking/buskerList")
     public ResponseEntity<List<BuskingInfoDTO>> buskerList(){
         return ResponseEntity.ok(buskingManagingService.currentBusking());
     }
