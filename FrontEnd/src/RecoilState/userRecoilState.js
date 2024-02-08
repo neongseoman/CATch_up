@@ -10,7 +10,7 @@ export const userInfoInitialState = {
   };
 
 export const userInfoState = atom({
-    key:"userInfo",
+    key: 'userInfo',
     default : userInfoInitialState,
     effects_UNSTABLE: [persistAtom],
 });
