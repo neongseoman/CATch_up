@@ -120,7 +120,7 @@ const SearchStreaming = () => {
     const [data, setData] = useState();
     const [buskerData, setBuskerData] = useState();
     const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=김경호 비비&page=0&size=10`;
-    const buskingListUrl = `${process.env.REACT_APP_API_BASE_URL}/busking/buskerList`
+    const buskingListUrl = `${process.env.REACT_APP_API_BASE_URL}/api/busking/buskerList`
     const handleStreamingClick = (buskerEmail) => {
         navigate('/watchingpage',{ state: { buskerEmail } })
     };
