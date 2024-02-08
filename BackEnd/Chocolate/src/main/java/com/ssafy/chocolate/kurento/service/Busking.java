@@ -30,6 +30,8 @@ public class Busking extends UserSession implements Closeable {
     private final String buskingReport;
     private final String buskingHashtag;
     private final String buskingInfo;
+    private int audienceCount = 0;
+    private int likeCount = 0;
     private WebRtcEndpoint buskerWebRtcEndpoint;
     private MediaPipeline buskerPipeline;
 

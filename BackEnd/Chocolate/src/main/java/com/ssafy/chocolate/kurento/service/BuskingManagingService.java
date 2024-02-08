@@ -112,6 +112,7 @@ public class BuskingManagingService {
         if (busking == null) {
             log.debug("There is no busker");
         }else{
+            busking.getBuskerWebRtcEndpoint().release();
             busking.close();
             buskingManaging.remove(busker);
         }

@@ -11,10 +11,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -107,9 +104,10 @@ public class SignalController {
     public void leaveBusking() {
     }
 
-    @MessageMapping("/api/busker/{buskerId}/stopBusking")
-    public void stopBusking(@DestinationVariable String buskerId) throws IOException {
-        buskingManagingService.stopBusking(buskerId);
+    @PostMapping("/api/busker/{buskerId}/stopBusking")
+    public void stopBusking(@PathVariable String buskerId) throws IOException {
+//        log.info(buskerId);
+        buskingManagingService.stopBusking(buskerId); // 에러처리 해야하는데...
     }
 
     @PostMapping("/api/busking/info")
