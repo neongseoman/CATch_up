@@ -18,7 +18,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
       } catch (error) {
         console.error("댓글을 가져오는 데 실패했습니다.", error);
       }
-      console.log(recoil.idNo, " aw ", comment.userNo)
+      console.log(recoil, " asdf ", recoil.idNo)
     };
 
     fetchComments();
