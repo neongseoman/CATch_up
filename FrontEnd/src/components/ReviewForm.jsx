@@ -5,7 +5,6 @@ import { userInfoState } from '../RecoilState/userRecoilState';
 
 const ReviewForm = ({ onSubmit }) => {
   const [content, setContent] = useState('');
-  const [userNo, setUserNo] = useState(22);
   const [rating, setRating] = useState(0);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
 
@@ -13,11 +12,10 @@ const ReviewForm = ({ onSubmit }) => {
     event.preventDefault();
     if (!recoil.isLoggedIn) {
       alert("로그인 후 이용가능합니다.");
+      
       return; // 로그인하지 않은 경우 함수 실행을 여기서 중단합니다.
     }
-    // setUserNo(recoil.idno);
-    setUserNo('22');
-    onSubmit({ userNo, content, rating });
+    onSubmit({ comments: content, likes: rating, userNo: 22 });
     setContent('');
     setRating(0);
   };

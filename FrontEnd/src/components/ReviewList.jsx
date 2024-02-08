@@ -22,7 +22,10 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
 
   const handleDelete = async (commentNo) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/stream-comments/${streamNo}`, { params: { userNo: currentUserNo } });
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/stream-comments/${streamNo}`, {
+        params: { userNo: 22 },
+        withCredentials: true
+      });
       setComments(comments.filter(comment => comment.commentNo !== commentNo));
     } catch (error) {
       console.error("댓글 삭제 실패", error);
@@ -30,7 +33,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
   };
 
   const handleCreateOrUpdate = async (comment) => {
-    const commentWithStreamNo = { ...comment, streamNo };
+    const commentWithStreamNo = { ...comment, streamNo};
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/stream-comments`,
       commentWithStreamNo,
@@ -39,6 +42,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
       });
       setComments([...comments, response.data]);
     } catch (error) {
+      alert("이미 작성하신 리뷰가 있습니다!!!")
       console.error("댓글 작성/수정 실패", error);
     }
   };
@@ -54,7 +58,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
           content={comment.comments}
           initialRating={comment.likes}
           onDelete={() => handleDelete(comment.commentNo)}
-          showDeleteButton={currentUserNo === comment.userNo}
+          showDeleteButton={22 === comment.userNo}
         />
       ))}
     </div>
