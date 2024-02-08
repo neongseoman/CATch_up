@@ -37,7 +37,7 @@ public class BuskingManagingService {
 //        System.out.println(busking);
 //        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
-        log.info("busker session : " + buskingManaging.get(buskerEmail));
+//        log.info("busker session : " + buskingManaging.get(buskerEmail));
     }
 
     public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
@@ -72,6 +72,7 @@ public class BuskingManagingService {
             buskingInfoDTO.setBuskingReport(busking.getBuskingReport());
             buskingInfoDTO.setBuskingHashtag(busking.getBuskingHashtag());
             buskingInfoDTO.setBuskingInfo(busking.getBuskingInfo());
+            buskingInfoDTO.setAudienceCount(busking.getAudienceCount());
 
             buskingInfoList.add(buskingInfoDTO);
         }

@@ -31,7 +31,6 @@ public class Busking extends UserSession implements Closeable {
     private final String buskingHashtag;
     private final String buskingInfo;
     private int audienceCount = 0;
-    private int likeCount = 0;
     private WebRtcEndpoint buskerWebRtcEndpoint;
     private MediaPipeline buskerPipeline;
 
@@ -131,6 +130,7 @@ public class Busking extends UserSession implements Closeable {
             if (newState == ConnectionState.CONNECTED) {
                 // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
                 log.info("ICE connection is connected. State: " + newState);
+                audienceCount++;
             } else if (newState == ConnectionState.DISCONNECTED) {
                 // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
                 log.info("ICE connection is closed. State: " + newState);
@@ -164,6 +164,7 @@ public class Busking extends UserSession implements Closeable {
             return;
         }
         buskingSession.remove(audience);
+        audienceCount--;
     }
 
     public void addCandidate(IceCandidate iceCandidate) {
@@ -179,9 +180,6 @@ public class Busking extends UserSession implements Closeable {
         }
     }
 
-//    public UserSession createAudienceSession() {
-//
-//    }
 
     @Override
     public void close() throws IOException { // 방송 종료할 때 시청자들한테 메세지 보냄.
@@ -192,12 +190,5 @@ public class Busking extends UserSession implements Closeable {
             buskingSession.remove(user.getAudienceId());
         }
         buskerWebRtcEndpoint.release();
-    }
-
-    @Override
-    public String toString() {
-        return "Busking{" +
-                ", buskerEmail='" + buskerEmail + '\'' +
-                '}';
     }
 }

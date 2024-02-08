@@ -6,12 +6,12 @@ import lombok.Setter;
 @Setter
 @Getter
 public class BuskingInfoDTO {
-
     private String buskerEmail;
     private String buskingTitle;
     private String buskingReport;
     private String buskingHashtag;
     private String buskingInfo;
+    private int audienceCount;
 
     @Override
     public String toString() {
@@ -21,6 +21,7 @@ public class BuskingInfoDTO {
                 ", buskingReport='" + buskingReport + '\'' +
                 ", buskingHashtag='" + buskingHashtag + '\'' +
                 ", buskingInfo='" + buskingInfo + '\'' +
+                ", audienceCount=" + audienceCount +
                 '}';
     }
 
