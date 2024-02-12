@@ -15,7 +15,7 @@ const Navbar = () => {
 
   // 메인 페이지인지 확인합니다.
   const isMainPage = location.pathname === '/';
-  console.log("ismainpage:",isMainPage)
+  // console.log("ismainpage:",isMainPage)
   useEffect(() => {
     // 로컬 스토리지에서 로그인 관련 데이터를 조회합니다.
     const loggedInUser = localStorage.getItem('user');

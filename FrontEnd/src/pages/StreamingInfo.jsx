@@ -18,16 +18,23 @@ const StreamingInfo = () => {
     const [buskingInfo, setBuskingInfo] = useState('');
 
     const buskerEmail = userInfo.userId
+    navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        setGeolocation({latitude,longitude})
+    })
     // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
     const handleStreaming = async (event) => {
         // event.preventDefault();
         const formData = {
             buskerEmail,
-            buskingTitle: buskingTitle,
-            buskingReport: buskingReport,
-            buskingHashtag: buskingHashtag,
-            buskingInfo: buskingInfo
+            buskingTitle,
+            buskingReport,
+            buskingHashtag,
+            buskingInfo,
+            geoLocation:geolocation
         };
+        console.log(formData)
 
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/busking/info`, {
