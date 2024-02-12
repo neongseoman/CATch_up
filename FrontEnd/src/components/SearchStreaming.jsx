@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import VideoTmp from "./VideoTmp";
+import {getCurrentBuskingInfo} from "../Apis/streamingApi";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -120,7 +121,7 @@ const SearchStreaming = () => {
     const [data, setData] = useState();
     const [buskerData, setBuskerData] = useState();
     const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=김경호 비비&page=0&size=10`;
-    const buskingListUrl = `${process.env.REACT_APP_API_BASE_URL}/api/busking/buskerList`
+    // const buskingListUrl = `${process.env.REACT_APP_API_BASE_URL}/api/busking/buskerList`
     const handleStreamingClick = (buskerEmail) => {
         navigate('/watchingpage',{ state: { buskerEmail } })
     };
@@ -137,15 +138,16 @@ const SearchStreaming = () => {
             });
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
     useEffect(() => {
-        axios
-            .get(buskingListUrl)
-            .then((response) => {
-                console.log("데이터:", response.data);
-                setBuskerData(response.data);
-            })
-            .catch((error) => {
-                console.error("에러:", error);
-            });
+        const fetchData = async () => {
+            try{
+                const currentBuskingInfo = await getCurrentBuskingInfo();
+                console.log('current Busking Info:', currentBuskingInfo);
+                setBuskerData(currentBuskingInfo);
+            }catch (error) {
+                console.error('Error in useEffect:', error);
+            }
+        }
+        fetchData()
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
     // 스트리밍 시작 시간 추출

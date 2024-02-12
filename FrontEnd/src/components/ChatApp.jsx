@@ -23,7 +23,7 @@ const ChatApp = () => {
     setLastClickedItem(item);
   };
 
-  const joinChatRoom = () => {
+    const joinChatRoom = () => {
     // disconnect();
 
     const connectedRoomId = "public";
@@ -95,6 +95,10 @@ const ChatApp = () => {
   const handleInputChange = (event) => {
     setMessage(event.target.value);
   };
+
+    useEffect(() => {
+        joinChatRoom()
+    }, []);
 
   useEffect(() => {
     // Fetch user info here using an AJAX request and set it in the state.

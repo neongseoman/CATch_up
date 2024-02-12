@@ -1,10 +1,13 @@
 import React, {useState} from "react";
-import { styled, createGlobalStyle } from 'styled-components';
+import {styled, createGlobalStyle} from 'styled-components';
 import ChatApp from "../components/ChatApp";
 import VideoTmp from "../components/VideoTmp";
 import StreamerList from "../components/StreamerList"
 import Streaming from "./Streaming";
 import Navbar from "../components/Navbar";
+import axios from "axios";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 const Wrapper = styled.div`
     overflow-y: hidden;
@@ -53,39 +56,49 @@ const RightBox = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-  body {
-    overflow: hidden;
-  }
+    body {
+        overflow: hidden;
+    }
 `;
 
 const StreamingPage = () => {
-  const [isStreaming,setIsStreaming] = useState(true)
-  const HandleEndButtonClick = () => {
-    // Your logic for handling "방송 종료"
-    console.log('방송 종료 버튼이 눌렸습니다.');
-    setIsStreaming(false)
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+    const userId = userInfo.userId
+    const [isStreaming, setIsStreaming] = useState(true)
+    const HandleEndButtonClick = () => {
+        // Your logic for handling "방송 종료"
+        const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/busker/${userId}/stopBusking`, {
+            body: JSON.stringify({
+                userId
+            })
+        })
+            .then(r => {
+                console.log(r)
+            })
+        console.log('방송 종료 버튼이 눌렸습니다.');
+        setIsStreaming(false)
 
-    // You can pass this information to the Streaming component if needed
-  };
+        // You can pass this information to the Streaming component if needed
+    };
 
 
-  return (
-    <Wrapper>
-      <GlobalStyle />
-      <Container>
-        <LeftBox>
-          <p>카메라, 마이크 ON/OFF</p>
-          <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
-        </LeftBox>
-        <MiddleBox>
-          <Streaming isStreaming={isStreaming}  />
-        </MiddleBox>
-        <RightBox>
-          <ChatApp />
-        </RightBox>
-      </Container>
-    </Wrapper>   
-  );
+    return (
+        <Wrapper>
+            <GlobalStyle/>
+            <Container>
+                <LeftBox>
+                    <p>카메라, 마이크 ON/OFF</p>
+                    <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
+                </LeftBox>
+                <MiddleBox>
+                    <Streaming isStreaming={isStreaming}/>
+                </MiddleBox>
+                <RightBox>
+                    <ChatApp/>
+                </RightBox>
+            </Container>
+        </Wrapper>
+    );
 };
 
 export default StreamingPage;

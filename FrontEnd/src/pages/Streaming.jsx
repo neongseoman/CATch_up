@@ -13,34 +13,34 @@ let makingOffer = false
 
 
 const Streaming = ({ isStreaming }) => {
+    // console.log(`${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`)
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
         new StompJS.Client({
-            brokerURL: "wss://i10a105.p.ssafy.io/api/signal",
+            brokerURL: `${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`,
         })
     );
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
     const navigate = useNavigate();
-
     // Set Peer Connection
     useEffect(() => {
         if (isStreaming === false){
             pc.getSenders().forEach(sender => pc.removeTrack(sender))
+            client.deactivate()
             pc.close()
 
             client.publish({
-                destination: `app/busker/${userId}/stopBusking`
+                destination: `app/api/busker/${userId}/stopBusking`
             })
             navigate("/")
         }
-        console.log("userId : " + userId)
         const videoElement = document.getElementById("streamingVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
             if (event.candidate) {
-                console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 // candidateList.push({iceCandidate: event.candidate})
                 client.publish({
                     destination: `/app/api/busker/${userId}/iceCandidate`,
@@ -99,7 +99,7 @@ const Streaming = ({ isStreaming }) => {
                 })
         }
 
-        const constraints = {video: true, audio: false}
+        const constraints = {video: true, audio: true}
 
          navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
@@ -128,7 +128,7 @@ const Streaming = ({ isStreaming }) => {
         }
 
         client.onConnect = (frame) => {
-            console.log(frame);
+            console.log("streaming stomp : " + frame);
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {
                 const offerResponse = JSON.parse(res.body);
@@ -163,6 +163,13 @@ const Streaming = ({ isStreaming }) => {
         };
 
         client.activate();
+
+        return () => {
+            // Cleanup function to be executed on component unmount
+            console.log("Closing WebSocket connection and Peer Connection");
+            client.deactivate(); // Close the WebSocket connection
+            pc.close(); // Close the Peer Connection
+        };
 
     }, [isStreaming]);
     return (
