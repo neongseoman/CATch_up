@@ -37,7 +37,7 @@ const StreamingInfo = () => {
         console.log(formData)
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/busking/info`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/create-busking`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
