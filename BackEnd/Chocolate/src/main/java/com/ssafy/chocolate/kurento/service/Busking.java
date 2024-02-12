@@ -4,6 +4,7 @@ package com.ssafy.chocolate.kurento.service;
 import com.google.gson.JsonObject;
 import com.ssafy.chocolate.kurento.dto.AudienceSdpOffer;
 import com.ssafy.chocolate.kurento.dto.BuskerSdpOffer;
+import com.ssafy.chocolate.kurento.dto.GeoLocation;
 import com.ssafy.chocolate.kurento.dto.UserSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +31,14 @@ public class Busking extends UserSession implements Closeable {
     private final String buskingReport;
     private final String buskingHashtag;
     private final String buskingInfo;
+    private GeoLocation geoLocation;
     private int audienceCount = 0;
     private WebRtcEndpoint buskerWebRtcEndpoint;
     private MediaPipeline buskerPipeline;
 
     public Busking(KurentoClient kurentoClient, IceMessageSendService iceMessageSendService,
                    String buskerEmail, String buskingTitle,
-                   String buskingReport, String buskingHashtag, String buskingInfo) {
+                   String buskingReport, String buskingHashtag, String buskingInfo, GeoLocation geoLocation) {
         this.kurentoClient = kurentoClient;
         this.iceMessageSendService = iceMessageSendService;
         this.buskerEmail = buskerEmail;
@@ -44,9 +46,12 @@ public class Busking extends UserSession implements Closeable {
         this.buskingReport = buskingReport;
         this.buskingHashtag = buskingHashtag;
         this.buskingInfo = buskingInfo;
+        this.geoLocation = geoLocation;
         buskerPipeline = kurentoClient.createMediaPipeline();
         this.setBuskerWebRtcEndpoint(new WebRtcEndpoint.Builder(buskerPipeline).build());
         WebRtcEndpoint buskerWebRtcEndpoint = this.getBuskerWebRtcEndpoint();
+//        log.info(geoLocation.toString()
+
 
         buskerWebRtcEndpoint.addIceCandidateFoundListener(iceCandidateFoundEvent -> {
             IceCandidate eventCandidate = iceCandidateFoundEvent.getCandidate();

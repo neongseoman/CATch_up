@@ -33,7 +33,7 @@ public class BuskingManagingService {
         String buskerEmail = infoDTO.getBuskerEmail();
         Busking busking = new Busking(kurentoClient, new IceMessageSendService(simpMessagingTemplate),
                 infoDTO.getBuskerEmail(), infoDTO.getBuskingTitle(), infoDTO.getBuskingReport(),
-                infoDTO.getBuskingHashtag(), infoDTO.getBuskingInfo());
+                infoDTO.getBuskingHashtag(), infoDTO.getBuskingInfo(),infoDTO.getGeoLocation());
 //        System.out.println(busking);
 //        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
@@ -73,6 +73,7 @@ public class BuskingManagingService {
             buskingInfoDTO.setBuskingHashtag(busking.getBuskingHashtag());
             buskingInfoDTO.setBuskingInfo(busking.getBuskingInfo());
             buskingInfoDTO.setAudienceCount(busking.getAudienceCount());
+            buskingInfoDTO.setGeoLocation(busking.getGeoLocation());
 
             buskingInfoList.add(buskingInfoDTO);
         }

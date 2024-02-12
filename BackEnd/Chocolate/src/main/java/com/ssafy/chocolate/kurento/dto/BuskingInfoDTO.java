@@ -12,6 +12,7 @@ public class BuskingInfoDTO {
     private String buskingHashtag;
     private String buskingInfo;
     private int audienceCount;
+    private GeoLocation geoLocation;
 
     @Override
     public String toString() {

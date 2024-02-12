@@ -111,7 +111,7 @@ public class SignalController {
     }
 
     @PostMapping("/api/busking/info")
-    public ResponseEntity buskingInfo(@RequestBody BuskingInfoDTO buskingInfoDTO) {
+    public ResponseEntity setNewBusking(@RequestBody BuskingInfoDTO buskingInfoDTO) {
         buskingManagingService.setBusking(buskingInfoDTO);
         return ResponseEntity.ok().build();
     }
