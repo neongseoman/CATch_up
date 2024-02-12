@@ -1,85 +1,102 @@
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomText from '../components/CustomText';
 import TextInput from '../components/TextInput';
-import Button from '../components/Button'
+import Button from '../components/Button';
 import styled from "@emotion/styled";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {buskerGeolocation, userInfoState} from "../RecoilState/userRecoilState";
-
+import { useRecoilState } from "recoil";
+import { buskerGeolocation, userInfoState } from "../RecoilState/userRecoilState";
+import LocationUsageToggle from "../components/LocationUsageToggle"
 
 const StreamingInfo = () => {
     const navigate = useNavigate();
-    const [userInfo, serUserInfo] = useRecoilState(userInfoState)
-    const [geolocation, setGeolocation] = useRecoilState(buskerGeolocation)
+    const [userInfo] = useRecoilState(userInfoState);
+    const [geolocation, setGeolocation] = useRecoilState(buskerGeolocation);
     const [buskingTitle, setBuskingTitle] = useState('');
-    const [buskingReport, setBuskingReport] = useState('');
     const [buskingHashtag, setBuskingHashtag] = useState('');
     const [buskingInfo, setBuskingInfo] = useState('');
+    const [useLocation, setUseLocation] = useState(false);
+    const [locationError, setLocationError] = useState('');
 
-    const buskerEmail = userInfo.userId
-    navigator.geolocation.getCurrentPosition((position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        setGeolocation({latitude,longitude})
-    })
-    // const [loginError, setLoginError] = useState(''); // 로그인 오류 메시지를 위한 상태
-    const handleStreaming = async (event) => {
-        // event.preventDefault();
+    // 위치 정보 토글 이벤트 핸들러
+    const handleLocationToggle = () => {
+        setUseLocation(!useLocation);
+        if (!useLocation) {
+            if (!navigator.geolocation) {
+                setLocationError('Geolocation is not supported by your browser');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setGeolocation({ latitude, longitude });
+                    setLocationError('');
+                },
+                () => {
+                    setLocationError('Unable to retrieve your location');
+                }
+            );
+        } else {
+            setGeolocation({ latitude: null, longitude: null });
+            setLocationError('');
+        }
+    };
+
+    const handleStreaming = async () => {
         const formData = {
-            buskerEmail,
+            buskerEmail: userInfo.userId,
             buskingTitle,
-            buskingReport,
             buskingHashtag,
             buskingInfo,
-            geoLocation:geolocation
+            geoLocation: useLocation ? geolocation : null,
         };
-        console.log(formData)
 
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/create-busking`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json', // Change content type to JSON
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData) // Convert formData to JSON
-            }).then(r => {
-                    console.log(r.status)
-                    navigate('/streamingpage')
-                }
-            );
+                body: JSON.stringify(formData)
+            });
 
+            if (!response.ok) {
+                throw new Error('Failed to create busking info');
+            }
+
+            console.log('Busking info created successfully', await response.json());
+            navigate('/streamingpage');
         } catch (error) {
             console.error('Error:', error);
         }
-
-    }
+    };
 
     return (
         <>
             <CustomText typography="h1" bold>
-                <br/>방송 정보<br/>
+                방송 정보
             </CustomText>
 
             <TextInput placeholder="방송 제목을 입력하세요" value={buskingTitle}
-                       onChange={(e) => setBuskingTitle(e.target.value)}></TextInput>
-
-            <TextInput placeholder="알림 메시지를 입력하세요" value={buskingReport}
-                       onChange={(e) => setBuskingReport(e.target.value)}></TextInput>
+                       onChange={(e) => setBuskingTitle(e.target.value)} />
 
             <TextInput placeholder="#해시태그를 #입력하세요" value={buskingHashtag}
-                       onChange={(e) => setBuskingHashtag(e.target.value)}></TextInput>
+                       onChange={(e) => setBuskingHashtag(e.target.value)} />
 
             <TextInput placeholder="방송 설명을 입력하세요" value={buskingInfo}
-                       onChange={(e) => setBuskingInfo(e.target.value)}></TextInput>
+                       onChange={(e) => setBuskingInfo(e.target.value)} />
 
-            {/* {loginError && <CustomText typography="p" style={{ color: 'red' , height: '30px' }}>{loginError}</CustomText>} */}
+            <LocationUsageToggle
+            useLocation={useLocation}
+            handleLocationToggle={handleLocationToggle}
+            />
+            {locationError && <p>Error: {locationError}</p>}
+
             <Button type="submit" onClick={handleStreaming}>방송 시작</Button>
         </>
     );
-}
+};
 
-export default StreamingInfo
-
-
+export default StreamingInfo;
