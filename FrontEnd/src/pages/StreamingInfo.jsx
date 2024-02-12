@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
 import { buskerGeolocation, userInfoState } from "../RecoilState/userRecoilState";
 import LocationUsageToggle from "../components/LocationUsageToggle"
+import HashTagInput from '../components/HashTagInput';
 
 const StreamingInfo = () => {
     const navigate = useNavigate();
@@ -73,6 +74,12 @@ const StreamingInfo = () => {
         }
     };
 
+    const handleTagsChange = (newTags) => {
+        //배열로 받아옴
+        const tagsString = newTags.join(', ');
+        setBuskingHashtag(tagsString);
+      };
+      
     return (
         <>
             <CustomText typography="h1" bold>
@@ -82,8 +89,7 @@ const StreamingInfo = () => {
             <TextInput placeholder="방송 제목을 입력하세요" value={buskingTitle}
                        onChange={(e) => setBuskingTitle(e.target.value)} />
 
-            <TextInput placeholder="#해시태그를 #입력하세요" value={buskingHashtag}
-                       onChange={(e) => setBuskingHashtag(e.target.value)} />
+            <HashTagInput onTagsChange={handleTagsChange} />
 
             <TextInput placeholder="방송 설명을 입력하세요" value={buskingInfo}
                        onChange={(e) => setBuskingInfo(e.target.value)} />

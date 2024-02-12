@@ -17,7 +17,7 @@ const CheckboxContainer = styled.div`
   height: 24px;
   margin-left: 10px;
   border-radius: 4px;
-  border: 2px solid var(--main); /* #007BFF 대신 var(--main) 사용 */
+  border: 2px solid var(--main);
   background-color: ${props => props.checked ? "var(--main)" : "#fff"}; /* 조건부 색상 적용 */
   transition: background-color 0.2s;
 
