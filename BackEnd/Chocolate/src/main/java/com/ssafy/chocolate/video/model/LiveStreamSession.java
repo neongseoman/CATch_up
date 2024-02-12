@@ -1,11 +1,11 @@
 package com.ssafy.chocolate.video.model;
-import com.ssafy.chocolate.user.model.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,13 +21,13 @@ public class LiveStreamSession {
     private Integer streamNo;
 
     @Column(name = "user_no")
-    private Integer userNo;
+    private Long userNo;
 
     @Column(name = "start_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "latitude")
     private Double latitude;
