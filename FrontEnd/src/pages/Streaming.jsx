@@ -99,7 +99,7 @@ const Streaming = ({ isStreaming }) => {
                 })
         }
 
-        const constraints = {video: false, audio: true}
+        const constraints = {video: true, audio: true}
 
          navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
