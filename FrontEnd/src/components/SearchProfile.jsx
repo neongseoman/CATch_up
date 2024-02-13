@@ -31,8 +31,8 @@ const Profile = styled.button`
 `;
 
 const ProfileImg = styled.img`
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   margin-top: 15px;
   margin-left: 10px;
   border-radius: 50%;

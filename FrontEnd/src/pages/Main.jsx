@@ -12,10 +12,10 @@ const Main = () => {
 
   return (
     <>
-      <CustomText typography="h1" bold>
+      {/* <CustomText typography="h1" bold>
         메인페이지 입니다
       </CustomText>
-      <CustomText typography="p">메인페이지는 좋죠</CustomText>
+      <CustomText typography="p">메인페이지는 좋죠</CustomText> */}
       <div>
         Test Link:
         <Link to={"/map"}> 지도,</Link>
@@ -44,7 +44,6 @@ const Main = () => {
         &menu=route
         &pathType=1
       ">출발지에서 도착지까지 길찾기</a> */}
-
       </div>
 
       <TwoColumnLayout>
@@ -96,7 +95,7 @@ const Main = () => {
 
 const TwoColumnLayout = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 `;
 
 const ColumnContainer = styled.div`
