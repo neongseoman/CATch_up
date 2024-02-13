@@ -14,7 +14,6 @@ const ChatApp = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const chatContainerRef = useRef(null);
   const [showButton, setShowButton] = useState(true);
-
   const handleItemClick = (item) => {
     if (lastClickedItem !== null) {
       lastClickedItem.classList.remove("clicked");
@@ -23,7 +22,7 @@ const ChatApp = () => {
     setLastClickedItem(item);
   };
 
-    const joinChatRoom = () => {
+  const joinChatRoom = () => {
     // disconnect();
 
     const connectedRoomId = "public";
@@ -96,16 +95,35 @@ const ChatApp = () => {
     setMessage(event.target.value);
   };
 
-    useEffect(() => {
-        joinChatRoom()
-    }, []);
+  useEffect(() => {
+    joinChatRoom();
+  }, []);
 
   useEffect(() => {
-    // Fetch user info here using an AJAX request and set it in the state.
-    // Example: fetchUserInfo();
+    const fetchData = async () => {
+      try {
+        // 서버로부터 사용자 정보를 가져오는 HTTP 요청
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/api/dashboard`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
-    // This is just a placeholder for demonstration.
-    setSender("Your Name");
+        if (!response.ok) {
+          throw new Error("서버 응답이 실패했습니다");
+        }
+
+        console.log("!!!!!!!!!!!!!!!!!!!!");
+        const data = await response.json();
+        console.log(data.additionalInfo.nickname);
+        setSender(data.additionalInfo.nickname);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -172,7 +190,7 @@ const ChatApp = () => {
               type="text"
               id="sender"
               style={{ width: "97%", pointerEvents: "none", display: "none" }}
-              placeholder="Your Name"
+              placeholder="Yo"
               value={sender}
               readOnly
             />
@@ -195,7 +213,7 @@ const ChatApp = () => {
                   key={index}
                 >
                   <div style={{ float: "left", alignItems: "center" }}>
-                    {chatMessage.content.length > 6 && (
+                    {!false && (
                       <div
                         style={{
                           float: "left",
@@ -212,10 +230,7 @@ const ChatApp = () => {
                     <span
                       className="sender"
                       style={{
-                        color:
-                          chatMessage.content.length > 6
-                            ? "#4AB3FF"
-                            : "#F7B84B",
+                        color: false ? "#4AB3FF" : "#F7B84B",
                         float: "left",
                         fontSize: "13px",
                         fontWeight: "100",
