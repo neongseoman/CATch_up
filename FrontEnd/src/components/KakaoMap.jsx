@@ -12,10 +12,25 @@ function Kakaomap(props) {
   useEffect(() => {
     const map = new kakao.maps.Map(container.current, options);
 
-    liveStreamSessions.forEach(session => {
+    const greenMarkerImage = new kakao.maps.MarkerImage(
+      '/img/green.png',
+      new kakao.maps.Size(50, 50)
+    );
+
+    const grayMarkerImage = new kakao.maps.MarkerImage(
+      '/img/gray.png',
+      new kakao.maps.Size(50, 50)
+    );
+
+    liveStreamSessions.forEach((session, index) => {
       const markerPosition = new kakao.maps.LatLng(session.lat, session.lng);
+
+      // 처음 2개의 마커에는 초록색 마커 이미지를, 나머지에는 회색 마커 이미지를 사용
+      const markerImage = index < 2 ? greenMarkerImage : grayMarkerImage;
+
       const marker = new kakao.maps.Marker({
         position: markerPosition,
+        image: markerImage, // 커스텀 마커 이미지 설정
       });
       marker.setMap(map);
 
@@ -39,7 +54,6 @@ function Kakaomap(props) {
             margin: 0;
             color: #666;
             font-size: 15px;
-
           ">${session.introduction}<br>${session.hashtags}</p>
         </div>
       `;
@@ -72,8 +86,8 @@ function Kakaomap(props) {
   );
 }
 
-
 export default Kakaomap;
+
 
 const liveStreamSessions = [
   {
