@@ -26,7 +26,7 @@ const Watching = ({buskerEmail}) => {
 
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
             if (event.candidate) {
-                console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                // console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 client.publish({
                     destination: `/app/api/audience/${userId}/iceCandidate`,
                     body: JSON.stringify({
@@ -49,7 +49,7 @@ const Watching = ({buskerEmail}) => {
                 console.log(pc.getStats().then(r=> console.log(koreaTime+" "+r)))
                 console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
             } else if (pc.iceConnectionState === 'disconnected'){
-
+                pc.restartIce()
                 console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')
             } else if(pc.iceConnectionState === 'failed') {
                 pc.restartIce()
@@ -62,6 +62,9 @@ const Watching = ({buskerEmail}) => {
                 console.log(koreaTime +' 데이터 연결이 확립되었습니다.');
             } else if (pc.connectionState === 'disconnected') {
                 console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');
+            } else if(pc.connectionState === "failed"){
+                pc.restartIce()
+                // window.location.replace("/watchingpage")
             }
         };
         pc.ontrack = (event) =>{

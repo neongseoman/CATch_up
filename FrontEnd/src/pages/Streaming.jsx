@@ -57,7 +57,6 @@ const Streaming = ({ isStreaming }) => {
             }
             console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
-                console.log(pc.getStats().then(r=> console.log(koreaTime+" "+r)))
                 console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
             } else if (pc.iceConnectionState === 'disconnected'){
 
