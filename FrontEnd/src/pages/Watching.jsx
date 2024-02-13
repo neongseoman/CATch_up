@@ -41,29 +41,28 @@ const Watching = ({buskerEmail}) => {
             }
         }
         pc.oniceconnectionstatechange = (event) => {
+            console.log(koreaTime+' - 데이터 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'new'){
                 console.log(koreaTime +' 피어 연결을 시작 합니다. ')
             }
             console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
-                console.log(pc.getStats().then(r=> console.log(koreaTime+" "+r)))
                 console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
             } else if (pc.iceConnectionState === 'disconnected'){
-                pc.restartIce()
+
                 console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')
             } else if(pc.iceConnectionState === 'failed') {
-                pc.restartIce()
                 console.log(koreaTime +' 피어 간 연결이  실패.');
             }
         };
         pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인
-            console.log('데이터 연결 상태:', pc.connectionState);
+            console.log(koreaTime+' - 데이터 연결 상태:', pc.connectionState);
             if (pc.connectionState === 'connected') {
                 console.log(koreaTime +' 데이터 연결이 확립되었습니다.');
             } else if (pc.connectionState === 'disconnected') {
                 console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');
             } else if(pc.connectionState === "failed"){
-                pc.restartIce()
+
                 // window.location.replace("/watchingpage")
             }
         };
@@ -71,6 +70,7 @@ const Watching = ({buskerEmail}) => {
             remoteVideo.srcObject = event.streams[0]
         }
         pc.onsignalingstatechange = (event) =>{
+            console.log(koreaTime+ " Negotiation을 진행합니다.")
         }
 
         if (typeof WebSocket !== 'function') {
