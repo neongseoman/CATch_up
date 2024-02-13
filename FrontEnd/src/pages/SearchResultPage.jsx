@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import CustomText from '../components/CustomText';
 import SearchStreaming from '../components/SearchStreaming';
 import SearchProfile from '../components/SearchProfile';
 import SearchShorts from '../components/SearchShorts';
@@ -12,16 +13,11 @@ const Wrapper = styled.div`
     align-items: flex-start;
 `;
 
-const PageTitle = styled.p`
-    color: #5E6468;
-    font-size: 20px;
-    margin-bottom: 10px;
-`;
-
 const Buttons = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
     margin-bottom: 30px;
 `;
 
@@ -83,7 +79,9 @@ const SearchResultPage = () => {
 
     return (
         <Wrapper>
-            <PageTitle>검색 결과</PageTitle>
+            <CustomText typography="h1" bold>
+                <br />검색 결과<br />
+            </CustomText>
             <Buttons>
                 <ResultButton onClick={handleStreamingClick} style={{ background: viewStreamingResult ? '#e8543d' : '#5E6468' }}>스트리밍</ResultButton>
                 <ResultButton onClick={handleProfileClick} style={{ background: viewProfileResult ? '#e8543d' : '#5E6468' }}>프로필</ResultButton>

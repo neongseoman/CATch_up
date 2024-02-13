@@ -1,4 +1,4 @@
-// 검색 결과 - 쇼츠
+// 쇼츠
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -12,15 +12,15 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const Shorts = styled.button`
+const Shorts = styled.div`
   width: 100%;
   margin-bottom: 30px;
-  background: none;
 `;
 
 const Video = styled.div`
   width: calc(55%);
   height: 300px;
+  margin-bottom: 30px;
   display: flex;
   float: left;
   border-radius: 10px;
@@ -30,6 +30,7 @@ const Video = styled.div`
 const Info = styled.div`
   width: calc(46%);
   margin-left: -10%;
+  margin-bottom: 30px;
   padding: 2% 5%;
   height: 300px;
   display: flex;

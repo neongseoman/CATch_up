@@ -124,18 +124,6 @@ const UserProfile1 = ({ userInfo }) => {
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
 
-
-  // 팔로워 및 팔로잉 수를 가져오는 함수
-  // useEffect(() => {
-  //   if(recoil.isLoggedIn){
-  //     fetch(`/api/users/${recoil.userId}/is-following/${userInfo.id}`)
-  //     .then((isFollowing) =>{
-  //       console.log("API 응답:", isFollowing); // API 응답 확인
-  //       setIsFollowing(isFollowing);
-  //     });
-  //   }
-  // }, [recoil.userId, userInfo.id]);
-
   // 팔로워 및 팔로잉 수를 가져오는 함수
   useEffect(() => {
     // 팔로잉 수

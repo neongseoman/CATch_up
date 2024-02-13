@@ -46,7 +46,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
       });
       setComments([...comments, response.data]);
     } catch (error) {
-      alert("이미 작성하신 리뷰가 있습니다!!!")
+      alert("이미 작성하신 리뷰가 있습니다!")
       console.error("댓글 작성/수정 실패", error);
     }
   };
@@ -57,7 +57,7 @@ const ReviewList = ({ streamNo, currentUserNo }) => {
       {comments.map(comment => (
         <Review
           key={comment.commentNo}
-          author={comment.userNo}
+          author={comment.nickname}
           date={comment.createdTime}
           content={comment.comments}
           initialRating={comment.likes}

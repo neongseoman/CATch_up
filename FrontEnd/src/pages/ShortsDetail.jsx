@@ -215,10 +215,11 @@ const ShortsDetail = () => {
                 <p>Loading...</p>
             ) : (
                 <>
+                {console.log(shortsInfo)}
                 <Video>{shortsInfo.streamShortClips.shortsPath}</Video>
                 <Info>
                     <TopInfo>
-                                                <TextField>
+                            <TextField>
                             <ShortsTitle>{shortsInfo.streamShortClips.title}</ShortsTitle>
                             <ShortsInfo>{shortsInfo.streamShortClips.introduction}</ShortsInfo>
                             <TagField>

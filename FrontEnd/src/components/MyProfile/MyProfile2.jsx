@@ -98,7 +98,7 @@ const MyProfile2 = ({ userInfo }) => {
   return (
     <Wrapper>
       <StreamsButton onClick={handleStreamsClick}>
-        <Count>{formatTime(userInfo.additionalInfo.streamingTime)}</Count>
+        <Count>{formatTime(userInfo.streamingTime)}</Count>
         <Text>STREAMING TIME</Text>
       </StreamsButton>
       <FollowerButton onClick={handleFollowerClick}>

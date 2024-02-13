@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { userInfoInitialState } from '../RecoilState/userRecoilState';
+import { userInfoState } from '../RecoilState/userRecoilState';
 import MyProfile1 from '../components/MyProfile/MyProfile1';
 import MyProfile2 from '../components/MyProfile/MyProfile2';
 import MyProfile3 from '../components/MyProfile/MyProfile3';
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const MyProfilePage = () => {
-  const idNo = useRecoilValue(userInfoInitialState);
+  const idNo = useRecoilValue(userInfoState).idNo;
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
