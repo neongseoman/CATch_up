@@ -13,7 +13,7 @@ let makingOffer = false
 
 
 const Streaming = ({ isStreaming }) => {
-    // console.log(`${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`)
+    console.log(`${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`)
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
