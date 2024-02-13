@@ -22,18 +22,6 @@ const SearchShorts = () => {
     navigate(`/user/shortsdetail/${streamNo}`);
   };
 
-  useEffect(() => {
-    axios
-      .get(url)
-      .then((response) => {
-        console.log("데이터:", response.data);
-        setData(response.data.content);
-      })
-      .catch((error) => {
-        console.error("에러:", error);
-      });
-  }, [searchTerm]);
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -62,6 +50,18 @@ const SearchShorts = () => {
 
     return result;
   };
+
+  useEffect(() => {
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("데이터:", response.data);
+          setData(response.data.content);
+        })
+        .catch((error) => {
+          console.error("에러:", error);
+        });
+    }, [searchTerm]);
 
   return (
     <Wrapper>

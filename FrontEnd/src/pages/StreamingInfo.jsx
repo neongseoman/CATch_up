@@ -98,7 +98,7 @@ const StreamingInfo = () => {
         //배열로 받아옴
         const tagsString = newTags.join(' ');
         setBuskingHashtag(tagsString);
-      };
+    };
       
     return (
         <>

@@ -7,6 +7,89 @@ import Navbar from "../components/Navbar";
 import Watching from "./Watching";
 import { useLocation } from "react-router-dom";
 
+const WatchingPage = () => {
+  const { buskerEmail } = useLocation().state;
+  const [streamingInfo, setStreamingInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const handleProfileClick = () => {
+    alert("해당 방송 주인 프로필 화면으로 이동!");
+  };
+
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // 서버로부터 스트리밍 정보를 가져오는 HTTP 요청
+          const response = await fetch("", {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (!response.ok) {
+            throw new Error("서버 응답이 실패했습니다");
+          }
+
+          const data = await response.json();
+          console.log(data);
+          setStreamingInfo(data);
+          setLoading(false);
+        } catch (e) {
+          setLoading(false);
+          console.log(e);
+        }
+      };
+
+      fetchData();
+    }, []);
+
+  return (
+    <Wrapper>
+      <GlobalStyle />
+      <Container>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <LeftBox>
+              <StreamerList />
+            </LeftBox>
+            <MiddleContainer>
+              <MiddleTopBox>
+                <Watching buskerEmail={buskerEmail} />
+                {/*<VideoTmp />*/}
+              </MiddleTopBox>
+              <MiddleBottomBox>
+                <StreamingTitle>방송 제목</StreamingTitle>
+                <StreamingInfo>방송 설명</StreamingInfo>
+                <Tags>해시태그</Tags>
+                <ProfileField>
+                  <ProfileImg
+                  // src={e.profileImagePath}
+                  // onError={(e) => {
+                  //     e.target.src = "/img/logo.png";
+                  // }}
+                  />
+                  <ProfileName>방송중인 사용자 닉네임</ProfileName>
+                  <Toggle>팔로우 토글</Toggle>
+                  <Count>
+                    현재 시청자 수 : 30000명 | 방송 시작 시간 : 13시 28분
+                  </Count>
+                </ProfileField>
+                <UserProfile onClick={handleProfileClick}>
+                  프로필 보러 가기
+                </UserProfile>
+              </MiddleBottomBox>
+            </MiddleContainer>
+            <RightBox>
+              <ChatApp />
+            </RightBox>
+          </>
+        )}
+      </Container>
+    </Wrapper>
+  );
+};
+
 const Wrapper = styled.div`
   overflow-y: hidden;
 `;
@@ -24,7 +107,6 @@ const LeftBox = styled.div`
   justify-content: center;
   width: 20%; // 1/3 of the container width
   height: 100%; // Full height
-  background: red;
 `;
 
 const MiddleContainer = styled.div`
@@ -39,7 +121,6 @@ const MiddleTopBox = styled.div`
   align-items: center;
   justify-content: center;
   height: 1000px; // Half height
-  background: green;
 `;
 
 const MiddleBottomBox = styled.div`
@@ -125,88 +206,5 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
   }
 `;
-
-const WatchingPage = () => {
-  const { buskerEmail } = useLocation().state;
-  const [streamingInfo, setStreamingInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 서버로부터 스트리밍 정보를 가져오는 HTTP 요청
-        const response = await fetch("", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error("서버 응답이 실패했습니다");
-        }
-
-        const data = await response.json();
-        console.log(data);
-        setStreamingInfo(data);
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleProfileClick = () => {
-    alert("해당 방송 주인 프로필 화면으로 이동!");
-  };
-
-  return (
-    <Wrapper>
-      <GlobalStyle />
-      <Container>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <LeftBox>
-              <StreamerList />
-            </LeftBox>
-            <MiddleContainer>
-              <MiddleTopBox>
-                <Watching buskerEmail={buskerEmail} />
-                {/*<VideoTmp />*/}
-              </MiddleTopBox>
-              <MiddleBottomBox>
-                <StreamingTitle>방송 제목</StreamingTitle>
-                <StreamingInfo>방송 설명</StreamingInfo>
-                <Tags>해시태그</Tags>
-                <ProfileField>
-                  <ProfileImg
-                  // src={e.profileImagePath}
-                  // onError={(e) => {
-                  //     e.target.src = "/img/logo.png";
-                  // }}
-                  />
-                  <ProfileName>방송중인 사용자 닉네임</ProfileName>
-                  <Toggle>팔로우 토글</Toggle>
-                  <Count>
-                    현재 시청자 수 : 30000명 | 방송 시작 시간 : 13시 28분
-                  </Count>
-                </ProfileField>
-                <UserProfile onClick={handleProfileClick}>
-                  프로필 보러 가기
-                </UserProfile>
-              </MiddleBottomBox>
-            </MiddleContainer>
-            <RightBox>
-              <ChatApp />
-            </RightBox>
-          </>
-        )}
-      </Container>
-    </Wrapper>
-  );
-};
 
 export default WatchingPage;

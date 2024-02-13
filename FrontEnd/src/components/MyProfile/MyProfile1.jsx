@@ -24,8 +24,7 @@ const ProfileImg = styled.img`
     height: 70px;
     border-radius: 50%;
     margin-left: 20px;
-    object-fit: cover;
-    transform: scale(1.5);
+    transform: scale(2);
 `;
 
 const TextField = styled.div`
