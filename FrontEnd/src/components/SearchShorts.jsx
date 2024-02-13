@@ -1,10 +1,10 @@
-// 검색 결과 - 쇼츠
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import { useRecoilValue } from 'recoil';
 import { searchTermState } from '../RecoilState/userRecoilState';
+import CardShorts from "./CardShorts";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,109 +12,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const Shorts = styled.button`
-  width: 100%;
-  margin-bottom: 30px;
-  background: none;
-`;
-
-const Video = styled.div`
-  width: calc(55%);
-  height: 300px;
-  display: flex;
-  float: left;
-  border-radius: 10px;
-  background-color: #8b8f92;
-`;
-
-const Info = styled.div`
-  width: calc(46%);
-  margin-left: -10%;
-  padding: 2% 5%;
-  height: 300px;
-  display: flex;
-  float: right;
-  color: white;
-  border-radius: 10px;
-  background-color: #1e1d1a;
-  justify-content: space-evenly;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const TagField = styled.div`
-  display: flex;
-  gap: 4px;
-`;
-
-const Tag = styled.div`
-  font-size: 10px;
-  background: #56350a;
-  color: #f7b84b;
-  border-radius: 30px;
-  padding: 6px;
-`;
-
-const ShortsTitle = styled.div`
-  color: white;
-  font-size: 24px;
-  text-align: left;
-`;
-
-const ShortsInfo = styled.div`
-  color: white;
-  font-size: 12px;
-  text-align: left;
-`;
-
-const ProfileField = styled.p`
-  display: flex;
-  margin: 0px;
-`;
-
-const ProfileImg = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 5px;
-  color: white;
-  object-fit: cover;
-  transform: scale(1.5);
-`;
-
-const ProfileName = styled.p`
-  margin-top: auto;
-  margin-bottom: auto;
-  font-size: 18px;
-  color: white;
-`;
-
-const StreamingInfoField = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: white;
-  width: 100%;
-`;
-
-const Options = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 20px;
-`;
-
-const Option = styled.p`
-  font-size: 10px;
-  color: white;
-`;
-
-const Data = styled.p`
-  font-size: 12px;
-  color: white;
-`;
-
 const SearchShorts = () => {
-  const [tagList, setTagList] = useState(["태그1", "태그2", "태그3"]);
   const navigate = useNavigate();
   const searchTerm = useRecoilValue(searchTermState);
   const [data, setData] = useState();
@@ -145,9 +43,9 @@ const SearchShorts = () => {
   };
 
   const formatStreamingTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600); // 초를 시간으로 변환
-    const remainingMinutes = Math.floor((seconds % 3600) / 60); // 시간을 제외한 나머지 초를 분으로 변환
-    const remainingSeconds = seconds % 60; // 남은 초
+    const hours = Math.floor(seconds / 3600); 
+    const remainingMinutes = Math.floor((seconds % 3600) / 60); 
+    const remainingSeconds = seconds % 60; 
 
     let result = "";
 
@@ -169,49 +67,16 @@ const SearchShorts = () => {
     <Wrapper>
       {data && Array.isArray(data)
         ? data.map((e, i) => (
-            <Shorts key={i} onClick={() => {
-              console.log(e)  
-              handleShortsClick(e.streamNo)
-              }}>
-              <Info>
-                <TagField>
-                  {tagList.map((tag, i) => (
-                    <div key={i}>
-                      <Tag>#{tag}</Tag>
-                    </div>
-                  ))}
-                </TagField>
-                <ProfileField>
-                  <ProfileImg
-                    src={e.profileImagePath}
-                    onError={(e) => {
-                      e.target.src = "/img/logo.png";
-                    }}
-                  />
-                  <ProfileName>{e.nickname}</ProfileName>
-                </ProfileField>
-                <ShortsTitle>{e.title}</ShortsTitle>
-                <ShortsInfo>{e.introduction}</ShortsInfo>
-                <StreamingInfoField>
-                  <Options>
-                    <Option>최대 시청자 수</Option>
-                    <Data>{e.maxViews}명</Data>
-                  </Options>
-                  <Options>
-                    <Option>방송 날짜</Option>
-                    <Data>{formatDate(e.streamedTime)}</Data>
-                  </Options>
-                  <Options>
-                    <Option>총 방송 시간</Option>
-                    <Data>{formatStreamingTime(e.streamingTime)}</Data>
-                  </Options>
-                </StreamingInfoField>
-              </Info>
-              <Video>{e.shortsPath}</Video>
-            </Shorts>
+            <CardShorts
+              key={i}
+              shortsData={e}
+              handleShortsClick={handleShortsClick}
+              formatDate={formatDate}
+              formatStreamingTime={formatStreamingTime}
+            />
           ))
         : null}
-    </Wrapper>
+       </Wrapper>
   );
 };
 
