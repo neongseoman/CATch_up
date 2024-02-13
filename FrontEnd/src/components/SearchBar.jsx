@@ -51,7 +51,7 @@ const SearchBar = () => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchTerm(event.target.value);
-      handleSearchClick();
+      navigate('/searchresult');
     }
   };
 

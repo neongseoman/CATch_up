@@ -12,6 +12,11 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation(); // 현재 위치를 가져옵니다.
   const logoutUserInfo = useSetRecoilState(userInfoState);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴 상태
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   // 메인 페이지인지 확인합니다.
   const isMainPage = location.pathname === '/';
@@ -68,18 +73,22 @@ const Navbar = () => {
 
   return (
     <Header isMainPage={isMainPage}>
+      <HamburgerIcon onClick={toggleMenu}>☰</HamburgerIcon>
+      {isMenuOpen && (
       <Nav>
-        <StyledLink to={'/'}>홈</StyledLink>
-        {isLoggedIn ? (
-          <>
-            <StyledLink to={'/user/info'}>내 프로필({userInfo})</StyledLink>
-            <StyledLink as="span" onClick={handleLogout}>로그아웃</StyledLink>
-            <StyledLink to={'/streaming/info'}>방송하기</StyledLink>
-          </>
-        ) : (
-          <StyledLink to={'/user/login'}>로그인</StyledLink>
-        )}
-      </Nav>
+      <StyledLink to={'/'}>홈</StyledLink>
+      {isLoggedIn ? (
+        <>
+          <StyledLink to={'/user/info'}>내 프로필({userInfo})</StyledLink>
+          <StyledLink as="span" onClick={handleLogout}>로그아웃</StyledLink>
+          <StyledLink to={'/streaming/info'}>방송하기</StyledLink>
+        </>
+      ) : (
+        <StyledLink to={'/user/login'}>로그인</StyledLink>
+      )}
+    </Nav>
+      )}
+
       <img
         src="/img/logo.png"
         alt="logo"
@@ -158,5 +167,29 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const HamburgerIcon = styled.div`
+  display: none;
+  cursor: pointer;
+
+  color: var(--pure-white);
+  font-weight: bold;
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  display: inline-block; /* 배경과 패딩 적용을 위해 필요 */
+  padding: 5px 10px; /* 링크 내부에 약간의 공간을 추가 */
+  border-radius: 15px; /* 기본 테두리 반경 설정 */
+  transition: background-color 0.3s, color 0.3s; /* 부드러운 전환 효과 */
+
+  &:hover {
+    background-color: #f8a45b; /* 마우스 오버 시 배경색 */
+    color: #7e3900; /* 마우스 오버 시 텍스트 색상 */
+    border-radius: 15px; /* 마우스 오버 시 테두리 반경 */
+  }
+
+
+
+  @media (max-width: 768px) {
+    display: block; // 모바일 화면에서만 햄버거 아이콘 표시
+  }
+`;
 
 export default Navbar;
