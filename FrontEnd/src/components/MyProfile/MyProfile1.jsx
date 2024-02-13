@@ -20,8 +20,8 @@ const InfoField = styled.div`
 `;
 
 const ProfileImg = styled.img`
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     margin-left: 20px;
     object-fit: cover;
@@ -89,17 +89,17 @@ const MyProfile1 = ({ userInfo }) => {
     <Wrapper>
       <InfoField>
         <ProfileImg
-            src={userInfo.additionalInfo.profileImagePath}
+            src={userInfo.profileImagePath}
             onError={(e) => {
                 e.target.src = '/img/logo.png';
             }}
         />
         <TextField>
           <TextTop>
-            <UserNickname>{userInfo.additionalInfo.nickname}</UserNickname>
+            <UserNickname>{userInfo.nickname}</UserNickname>
             <EditButton onClick={handleEditClick}>✐edit</EditButton>
           </TextTop>
-          <UserIntroduce>{userInfo.additionalInfo.introduction}</UserIntroduce>
+          <UserIntroduce>{userInfo.introduction}</UserIntroduce>
         </TextField>
         
       </InfoField>
