@@ -41,7 +41,7 @@ const Watching = ({buskerEmail}) => {
             }
         }
         pc.oniceconnectionstatechange = (event) => {
-            console.log(koreaTime+' - 데이터 연결 상태:', pc.iceConnectionState);
+            console.log(koreaTime+' - ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'new'){
                 console.log(koreaTime +' 피어 연결을 시작 합니다. ')
             }
