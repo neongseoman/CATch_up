@@ -72,6 +72,26 @@ const StreamingInfo = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/busking/info`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create busking info');
+            }
+
+            console.log('Busking info created successfully', await response.json());
+            navigate('/streamingpage');
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handleTagsChange = (newTags) => {

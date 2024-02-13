@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
+import {useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
     overflow-y: hidden;
@@ -62,6 +63,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const StreamingPage = () => {
+    const navigate = useNavigate();
     const [userInfo, setUserInfo] = useRecoilState(userInfoState)
     const userId = userInfo.userId
     const [isStreaming, setIsStreaming] = useState(true)
@@ -77,7 +79,7 @@ const StreamingPage = () => {
             })
         console.log('방송 종료 버튼이 눌렸습니다.');
         setIsStreaming(false)
-
+        navigate("/")
         // You can pass this information to the Streaming component if needed
     };
 
