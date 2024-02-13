@@ -34,16 +34,12 @@ public class BuskingManagingService {
         Busking busking = new Busking(kurentoClient, new IceMessageSendService(simpMessagingTemplate),
                 infoDTO.getBuskerEmail(), infoDTO.getBuskingTitle(), infoDTO.getBuskingReport(),
                 infoDTO.getBuskingHashtag(), infoDTO.getBuskingInfo(),infoDTO.getGeoLocation());
-//        System.out.println(busking);
-//        System.out.println(buskingManaging);
         buskingManaging.put(buskerEmail, busking);
-//        log.info("busker session : " + buskingManaging.get(buskerEmail));
     }
 
     public void startBusking(BuskerSdpOffer message) throws NoBuskingException, IOException {
         String buskerId = message.getUserId();
         log.info(buskerId + " is on set up busking");
-//        System.out.println("여기까지는 괜찮고");
         Busking busking = buskingManaging.get(buskerId);
         JsonObject sdpAnswer = busking.BuskingStart(message);
         simpMessagingTemplate.convertAndSend("/busker/" + buskerId + "/sdpAnswer",
