@@ -5,9 +5,9 @@ const { persistAtom } = recoilPersist();
 // 초기 상태 값을 별도의 변수에 저장
 export const userInfoInitialState = {
     isLoggedIn: false,
-    userId: null,
-    idNo: null,
-    nickname: null,
+    userId: null,  // 이메일
+    idNo: null,  // 회원 번호
+    nickname: null,  // 닉네임
   };
 
 export const userInfoState = atom({
