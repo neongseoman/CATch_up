@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { searchTermState } from '../RecoilState/userRecoilState';
 import { getCurrentBuskingInfo } from "../Apis/streamingApi";
 import CardStreaming from "./CardStreaming";
+import Kakaomap from './KakaoMap';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -18,13 +19,13 @@ const Wrapper = styled.div`
 const MapWrapper = styled.div`
     width: 100%;
     height: 500px;
-    border-radius: 5px;
+    /* border-radius: 5px;
     background: grey;
     background: linear-gradient(
             to bottom,
             rgba(128, 128, 128, 0.5),
             rgba(128, 128, 128, 0)
-    ); /* 그라데이션 추가 */
+    ); 그라데이션 추가 */
 `;
 
 const SearchStreaming = () => {
@@ -75,7 +76,11 @@ const SearchStreaming = () => {
 
     return (
         <Wrapper>
-            <MapWrapper></MapWrapper>
+            <MapWrapper>
+
+                <Kakaomap></Kakaomap>
+
+            </MapWrapper>
             {buskerData && Array.isArray(buskerData)
                 ? buskerData.map((e, i) => (
                     <CardStreaming
