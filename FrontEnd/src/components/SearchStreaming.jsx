@@ -19,13 +19,13 @@ const Wrapper = styled.div`
 const MapWrapper = styled.div`
     width: 100%;
     height: 500px;
-    border-radius: 5px;
+    /* border-radius: 5px;
     background: grey;
     background: linear-gradient(
             to bottom,
             rgba(128, 128, 128, 0.5),
             rgba(128, 128, 128, 0)
-    ); /* 그라데이션 추가 */
+    ); 그라데이션 추가 */
 `;
 
 const SearchStreaming = () => {
