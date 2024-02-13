@@ -5,6 +5,24 @@ function TmpFollowPage({ userId }) {
   const [followingsCount, setFollowingsCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
 
+  // 팔로우/언팔로우 처리 함수
+  const handleFollow = () => {
+    const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userId}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userId}`;
+    const method = isFollowing ? 'DELETE' : 'POST';
+  
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // 쿠키/인증 정보를 요청과 함께 보내도록 설정
+    })
+    .then(() => {
+      setIsFollowing(!isFollowing);
+      // 팔로우 상태에 따라 팔로워 수 조정
+      setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
+    })
+    .catch((error) => console.error('Error:', error));
+  };
+
   // 팔로워 및 팔로잉 수를 가져오는 함수
   useEffect(() => {
     // 팔로잉 수
@@ -23,25 +41,6 @@ function TmpFollowPage({ userId }) {
       .then((response) => response.json())
       .then((isFollowing) => setIsFollowing(isFollowing));
   }, [userId]);
-
-  // 팔로우/언팔로우 처리 함수
-  const handleFollow = () => {
-    const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userId}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userId}`;
-    const method = isFollowing ? 'DELETE' : 'POST';
-  
-    fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // 쿠키/인증 정보를 요청과 함께 보내도록 설정
-    })
-    .then(() => {
-      setIsFollowing(!isFollowing);
-      // 팔로우 상태에 따라 팔로워 수 조정
-      setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
-    })
-    .catch((error) => console.error('Error:', error));
-  };
-  
 
   return (
     <div>
