@@ -7,39 +7,8 @@ function UserInfo() {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
-
   const pageNum = [1, 2, 3, 4, 5];
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 서버로부터 사용자 정보를 가져오는 HTTP 요청
-        const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/api/dashboard`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("서버 응답이 실패했습니다");
-        }
-
-        const data = await response.json();
-        console.log(data);
-        setUserInfo(data);
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-        navigate("/user/login");
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -107,6 +76,36 @@ function UserInfo() {
       console.error("동영상 업로드 오류", error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 서버로부터 사용자 정보를 가져오는 HTTP 요청
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/api/dashboard`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("서버 응답이 실패했습니다");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setUserInfo(data);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        console.log(e);
+        navigate("/user/login");
+      }
+    };
+
+    fetchData();
+  }, [navigate]);
 
   return (
     <div>

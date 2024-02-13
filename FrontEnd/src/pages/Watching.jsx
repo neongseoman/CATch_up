@@ -9,6 +9,7 @@ import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
 let makingOffer = false
+
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -21,6 +22,7 @@ const Watching = ({buskerEmail}) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
+
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
 
@@ -146,7 +148,6 @@ const Watching = ({buskerEmail}) => {
 
 
     }, []);
-
 
     return (
         <>

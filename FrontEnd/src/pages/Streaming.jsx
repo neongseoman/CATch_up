@@ -11,7 +11,6 @@ import {useNavigate} from "react-router-dom";
 // const userId = "buskerID"
 let makingOffer = false
 
-
 const Streaming = ({ isStreaming }) => {
     console.log(`${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`)
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
@@ -171,6 +170,7 @@ const Streaming = ({ isStreaming }) => {
         };
 
     }, [isStreaming]);
+
     return (
         <>
             <video id="streamingVideo" style={{width: '100%'}} autoPlay controls></video>

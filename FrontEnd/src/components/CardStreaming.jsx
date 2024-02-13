@@ -67,9 +67,7 @@ const ProfileImg = styled.img`
     height: 30px;
     border-radius: 50%;
     margin-right: 5px;
-    color: white;
-    object-fit: cover;
-    transform: scale(1.5);
+    transform: scale(2);
 `;
 
 const ProfileName = styled.p`
