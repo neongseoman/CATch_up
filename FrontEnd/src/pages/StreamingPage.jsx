@@ -10,6 +10,46 @@ import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
 import {useNavigate} from "react-router-dom";
 
+const StreamingPage = () => {
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+    const userId = userInfo.userId
+    const [isStreaming, setIsStreaming] = useState(true)
+    const HandleEndButtonClick = () => {
+        // Your logic for handling "방송 종료"
+        const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/busker/${userId}/stopBusking`, {
+            body: JSON.stringify({
+                userId
+            })
+        })
+            .then(r => {
+                console.log(r)
+            })
+        console.log('방송 종료 버튼이 눌렸습니다.');
+        setIsStreaming(false)
+        navigate("/")
+        // You can pass this information to the Streaming component if needed
+    };
+
+    return (
+        <Wrapper>
+            <GlobalStyle/>
+            <Container>
+                <LeftBox>
+                    <p>카메라, 마이크 ON/OFF</p>
+                    <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
+                </LeftBox>
+                <MiddleBox>
+                    <Streaming isStreaming={isStreaming}/>
+                </MiddleBox>
+                <RightBox>
+                    <ChatApp/>
+                </RightBox>
+            </Container>
+        </Wrapper>
+    );
+};
+
 const Wrapper = styled.div`
     overflow-y: hidden;
 `;
@@ -61,46 +101,5 @@ const GlobalStyle = createGlobalStyle`
         overflow: hidden;
     }
 `;
-
-const StreamingPage = () => {
-    const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState)
-    const userId = userInfo.userId
-    const [isStreaming, setIsStreaming] = useState(true)
-    const HandleEndButtonClick = () => {
-        // Your logic for handling "방송 종료"
-        const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/busker/${userId}/stopBusking`, {
-            body: JSON.stringify({
-                userId
-            })
-        })
-            .then(r => {
-                console.log(r)
-            })
-        console.log('방송 종료 버튼이 눌렸습니다.');
-        setIsStreaming(false)
-        navigate("/")
-        // You can pass this information to the Streaming component if needed
-    };
-
-
-    return (
-        <Wrapper>
-            <GlobalStyle/>
-            <Container>
-                <LeftBox>
-                    <p>카메라, 마이크 ON/OFF</p>
-                    <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
-                </LeftBox>
-                <MiddleBox>
-                    <Streaming isStreaming={isStreaming}/>
-                </MiddleBox>
-                <RightBox>
-                    <ChatApp/>
-                </RightBox>
-            </Container>
-        </Wrapper>
-    );
-};
 
 export default StreamingPage;
