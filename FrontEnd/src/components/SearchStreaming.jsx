@@ -5,6 +5,7 @@ import axios from "axios";
 import styled from "styled-components";
 import VideoTmp from "./VideoTmp";
 import {getCurrentBuskingInfo} from "../Apis/streamingApi";
+import Kakaomap from './KakaoMap';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -165,7 +166,11 @@ const SearchStreaming = () => {
 
     return (
         <Wrapper>
-            <MapWrapper></MapWrapper>
+            <MapWrapper>
+
+                <Kakaomap></Kakaomap>
+
+            </MapWrapper>
             {buskerData && Array.isArray(buskerData)
                 ? buskerData.map((e, i) => (
                     <Streaming key={i} onClick={() => handleStreamingClick(e.buskerEmail)}>

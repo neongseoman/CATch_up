@@ -20,7 +20,11 @@ function Kakaomap(props) {
       <div 
         id="map" 
         ref={container} 
-        style={{ width: width || '50vw', height: height || '50vh' }}
+        style={{ 
+          width: width || '100%', 
+          height: height || '100%',
+          borderRadius: '15px' // border radius 스타일 적용
+        }}
       ></div>
     );
   }
