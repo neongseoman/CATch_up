@@ -137,14 +137,26 @@ const Nav = styled.nav`
 `;
 
 const StyledLink = styled(Link)`
-  color: var( --pure-white);
+  color: var(--pure-white);
   font-weight: bold;
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  display: inline-block; /* 배경과 패딩 적용을 위해 필요 */
+  padding: 5px 10px; /* 링크 내부에 약간의 공간을 추가 */
+  border-radius: 15px; /* 기본 테두리 반경 설정 */
+  transition: background-color 0.3s, color 0.3s; /* 부드러운 전환 효과 */
+
+  &:hover {
+    background-color: #f8a45b; /* 마우스 오버 시 배경색 */
+    color: #7e3900; /* 마우스 오버 시 텍스트 색상 */
+    border-radius: 15px; /* 마우스 오버 시 테두리 반경 */
+  }
 
   // 모바일 화면에 대한 스타일
   @media (max-width: 768px) {
-    width:50px;
-    font-size:14px;
+    width: 50px;
+    font-size: 14px;
   }
 `;
+
 
 export default Navbar;
