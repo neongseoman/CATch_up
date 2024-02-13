@@ -44,8 +44,15 @@ const SearchBar = () => {
   const navigate = useNavigate();
   const setSearchTerm = useSetRecoilState(searchTermState);
 
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
+  // const handleInputChange = (e) => {
+    
+  // };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      setSearchTerm(event.target.value);
+      handleSearchClick();
+    }
   };
 
   const handleSearchClick = () => {
@@ -58,7 +65,8 @@ const SearchBar = () => {
         type="text"
         placeholder="검색어를 입력하세요"
         // value={searchTerm}
-        onChange={handleInputChange}
+        // onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
       />
       <SearchButton onClick={handleSearchClick}>🔍︎</SearchButton>
     </SearchContainer>

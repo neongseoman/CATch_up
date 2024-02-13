@@ -8,7 +8,7 @@ export const Button = styled.button`
   align-items: center;
   padding: 12px 16px;
   border-radius: ${(props) => (props.rounded ? "100px" : `8px`)};
-  width: ${(props) => (props.width ? props.width : `auto`)}; /* 너비가 명시적으로 주어지지 않으면 자동으로 설정 */
+  width: ${(props) => (props.width ? props.width : `100%`)}; /* 너비가 명시적으로 주어지지 않으면 자동으로 설정 */
   background-color: ${(props) =>
     props.disabled ? `var(--bg-gray)` : `var(--main)`};
   color: var(--pure-white);
