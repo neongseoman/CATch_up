@@ -79,25 +79,25 @@ const Watching = ({buskerEmail}) => {
         pc.onnegotiationneeded = (event) => {
             console.log(koreaTime+ " Negotiation을 진행합니다.")
             makingOffer = true
-            pc.createOffer({
-            })
-                .then((offer) => {
-                    console.log("sdp offer created") // sdp status
-                    pc.setLocalDescription(offer)
-                        .then((r) => {
-                            client.publish({
-                                destination: `/app/api/busker/${userId}/offer`,
-                                body: JSON.stringify({
-                                    userId,
-                                    offer,
-                                })
-                            })
-                            makingOffer = false
-                        })
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            // pc.createOffer({
+            // })
+            //     .then((offer) => {
+            //         console.log("sdp offer created") // sdp status
+            //         pc.setLocalDescription(offer)
+            //             .then((r) => {
+            //                 client.publish({
+            //                     destination: `/app/api/busker/${userId}/offer`,
+            //                     body: JSON.stringify({
+            //                         userId,
+            //                         offer,
+            //                     })
+            //                 })
+            //                 makingOffer = false
+            //             })
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //     })
         }
 
 
@@ -112,29 +112,29 @@ const Watching = ({buskerEmail}) => {
             console.log(frame); // stomp status
 
             makingOffer = true
-            // pc.createOffer({
-            //     offerToReceiveAudio:true,
-            //     offerToReceiveVideo:true
-            // })
-            //     .then((offer) => {
-            //         console.log("sdp offer created") // sdp status
-            //         pc.setLocalDescription(offer)
-            //             .then((r) => {
-            //                 client.publish({
-            //                     destination: `/app/api/audience/${userId}/offer`,
-            //                     body: JSON.stringify({
-            //                         buskerId,
-            //                         audienceId: userId,
-            //                         offer,
-            //                     })
-            //                 })
-            //                 new RTCPeerConnectionIceEvent("onicecandidate")
-            //                 makingOffer = false
-            //             })
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //     })
+            pc.createOffer({
+                offerToReceiveAudio:true,
+                offerToReceiveVideo:true
+            })
+                .then((offer) => {
+                    console.log("sdp offer created") // sdp status
+                    pc.setLocalDescription(offer)
+                        .then((r) => {
+                            client.publish({
+                                destination: `/app/api/audience/${userId}/offer`,
+                                body: JSON.stringify({
+                                    buskerId,
+                                    audienceId: userId,
+                                    offer,
+                                })
+                            })
+                            new RTCPeerConnectionIceEvent("onicecandidate")
+                            makingOffer = false
+                        })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
 
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
