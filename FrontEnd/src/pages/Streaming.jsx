@@ -69,8 +69,13 @@ const Streaming = ({ isStreaming }) => {
             console.log('데이터 연결 상태:', pc.connectionState);
             if (pc.connectionState === 'connected') {
                 console.log(koreaTime +' 데이터 연결이 확립되었습니다.');
-            } else if (pc.connectionState === 'disconnected') {
-                console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');
+            }else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed'){
+                if (pc){
+                    pc.close()
+                }
+                pcRef.current = new RTCPeerConnection(PCConfig);
+
+                console.log(koreaTime +' 피어 간 연결이 끊어졌거나 실패했습니다.');
             }
         };
         pc.onnegotiationneeded = (event) => {

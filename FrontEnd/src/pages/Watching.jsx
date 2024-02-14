@@ -75,29 +75,29 @@ const Watching = ({buskerEmail}) => {
         pc.onsignalingstatechange = (event) =>{
             console.log(koreaTime+ " Negotiation을 진행합니다.")
 
-            pc.createOffer({
-                offerToReceiveAudio:true,
-                offerToReceiveVideo:true
-            })
-                .then((offer) => {
-                    console.log("sdp offer created") // sdp status
-                    pc.setLocalDescription(offer)
-                        .then((r) => {
-                            client.publish({
-                                destination: `/app/api/audience/${userId}/offer`,
-                                body: JSON.stringify({
-                                    buskerId,
-                                    audienceId: userId,
-                                    offer,
-                                })
-                            })
-                            new RTCPeerConnectionIceEvent("onicecandidate")
-                            makingOffer = false
-                        })
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            // pc.createOffer({
+            //     offerToReceiveAudio:true,
+            //     offerToReceiveVideo:true
+            // })
+            //     .then((offer) => {
+            //         console.log("sdp offer created") // sdp status
+            //         pc.setLocalDescription(offer)
+            //             .then((r) => {
+            //                 client.publish({
+            //                     destination: `/app/api/audience/${userId}/offer`,
+            //                     body: JSON.stringify({
+            //                         buskerId,
+            //                         audienceId: userId,
+            //                         offer,
+            //                     })
+            //                 })
+            //                 new RTCPeerConnectionIceEvent("onicecandidate")
+            //                 makingOffer = false
+            //             })
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //     })
         }
 
         if (typeof WebSocket !== 'function') {
