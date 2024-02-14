@@ -50,10 +50,9 @@ const Watching = ({buskerEmail}) => {
                 console.log(currentKoreaTime +' 피어 연결을 시작 합니다. ')
             }
             console.log(currentKoreaTime +' ICE 연결 상태:', pc.iceConnectionState);
-            pc.restartIce()
             if (pc.iceConnectionState === 'connected') {
                 console.log(currentKoreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
-            } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed'){
+            } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
                 if (pc){
                     pc.close()
                 }
@@ -71,10 +70,8 @@ const Watching = ({buskerEmail}) => {
                 console.log(currentKoreaTime +' 데이터 연결이 확립되었습니다.');
             } else if (pc.connectionState === 'disconnected') {
                 console.log(currentKoreaTime +' 데이터 연결이 끊어졌습니다.');
-                pc.restartIce()
             } else if(pc.connectionState === "failed"){
                 console.log(currentKoreaTime +' 데이터 연결을 실패했습니다.');
-                pc.restartIce()
             }
         };
         pc.ontrack = (event) =>{
