@@ -75,6 +75,7 @@ public class Busking extends UserSession implements Closeable {
         });
         buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
             ConnectionState newState = connectionStateChangedEvent.getNewState();
+            log.debug(newState.toString());
             if (newState == ConnectionState.CONNECTED) {
                 // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
                 log.info("ICE connection is connected. State: " + newState);
@@ -83,6 +84,9 @@ public class Busking extends UserSession implements Closeable {
                 log.info("ICE connection is closed. State: " + newState);
             }
         });
+
+
+
 
 
     }
@@ -132,6 +136,8 @@ public class Busking extends UserSession implements Closeable {
 
         audienceWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
             ConnectionState newState = connectionStateChangedEvent.getNewState();
+
+            log.debug(newState.toString());
             if (newState == ConnectionState.CONNECTED) {
                 // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
                 log.info("ICE connection is connected. State: " + newState);
@@ -141,6 +147,8 @@ public class Busking extends UserSession implements Closeable {
                 log.info("ICE connection is closed. State: " + newState);
             }
         });
+
+
 
         String sdpAnswer = audienceWebRtcEndpoint.processOffer(sdpOffer.getOffer().getSdp());
         JsonObject sdpResponse = new JsonObject();

@@ -33,5 +33,18 @@ public class MemberService {
     }
 
 
+    public Optional<Member> getMemberByEmail(String email) {
 
+        Optional<Member> optionalMember = repository.findByEmail(email);
+        System.out.println(optionalMember.get());
+
+        if (optionalMember.isPresent()) {
+            Member m = optionalMember.get();
+            m.setPassword(null); // 패스워드는 보내주지 않음
+            return Optional.of(m);
+        } else {
+            return Optional.empty();
+        }
+
+    }
 }
