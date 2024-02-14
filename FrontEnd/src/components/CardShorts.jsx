@@ -14,6 +14,7 @@ const Video = styled.div`
   float: left;
   border-radius: 10px;
   background-color: #8b8f92;
+  margin-top: 15px;
 `;
 
 const Info = styled.div`
@@ -29,6 +30,7 @@ const Info = styled.div`
   justify-content: space-evenly;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: 15px;
 `;
 
 const TagField = styled.div`
@@ -100,19 +102,18 @@ const Data = styled.p`
 `;
 
 const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreamingTime }) => {
+
   return (
       <ShortsWrapper onClick={() => handleShortsClick(shortsData.streamNo)}>
           <Info>
-              <TagField>
-                  <Tag>#{shortsData.category}</Tag>
-              </TagField>
               <ProfileField>
-                  <ProfileImg
+                  {/* <ProfileImg
                     src={shortsData.profileImagePath}
                     onError={(e) => {
                       e.target.src = "/img/logo_withoutDot.png";
                     }}
-                  />
+                  /> */}
+                  <ProfileImg src= "/img/logo_withoutDot.png" />
                   <ProfileName>{shortsData.nickname}</ProfileName>
               </ProfileField>
               <ShortsTitle>{shortsData.title}</ShortsTitle>

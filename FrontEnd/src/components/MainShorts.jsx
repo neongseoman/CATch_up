@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
-import { useRecoilValue } from 'recoil';
-import { searchTermState } from '../RecoilState/userRecoilState';
 import CardShorts from "./CardShorts";
 
 const Wrapper = styled.div`
@@ -12,11 +10,10 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const SearchShorts = () => {
+const MainShorts = () => {
   const navigate = useNavigate();
-  const searchTerm = useRecoilValue(searchTermState);
   const [data, setData] = useState();
-  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchShorts?query=${searchTerm}&page=0&size=10`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/shorts`;
 
   const handleShortsClick = (streamNo) => {
     navigate(`/user/shortsdetail/${streamNo}`);
@@ -44,6 +41,7 @@ const SearchShorts = () => {
     if (remainingMinutes > 0) {
       result += `${remainingMinutes}분 `;
     }
+
     if (remainingSeconds > 0 || result === "") {
       result += `${remainingSeconds}초`;
     }
@@ -56,12 +54,12 @@ const SearchShorts = () => {
         .get(url)
         .then((response) => {
           console.log("데이터:", response.data);
-          setData(response.data.content);
+          setData(response.data);
         })
         .catch((error) => {
           console.error("에러:", error);
         });
-    }, [searchTerm]);
+    }, []);
 
   return (
     <Wrapper>
@@ -75,9 +73,9 @@ const SearchShorts = () => {
               formatStreamingTime={formatStreamingTime}
             />
           ))
-      : null}
-    </Wrapper>
+        : null}
+       </Wrapper>
   );
 };
 
-export default SearchShorts;
+export default MainShorts;

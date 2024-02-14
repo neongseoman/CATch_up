@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { useRecoilValue } from 'recoil';
-import { searchTermState } from '../RecoilState/userRecoilState';
+import { getCurrentBuskingInfo } from "../Apis/streamingApi";
+import CardStreaming from "./CardStreaming";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -12,20 +12,13 @@ const Wrapper = styled.div`
     gap: 30px;
 `;
 
-const MapWrapper = styled.div`
-    width: 100%;
-    height: 500px;
-`;
-
-const SearchStreaming = () => {
+const MainStreaming = () => {
     const navigate = useNavigate();
-    const searchTerm = useRecoilValue(searchTermState);
-    const [data, setData] = useState();
     const [buskerData, setBuskerData] = useState();
-    const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=${searchTerm}&page=0&size=10`;
 
-    const handleStreamingClick = (buskerEmail, data) => {
-        navigate('/watchingpage', { state: { buskerEmail, data } });
+    const handleStreamingClick = (data) => {
+        console.log(data)
+        navigate('/watchingpage', { state: { data } });
     };
     
     async function getUserData(email) {
@@ -60,6 +53,7 @@ const SearchStreaming = () => {
                     const user = await getUserData(currentBuskingInfo[i].buskerEmail)
                     currentBuskingInfo[i].nickname = user.nickname;
                     currentBuskingInfo[i].startTime = user.createdDate;
+                    currentBuskingInfo[i].userNo = user.id;
                 }
                 setBuskerData(currentBuskingInfo);
 
@@ -75,20 +69,17 @@ const SearchStreaming = () => {
         const hours = date.getHours();
         const minutes = date.getMinutes();
 
-        return `${hours < 10 ? "0" + hours : hours}:${
-            minutes < 10 ? "0" + minutes : minutes
-        }`;
+        return `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`;
     };
 
     return (
         <Wrapper>
-            <MapWrapper></MapWrapper>
             {buskerData && Array.isArray(buskerData)
                 ? buskerData.map((e, i) => (
                     <CardStreaming
                         key={i}
                         data={e}
-                        handleStreamingClick={() => handleStreamingClick(e.buskerEmail)}
+                        handleStreamingClick={() => handleStreamingClick(e)}
                         getTimeFromStartTime={getTimeFromStartTime}
                     />
                 ))
@@ -97,4 +88,4 @@ const SearchStreaming = () => {
     );
 };
 
-export default SearchStreaming;
+export default MainStreaming;
