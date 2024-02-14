@@ -42,7 +42,7 @@ export const MainLayout = () => {
 };
 
 const DefaultMain = styled.div`
-  width: 100%;
+  width: 80%;
   min-height: 90vh;
   margin: 0 auto;
   padding: 36px;

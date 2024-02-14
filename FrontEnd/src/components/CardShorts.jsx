@@ -3,15 +3,14 @@ import styled from "styled-components";
 
 const ShortsWrapper = styled.button`
   width: 100%;
-  margin-bottom: 30px;
   background: none;
 `;
 
 const Info = styled.div`
-  width: calc(46%);
+  width: calc(52%);
   margin-left: -10%;
   padding: 2% 5%;
-  height: 300px;
+  height: 260px;
   display: flex;
   float: right;
   color: white;
@@ -23,17 +22,18 @@ const Info = styled.div`
   margin-top: 15px;
 `;
 
-
 const ShortsTitle = styled.div`
   color: white;
-  font-size: 24px;
+  font-size: 20px;
   text-align: left;
+  word-break: keep-all;
 `;
 
 const ShortsInfo = styled.div`
   color: white;
   font-size: 12px;
   text-align: left;
+  word-break: keep-all;
 `;
 
 const ProfileField = styled.p`
@@ -42,8 +42,8 @@ const ProfileField = styled.p`
 `;
 
 const ProfileImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   margin-right: 5px;
 `;
@@ -51,7 +51,7 @@ const ProfileImg = styled.img`
 const ProfileName = styled.p`
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
 `;
 
@@ -70,23 +70,24 @@ const Options = styled.div`
 `;
 
 const Option = styled.p`
-  font-size: 10px;
+  font-size: 8px;
   color: white;
 `;
 
 const Data = styled.p`
-  font-size: 12px;
+  font-size: 10px;
   color: white;
 `;
+
 const Image = styled.img`
-width: calc(55%);
-height: 300px;
-display: flex;  
-float: left;
-border-radius: 10px;
-margin-top: 15px;
-background-color: #8b8f92;
-object-fit: cover; 
+  width: calc(49%);
+  height: 260px;
+  display: flex;  
+  float: left;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #8b8f92;
+  object-fit: cover;
 `
 
 const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreamingTime }) => {
