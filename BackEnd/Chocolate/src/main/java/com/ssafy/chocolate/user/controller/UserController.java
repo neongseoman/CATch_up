@@ -22,4 +22,9 @@ public class UserController {
     public Optional<Member> getMember(@RequestParam Long id) {
         return memberService.getMember(id);
     }
+
+    @GetMapping("/profile/email")
+    public Optional<Member> getMemberByEmail(@RequestParam String email) {
+        return memberService.getMemberByEmail(email);
+    }
 }
