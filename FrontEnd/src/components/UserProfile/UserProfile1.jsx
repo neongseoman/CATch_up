@@ -176,12 +176,7 @@ const UserProfile1 = ({ userInfo }) => {
     <Wrapper>
       <BackButton>↩</BackButton>
       <InfoField>
-        <ProfileImg
-            src={userInfo.profileImagePath}
-            onError={(e) => {
-                e.target.src = '/img/logo_withoutDot.png';
-            }}
-        />
+        <ProfileImg src= "/img/logo_withoutDot.png" />
         <TextField>
           <TextTop>
             <UserNickname>{userInfo.nickname}</UserNickname>
