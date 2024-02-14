@@ -114,15 +114,28 @@ const StreamingInfo = () => {
             <TextInput placeholder="방송 설명을 입력하세요" value={buskingInfo}
                        onChange={(e) => setBuskingInfo(e.target.value)} />
 
-            <LocationUsageToggle
-            useLocation={useLocation}
-            handleLocationToggle={handleLocationToggle}
-            />
+            <ToggleField>
+                <LocationUsageToggle
+                useLocation={useLocation}
+                handleLocationToggle={handleLocationToggle}
+                />
+                <NoticeText>(동의하지 않으면 스트리밍을 시작할 수 없습니다!)</NoticeText>
+            </ToggleField>
             {locationError && <p>Error: {locationError}</p>}
 
             <Button type="submit" onClick={handleStreaming}>방송 시작</Button>
         </>
     );
 };
+
+const ToggleField = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const NoticeText = styled.p`
+    margin-left: 12px;
+    font-size: 12px;
+`
 
 export default StreamingInfo;
