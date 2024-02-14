@@ -79,25 +79,6 @@ const Watching = ({buskerEmail}) => {
         pc.onnegotiationneeded = (event) => {
             console.log(koreaTime+ " Negotiation을 진행합니다.")
             makingOffer = true
-            // pc.createOffer({
-            // })
-            //     .then((offer) => {
-            //         console.log("sdp offer created") // sdp status
-            //         pc.setLocalDescription(offer)
-            //             .then((r) => {
-            //                 client.publish({
-            //                     destination: `/app/api/busker/${userId}/offer`,
-            //                     body: JSON.stringify({
-            //                         userId,
-            //                         offer,
-            //                     })
-            //                 })
-            //                 makingOffer = false
-            //             })
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //     })
         }
 
 
