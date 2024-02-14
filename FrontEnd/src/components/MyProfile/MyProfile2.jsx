@@ -17,16 +17,19 @@ const Wrapper = styled.div`
 const StreamsButton = styled.button`
     border: none;
     background: none;
+    cursor: var(--sub-color);
 `;
 
 const FollowerButton = styled.button`
     border: none;
     background: none;
+    cursor: var(--sub-color);
 `;
 
 const FollowingButton = styled.button`
     border: none;
     background: none;
+    cursor: var(--sub-color);
 `;
 
 const Count = styled.p`
@@ -47,17 +50,17 @@ const MyProfile2 = ({ userInfo }) => {
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
 
-  const handleStreamsClick = () => {
-    alert('스트리밍 기록 페이지로 이동!');
-  };
+  // const handleStreamsClick = () => {
+  //   alert('스트리밍 기록 페이지로 이동!');
+  // };
 
-  const handleFollowerClick = () => {
-    alert('팔로워 목록 모달 띄우기!');
-  };
+  // const handleFollowerClick = () => {
+  //   alert('팔로워 목록 모달 띄우기!');
+  // };
 
-  const handleFollowingClick = () => {
-    alert('팔로잉 목록 모달 띄우기!');
-  };
+  // const handleFollowingClick = () => {
+  //   alert('팔로잉 목록 모달 띄우기!');
+  // };
 
   const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
@@ -97,15 +100,15 @@ const MyProfile2 = ({ userInfo }) => {
 
   return (
     <Wrapper>
-      <StreamsButton onClick={handleStreamsClick}>
+      <StreamsButton>
         <Count>{formatTime(userInfo.streamingTime)}</Count>
         <Text>STREAMING TIME</Text>
       </StreamsButton>
-      <FollowerButton onClick={handleFollowerClick}>
+      <FollowerButton>
         <Count>{followersCount}</Count>
         <Text>FOLLOWER</Text>
       </FollowerButton>
-      <FollowingButton onClick={handleFollowingClick}>
+      <FollowingButton>
         <Count>{followingsCount}</Count>
         <Text>FOLLOWING</Text>
       </FollowingButton>

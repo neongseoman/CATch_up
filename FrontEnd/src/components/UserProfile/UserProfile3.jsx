@@ -38,7 +38,7 @@ const UserProfile3 = ({ userInfo }) => {
           method: 'GET',
           credentials: 'include'
         });
-
+        
         if (!response.ok) {
           throw new Error('서버 응답이 실패했습니다');
         }

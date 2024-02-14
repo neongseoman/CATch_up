@@ -17,12 +17,13 @@ const MyProfile1 = ({ userInfo }) => {
   return (
     <Wrapper>
       <InfoField>
-        <ProfileImg
+        {/* <ProfileImg
             src={userInfo.profileImagePath}
             onError={(e) => {
                 e.target.src = '/img/logo_withoutDot.png';
             }}
-        />
+        /> */}
+        <ProfileImg src= "/img/logo_withoutDot.png" />
         <TextField>
           <TextTop>
             <UserNickname>{userInfo.nickname}</UserNickname>

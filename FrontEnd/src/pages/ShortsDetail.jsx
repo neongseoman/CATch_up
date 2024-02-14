@@ -56,19 +56,6 @@ const ShortsInfo = styled.div`
     text-align: left;
 `;
 
-const TagField = styled.div`
-    display: flex;
-    gap: 4px;
-`;
-
-const Tag = styled.div`
-    font-size: 10px;
-    background: #56350A;
-    color: #F7B84B;
-    border-radius: 30px;
-    padding: 6px;
-`;
-
 const LikeField = styled.div`
     display: flex;
     flex-direction: column;
@@ -149,7 +136,6 @@ const CommentField = styled.div`
 `;
 
 const ShortsDetail = () => {
-    const [tagList, setTagList] = useState(['태그1', '태그2', '태그3']);
     const [shortsInfo, setShortsInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [recoil] = useRecoilState(userInfoState);
@@ -175,7 +161,6 @@ const ShortsDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            // 서버로부터 사용자 정보를 가져오는 HTTP 요청
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/shorts/${streamNo}`, {
               method: 'GET',
               credentials: 'include'
@@ -211,16 +196,9 @@ const ShortsDetail = () => {
                 <Video>{shortsInfo.streamShortClips.shortsPath}</Video>
                 <Info>
                     <TopInfo>
-                            <TextField>
-                            <ShortsTitle>{shortsInfo.streamShortClips.title}</ShortsTitle>
-                            <ShortsInfo>{shortsInfo.streamShortClips.introduction}</ShortsInfo>
-                            <TagField>
-                            {tagList.map((tag, i) => (
-                                <div key={i}>
-                                    <Tag>#{tag}</Tag>
-                                </div>
-                            ))}
-                            </TagField>
+                        <TextField>
+                        <ShortsTitle>{shortsInfo.streamShortClips.title}</ShortsTitle>
+                        <ShortsInfo>{shortsInfo.streamShortClips.introduction}</ShortsInfo>
                         </TextField>
                         <LikeField>
                             <LikeButton onClick={handleLikeClick}>
@@ -266,4 +244,3 @@ const ShortsDetail = () => {
 };
 
 export default ShortsDetail;
-

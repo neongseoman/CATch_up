@@ -4,7 +4,6 @@ import VideoTmp from "./VideoTmp";
 
 const StreamingWrapper = styled.button`
     width: 100%;
-    /* height: 300px; */
     background: none;
 `;
 
@@ -15,6 +14,7 @@ const Video = styled.div`
     float: left;
     border-radius: 10px;
     background-color: #8b8f92;
+    margin-top: 15px;
 `;
 
 const Info = styled.div`
@@ -30,6 +30,7 @@ const Info = styled.div`
     justify-content: space-evenly;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 15px;
 `;
 
 const TagField = styled.div`
@@ -90,12 +91,16 @@ const Option = styled.p`
 `;
 
 const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => {
+    const hashtags = data.buskingHashtag.split(" ");
+    
     return (
         <StreamingWrapper onClick={handleStreamingClick}>
             <Info>
-                <TagField>
-                    <Tag>#{data.buskingHashtag}</Tag>
-                </TagField>
+                {hashtags.map((tag, i) => (
+                    <TagField key={i}>
+                        <Tag>#{tag}</Tag>
+                    </TagField>
+                ))}
                 <StreamingTitle>{data.buskingTitle}</StreamingTitle>
                 <StreamingInfo>{data.buskingInfo}</StreamingInfo>
                 <ProfileField>
@@ -105,9 +110,7 @@ const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => 
                             e.target.src = "/img/logo_withoutDot.png";
                         }}
                     /> */}
-                    <ProfileImg
-                        src= "/img/logo_withoutDot.png"
-                    />
+                    <ProfileImg src= "/img/logo_withoutDot.png" />
                     <ProfileName>{data.nickname}</ProfileName>
                 </ProfileField>
                 <OptionField>
