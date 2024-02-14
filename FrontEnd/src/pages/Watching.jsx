@@ -22,6 +22,8 @@ const Watching = ({buskerEmail}) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
+    console.log(buskerId)
+    console.log(buskerEmail)
 
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
