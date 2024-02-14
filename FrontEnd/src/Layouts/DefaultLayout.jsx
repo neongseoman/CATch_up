@@ -30,6 +30,28 @@ export const Layout = () => {
   );
 };
 
+export const MainLayout = () => {
+  return (
+    <>
+      <Navbar />
+      <DefaultMain>
+        <Outlet />
+      </DefaultMain>
+    </>
+  );
+};
+
+const DefaultMain = styled.div`
+  width: 100%;
+  min-height: 90vh;
+  margin: 0 auto;
+  padding: 36px;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
 const DefaultLayout = styled.div`
   width: 100%;
   min-height: 90vh;
@@ -41,4 +63,5 @@ const DefaultLayout = styled.div`
   flex-direction: column;
   gap: 24px;
 `;
+
 export default DefaultLayout;

@@ -5,7 +5,7 @@ import SignUpForm from './pages/SignUpForm'; // 회원가입 폼 import
 import Page from './pages/Page';
 
 import UserInfo from './pages/UserInfo';
-import {  NavLayout,NavLayoutWithoutDefault } from './Layouts/DefaultLayout';
+import { MainLayout, NavLayout, NavLayoutWithoutDefault } from './Layouts/DefaultLayout';
 import ErrorPage from './pages/ErrorPage';
 import MainMapPage from './pages/MainMapPage'
 import MyProfilePage from './pages/MyProfilePage';
@@ -35,8 +35,11 @@ function App() {
       <RecoilRoot>
           <BrowserRouter>
               <Routes>
-                  <Route element={<NavLayout />}>
+                  <Route element={<MainLayout />}>
                       <Route path='/' element={<Main />} />
+                  </Route>
+
+                  <Route element={<NavLayout />}>
                       <Route path='/page/:pageId' element={<Page />} />
                       <Route path='/searchresult' element={<SearchResultPage />} />
                       <Route path='/tmpfollowpage' element={<TmpFollowPage userId={"user2@example.com"}/>} />
@@ -52,9 +55,7 @@ function App() {
                   
                   <Route path="streaming" element={<NavLayout />}>
                       <Route path='info' element={<StreamingInfo />} />
-                       {/*<Route path='onair' element={<Streaming />} />*/}
                       <Route path='shorts' element={<ShortsUpload />} />
-                       {/*<Route path='watching' element={<Watching />} />*/}
                   </Route>
 
                   <Route path="user" element={<NavLayout />}>

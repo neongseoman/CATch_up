@@ -76,13 +76,15 @@ const LikeField = styled.div`
 `;
 
 const LikeButton = styled.button`
-    font-size: 20px;
+    font-size: 24px;
+    height: 24px;
     background: none;
     cursor: pointer;
 `;
 
 const LikeCount = styled.p`
     font-size: 16px;
+    height: 16px;
 `;
 
 const BottomInfo = styled.div`
@@ -99,21 +101,18 @@ const ProfileField = styled.p`
 `;
 
 const ProfileImg = styled.img`
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 5px;
-    color: white;
-    object-fit: cover;
-    transform: scale(2);
 `;
 
 const ProfileName = styled.p`
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: 10px;
+    margin-left: 5px;
     font-size: 16px;
     color: white;
 `;
@@ -154,9 +153,24 @@ const ShortsDetail = () => {
     const [shortsInfo, setShortsInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [recoil] = useRecoilState(userInfoState);
-
-    
     const { streamNo } = useParams();
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    };
+
+    const [count, setCount] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleLikeClick = () => {
+        const updatedCount = isLiked ? count - 1 : count + 1;
+        setCount(updatedCount);
+        setIsLiked(!isLiked);
+      };  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -175,37 +189,16 @@ const ShortsDetail = () => {
             
             console.log(data)
             setShortsInfo(data);
-            setLoading(false);
-          } catch (e) {
-            setLoading(false);
-            console.log(e)
-          }
-          
+            setCount(data.streamShortClips.likes)
+            } catch (e) {
+                console.log(e)
+            }
+            setLoading(false)
         };
     
         fetchData();
       }, []);
-    
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
-    };
 
-    const [count, setCount] = useState(shortsInfo ? shortsInfo.streamShortClips.likes : 0);
-    const [isLiked, setIsLiked] = useState(false);
-
-    const handleLikeClick = () => {
-        if (isLiked) {
-          setCount(count - 1);
-        } else {
-          setCount(count + 1);
-        }
-        setIsLiked(!isLiked);
-      };
-    
     return (
         <Wrapper>
             <CustomText typography="h1" bold>
@@ -215,7 +208,6 @@ const ShortsDetail = () => {
                 <p>Loading...</p>
             ) : (
                 <>
-                {console.log(shortsInfo)}
                 <Video>{shortsInfo.streamShortClips.shortsPath}</Video>
                 <Info>
                     <TopInfo>
@@ -232,7 +224,7 @@ const ShortsDetail = () => {
                         </TextField>
                         <LikeField>
                             <LikeButton onClick={handleLikeClick}>
-                                {isLiked ? '좋아요 취소' : '좋아요'}
+                                {isLiked ? '♥' : '♡'}
                             </LikeButton>
                             <LikeCount>{count}</LikeCount>
                         </LikeField>
@@ -242,7 +234,7 @@ const ShortsDetail = () => {
                             <ProfileImg
                                 src={shortsInfo.member.profileImagePath}
                                 onError={(e) => {
-                                    e.target.src = '/img/logo.png';
+                                    e.target.src = '/img/logo_withoutDot.png';
                                 }}
                             />
                             <ProfileName>{shortsInfo.member.nickname}</ProfileName>

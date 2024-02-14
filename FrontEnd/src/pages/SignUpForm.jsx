@@ -4,8 +4,6 @@ import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import styled from "@emotion/styled";
 
-
-
 function SignUpForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -54,7 +52,6 @@ function SignUpForm() {
     // 이메일과 비밀번호가 유효하고, 추가적인 오류 메시지가 없어야 함
     return validateEmail(email) && validatePassword(password) && !emailError && !passwordError;
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -131,7 +128,6 @@ function SignUpForm() {
   );
 }
 
-
 const ValMsg = styled.header`
 height: 30px; /* 메시지 영역 높이 */
 color: red;
@@ -139,6 +135,4 @@ font-size: 0.8rem;
 margin-top: 5px; /* 입력 필드와의 간격 */
 `;
 
-
 export default SignUpForm;
-

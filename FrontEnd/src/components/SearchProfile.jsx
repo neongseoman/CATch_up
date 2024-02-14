@@ -16,7 +16,6 @@ const Wrapper = styled.div`
 
 const ProfileList = styled.div`
   width: 100%;
-  margin-bottom: 30px;
 `;
 
 const Profile = styled.button`
@@ -31,18 +30,18 @@ const Profile = styled.button`
 `;
 
 const ProfileImg = styled.img`
-  width: 120px;
-  height: 120px;
-  margin-top: 15px;
-  margin-left: 10px;
+  width: 90px;
+  height: 90px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 20px;
   border-radius: 50%;
-  object-fit: cover;
-  transform: scale(1.3);
 `;
 
 const ProfileText = styled.div`
   margin-top: auto;
   margin-bottom: auto;
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -115,7 +114,7 @@ const SearchProfile = () => {
                 <ProfileImg
                   src={e.profileImagePath}
                   onError={(e) => {
-                    e.target.src = "/img/logo.png";
+                    e.target.src = "/img/logo_withoutDot.png";
                   }}
                 />
                 <ProfileText>

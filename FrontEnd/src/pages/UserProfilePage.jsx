@@ -6,13 +6,6 @@ import UserProfile1 from '../components/UserProfile/UserProfile1';
 import UserProfile2 from '../components/UserProfile/UserProfile2';
 import UserProfile3 from '../components/UserProfile/UserProfile3';
 
-const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-`;
-
 const UserProfilePage = () => {
   const { id } = useParams();
   const [userInfo, setUserInfo] = useState(null);
@@ -61,5 +54,12 @@ const UserProfilePage = () => {
     </center>
   );
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`;
 
 export default UserProfilePage;

@@ -12,7 +12,7 @@ export const userInfoInitialState = {
 
 export const userInfoState = atom({
     key: 'userInfo',
-    default : userInfoInitialState,
+    default: userInfoInitialState,
     effects_UNSTABLE: [persistAtom],
 });
 
@@ -24,5 +24,5 @@ export const searchTermState = atom({
 
 export const buskerGeolocation = atom({
     key: "buskerGeoloation",
-    default:null,
-})
+    default: null,
+});
