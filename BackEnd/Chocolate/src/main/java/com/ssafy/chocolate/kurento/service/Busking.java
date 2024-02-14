@@ -110,7 +110,9 @@ public class Busking extends UserSession implements Closeable {
     // 방송에 참여하는 시청자
     public void audienceJoin(AudienceSdpOffer sdpOffer,UserSession audienceSession) {
         String audienceId = sdpOffer.getAudienceId();
-        log.info("audience Join");
+        log.info(sdpOffer.getAudienceId() + ": audience" +
+                "" +
+                " Join");
 //        MediaPipeline mediaPipeline = kurentoClient.createMediaPipeline();
         WebRtcEndpoint audienceWebRtcEndpoint = new WebRtcEndpoint.Builder(buskerPipeline).build();
 
@@ -147,6 +149,8 @@ public class Busking extends UserSession implements Closeable {
                 log.info("ICE connection is closed. State: " + newState);
             }
         });
+
+//        audienceWebRtcEndpoint.addIceComponentStateChangedListener()
 
 
 
