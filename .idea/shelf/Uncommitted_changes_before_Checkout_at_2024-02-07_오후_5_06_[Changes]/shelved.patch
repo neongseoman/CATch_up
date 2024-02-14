@@ -1,0 +1,177 @@
+Index: FrontEnd/src/pages/StreamingPage.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\nimport { styled, createGlobalStyle } from 'styled-components';\r\nimport ChatApp from \"../components/ChatApp\";\r\nimport VideoTmp from \"../components/VideoTmp\";\r\nimport StreamerList from \"../components/StreamerList\"\r\nimport Streaming from \"./Streaming\";\r\nimport Navbar from \"../components/Navbar\";\r\n\r\nconst Wrapper = styled.div`\r\n    overflow-y: hidden;\r\n`;\r\n\r\nconst Container = styled.div`\r\n    display: flex;\r\n    flex-direction: row;\r\n    width: 100%;\r\n    height: 100vh; // Use full screen height\r\n`;\r\n\r\nconst LeftBox = styled.div`\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    width: 20%;\r\n    height: 100%;\r\n    background: black;\r\n\r\n`;\r\n\r\nconst EndButton = styled.button`\r\n    width: 230px;\r\n    height: 80px;\r\n    border-radius: 10px;\r\n    background: #F7B84B;\r\n    color: white;\r\n    font-size: 28px;\r\n`;\r\n\r\nconst MiddleBox = styled.div`\r\n    display: flex;\r\n    flex-direction: column;\r\n    width: 60%;\r\n    height: 100%;\r\n`;\r\n\r\nconst RightBox = styled.div`\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    width: 25%;\r\n    height: 100%; // Full height\r\n    background: orange;\r\n`;\r\n\r\nconst GlobalStyle = createGlobalStyle`\r\n  body {\r\n    overflow: hidden;\r\n  }\r\n`;\r\n\r\nconst StreamingPage = () => {\r\n  \r\n  return (\r\n    <Wrapper>\r\n      <GlobalStyle />\r\n      <Container>\r\n        <LeftBox>\r\n          <p>카메라, 마이크 ON/OFF</p>\r\n          <EndButton>방송 종료</EndButton>\r\n        </LeftBox>\r\n        <MiddleBox>\r\n          <Streaming />\r\n        </MiddleBox>\r\n        <RightBox>\r\n          <ChatApp />\r\n        </RightBox>\r\n      </Container>\r\n    </Wrapper>   \r\n  );\r\n};\r\n\r\nexport default StreamingPage;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/FrontEnd/src/pages/StreamingPage.jsx b/FrontEnd/src/pages/StreamingPage.jsx
+--- a/FrontEnd/src/pages/StreamingPage.jsx	(revision 6b26c45aa65b21e7e2c6d6cb6f1dd3442bd2a137)
++++ b/FrontEnd/src/pages/StreamingPage.jsx	(date 1707292947503)
+@@ -1,4 +1,4 @@
+-import React from "react";
++import React, {useState} from "react";
+ import { styled, createGlobalStyle } from 'styled-components';
+ import ChatApp from "../components/ChatApp";
+ import VideoTmp from "../components/VideoTmp";
+@@ -59,17 +59,26 @@
+ `;
+ 
+ const StreamingPage = () => {
+-  
++  const HandleEndButtonClick = () => {
++    const [isStreaming,setIsStreaming] = useState(true)
++    // Your logic for handling "방송 종료"
++    console.log('방송 종료 버튼이 눌렸습니다.');
++    setIsStreaming(false)
++
++    // You can pass this information to the Streaming component if needed
++  };
++
++
+   return (
+     <Wrapper>
+       <GlobalStyle />
+       <Container>
+         <LeftBox>
+           <p>카메라, 마이크 ON/OFF</p>
+-          <EndButton>방송 종료</EndButton>
++          <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
+         </LeftBox>
+         <MiddleBox>
+-          <Streaming />
++          <Streaming isStreaming={isStreaming} />
+         </MiddleBox>
+         <RightBox>
+           <ChatApp />
+Index: FrontEnd/src/pages/Streaming.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect, useRef, useState} from \"react\";\r\nimport CustomText from \"../components/CustomText\";\r\nimport {PCConfig} from \"../WebRTC/RTCConfig\";\r\nimport * as StompJS from \"@stomp/stompjs\";\r\nimport * as SockJS from \"sockjs-client\";\r\nimport {koreaTime} from \"../WebRTC/PCEvent\";\r\nimport {useRecoilState} from \"recoil\";\r\nimport {userInfoState} from \"../RecoilState/userRecoilState\";\r\n\r\n// const userId = \"buskerID\"\r\nlet makingOffer = false\r\n\r\n// 대체 왜 이게 2번이나 마운트되는거야?\r\nconst Streaming = () => {\r\n    const [userInfo, setUserInfo] = useRecoilState(userInfoState);\r\n    const pcRef = useRef(new RTCPeerConnection(PCConfig));\r\n    const clientRef = useRef(\r\n        new StompJS.Client({\r\n            brokerURL: \"ws://127.0.0.1:8080/signal\",\r\n        })\r\n    );\r\n    const pc = pcRef.current;\r\n    const client = clientRef.current;\r\n    const userId = userInfo.userId\r\n    const candidateList = []\r\n\r\n    // Set Peer Connection\r\n    useEffect(() => {\r\n        console.log(\"userId : \" + userId)\r\n        const videoElement = document.getElementById(\"streamingVideo\")\r\n        pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.\r\n            // 이걸 좀 이따가 실행해야 하는뎅...\r\n            if (event.candidate) {\r\n                console.log(\"Client Send Ice Candidate : [ \" + event.candidate.candidate + \" ] \")\r\n                // candidateList.push({iceCandidate: event.candidate})\r\n                client.publish({\r\n                    destination: `/app/busker/${userId}/iceCandidate`,\r\n                    body: JSON.stringify({iceCandidate: event.candidate})\r\n                });\r\n            }\r\n            if ( event.target.iceGatheringState === 'complete') {\r\n                console.log('done gathering candidates - got iceGatheringState complete');\r\n            }\r\n        }\r\n        pc.oniceconnectionstatechange = (event) => {\r\n            if (pc.iceConnectionState === 'new'){\r\n                console.log(koreaTime +' 피어 연결을 시작 합니다. ')\r\n            }\r\n            console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);\r\n            if (pc.iceConnectionState === 'connected') {\r\n                console.log(pc.getStats().then(r=> console.log(koreaTime+\" \"+r)))\r\n                console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');\r\n            } else if (pc.iceConnectionState === 'disconnected'){\r\n\r\n                console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')\r\n            } else if(pc.iceConnectionState === 'failed') {\r\n                pc.restartIce()\r\n                console.log(koreaTime +' 피어 간 연결이  실패.');\r\n            }\r\n        };\r\n        pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인\r\n            console.log('데이터 연결 상태:', pc.connectionState);\r\n            if (pc.connectionState === 'connected') {\r\n                console.log(koreaTime +' 데이터 연결이 확립되었습니다.');\r\n            } else if (pc.connectionState === 'disconnected') {\r\n                console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');\r\n            }\r\n        };\r\n        pc.onnegotiationneeded = (event) => {\r\n            console.log(koreaTime+ \" Negotiation을 진행합니다.\")\r\n            makingOffer = true\r\n            pc.createOffer({\r\n            })\r\n                .then((offer) => {\r\n                    console.log(\"sdp offer created\") // sdp status\r\n                    pc.setLocalDescription(offer)\r\n                        .then((r) => {\r\n                            client.publish({\r\n                                destination: `/app/busker/${userId}/offer`,\r\n                                body: JSON.stringify({\r\n                                    userId,\r\n                                    offer,\r\n                                })\r\n                            })\r\n                            makingOffer = false\r\n                        })\r\n                })\r\n                .catch((error) => {\r\n                    console.log(error)\r\n                })\r\n        }\r\n\r\n        const constraints = {video: true, audio: false}\r\n\r\n         navigator.mediaDevices.getUserMedia(constraints)\r\n            .then((stream) => {\r\n                for (const track of stream.getTracks()){\r\n                    pc.addTrack(track,stream)\r\n                }\r\n                console.log(\"buskerId : \"+ userId)\r\n                videoElement.srcObject = stream\r\n            }).catch(error => {\r\n                if (error.name === \"OverconstrainedError\") {\r\n                    console.error(\r\n                        `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`,\r\n                    );\r\n                } else if (error.name === \"NotAllowedError\") {\r\n                    console.error(\"You need to grant this page permission to access your camera and microphone.\",);\r\n                } else {\r\n                    console.error(`getUserMedia error: ${error.name}`, error);\r\n                }\r\n        })\r\n\r\n        if (typeof WebSocket !== 'function') {\r\n            client.webSocketFactory = function () {\r\n                console.log(\"Stomp error sockjs is running\");\r\n                return new SockJS('http://127.0.0.1:8080/signal');\r\n            };\r\n        }\r\n\r\n        client.onConnect = (frame) => {\r\n            console.log(frame);\r\n            // sdpOffer를 보내고 Answer를 받음\r\n            client.subscribe(`/busker/${userId}/sdpAnswer`, (res) => {\r\n                const offerResponse = JSON.parse(res.body);\r\n                const answerId = offerResponse.id;\r\n                const response = offerResponse.response;\r\n                const sdpAnswer = offerResponse.sdpAnswer;\r\n\r\n                // console.log(\"Received SDP Answer \\n\");\r\n                console.log(\"Received SDP Answer \\n\"+offerResponse)\r\n                pc.setRemoteDescription({\r\n                    type: \"answer\",\r\n                    sdp: sdpAnswer\r\n                }).then(() => {\r\n                    console.log(\"Remote description set successfully\");\r\n                }).catch((error) => {\r\n                    console.error(\"Error setting remote description:\", error);\r\n                });\r\n            });\r\n\r\n            // client.subscribe(`/busker/${userId}/createSession`, (res) => {\r\n            //     if (res.body === \"created\"){\r\n            //         for (const candidateListElement of candidateList) {\r\n            //             client.publish({\r\n            //                 destination: `/app/busker/${userId}/iceCandidate`,\r\n            //                 body: JSON.stringify({iceCandidate: candidateListElement.candidate})\r\n            //             });\r\n            //         }\r\n            //     }\r\n            // });\r\n\r\n            // IceCandidate 받음.\r\n            client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {\r\n                const iceResponse = JSON.parse(res.body);\r\n                if (iceResponse.id === \"iceCandidate\") {\r\n                    console.log(koreaTime + \" server send ice \\n\" + iceResponse.candidate.candidate)\r\n                    const icecandidate = new RTCIceCandidate(iceResponse.candidate)\r\n                    pc.addIceCandidate(icecandidate)\r\n                        .then()\r\n                }\r\n            })\r\n        }\r\n        client.onStompError = (frame) => {\r\n            console.log('Broker reported error: ' + frame.headers['message']);\r\n            console.log('Additional details: ' + frame.body);\r\n        };\r\n\r\n        client.activate();\r\n\r\n    }, []);\r\n\r\n\r\n    return (\r\n        <>\r\n            <video id=\"streamingVideo\" style={{width: '100%'}} autoPlay controls></video>\r\n        </>\r\n    )\r\n}\r\n\r\nexport default Streaming;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/FrontEnd/src/pages/Streaming.jsx b/FrontEnd/src/pages/Streaming.jsx
+--- a/FrontEnd/src/pages/Streaming.jsx	(revision 6b26c45aa65b21e7e2c6d6cb6f1dd3442bd2a137)
++++ b/FrontEnd/src/pages/Streaming.jsx	(date 1707293049407)
+@@ -11,7 +11,8 @@
+ let makingOffer = false
+ 
+ // 대체 왜 이게 2번이나 마운트되는거야?
+-const Streaming = () => {
++const Streaming = ({  }) => {
++    const [isStreaming, setIsStreaming] = useState(true);
+     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+     const pcRef = useRef(new RTCPeerConnection(PCConfig));
+     const clientRef = useRef(
+@@ -24,6 +25,7 @@
+     const userId = userInfo.userId
+     const candidateList = []
+ 
++
+     // Set Peer Connection
+     useEffect(() => {
+         console.log("userId : " + userId)
+@@ -138,19 +140,6 @@
+                     console.error("Error setting remote description:", error);
+                 });
+             });
+-
+-            // client.subscribe(`/busker/${userId}/createSession`, (res) => {
+-            //     if (res.body === "created"){
+-            //         for (const candidateListElement of candidateList) {
+-            //             client.publish({
+-            //                 destination: `/app/busker/${userId}/iceCandidate`,
+-            //                 body: JSON.stringify({iceCandidate: candidateListElement.candidate})
+-            //             });
+-            //         }
+-            //     }
+-            // });
+-
+-            // IceCandidate 받음.
+             client.subscribe(`/busker/${userId}/iceCandidate`, (res) => {
+                 const iceResponse = JSON.parse(res.body);
+                 if (iceResponse.id === "iceCandidate") {
+@@ -168,8 +157,15 @@
+ 
+         client.activate();
+ 
+-    }, []);
++    }, [isStreaming]);
+ 
++    const handleEndButtonClick = () => {
++        // Call the onEndButtonClick callback
++        onEndButtonClick();
++
++        // Update state to stop streaming
++        setIsStreaming(false);
++    };
+ 
+     return (
+         <>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"51d08d94-4974-4f6a-9bc3-eabacdcaa2b7\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/FrontEnd/.env.production\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/FrontEnd/.env.production\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/FrontEnd/src/components/SearchStreaming.jsx\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/FrontEnd/src/components/SearchStreaming.jsx\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/FrontEnd/src/pages/Main.jsx\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/FrontEnd/src/pages/Main.jsx\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"HTML File\" />\r\n        <option value=\"JavaScript File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"e744745fd7740c5dbe3e300606071c546edf4fce\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"HARD\" />\r\n  </component>\r\n  <component name=\"GitLabMergeRequestFiltersHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPENED&quot;,\r\n    &quot;assignee&quot;: {\r\n      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,\r\n      &quot;username&quot;: &quot;rmstn8426&quot;,\r\n      &quot;fullname&quot;: &quot;박근수&quot;\r\n    }\r\n  }\r\n}</component>\r\n  <component name=\"GitLabMergeRequestsSettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;first&quot;: &quot;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105.git&quot;,\r\n    &quot;second&quot;: &quot;6d7cf59d-cde3-41ae-9f96-26f685a9a975&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GitToolBoxStore\">\r\n    <option name=\"projectConfigVersion\" value=\"5\" />\r\n    <option name=\"recentBranches\">\r\n      <RecentBranches>\r\n        <option name=\"branchesForRepo\">\r\n          <list>\r\n            <RecentBranchesForRepo>\r\n              <option name=\"branches\">\r\n                <list>\r\n                  <RecentBranch>\r\n                    <option name=\"branchName\" value=\"FE_develop\" />\r\n                    <option name=\"lastUsedInstant\" value=\"1707269113\" />\r\n                  </RecentBranch>\r\n                </list>\r\n              </option>\r\n              <option name=\"repositoryRootUrl\" value=\"file://$PROJECT_DIR$\" />\r\n            </RecentBranchesForRepo>\r\n          </list>\r\n        </option>\r\n      </RecentBranches>\r\n    </option>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2bIkUQTMuezQ4RiJD5MJs6uiL3I\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"flattenModules\" value=\"true\" />\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showExcludedFiles\" value=\"false\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n    <option name=\"showScratchesAndConsoles\" value=\"false\" />\r\n    <option name=\"showVisibilityIcons\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ASKED_ADD_EXTERNAL_FILES\": \"true\",\r\n    \"DefaultHtmlFileTemplate\": \"HTML File\",\r\n    \"Node.js.App.js.executor\": \"Debug\",\r\n    \"Node.js.SignalingConnection.js.executor\": \"Run\",\r\n    \"Node.js.StreamerStomp.js.executor\": \"Run\",\r\n    \"Node.js.Streaming.jsx.executor\": \"Run\",\r\n    \"Node.js.Watching.jsx.executor\": \"Run\",\r\n    \"Node.js.index.js.executor\": \"Run\",\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"FE__develop\",\r\n    \"ignore_missing_gitignore\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/SSAFY/Desktop/frontcode/S10P12A105/FrontEnd/src/WebRTC\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"settings.typescriptcompiler\",\r\n    \"ts.external.directory.path\": \"C:\\\\Users\\\\SSAFY\\\\AppData\\\\Local\\\\Programs\\\\WebStorm\\\\plugins\\\\javascript-impl\\\\jsLanguageServicesImpl\\\\external\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\SSAFY\\Desktop\\frontcode\\S10P12A105\\FrontEnd\\src\\WebRTC\" />\r\n      <recent name=\"C:\\Users\\SSAFY\\Desktop\\frontcode\\S10P12A105\\FrontEnd\\src\\pages\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\SSAFY\\Desktop\\frontcode\\S10P12A105\\FrontEnd\\src\\WebRTC\" />\r\n      <recent name=\"C:\\Users\\SSAFY\\Desktop\\frontcode\\S10P12A105\\FrontEnd\\src\\RTCConnection\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration default=\"true\" type=\"ShConfigurationType\">\r\n      <option name=\"SCRIPT_TEXT\" value=\"\" />\r\n      <option name=\"INDEPENDENT_SCRIPT_PATH\" value=\"true\" />\r\n      <option name=\"SCRIPT_PATH\" value=\"\" />\r\n      <option name=\"SCRIPT_OPTIONS\" value=\"\" />\r\n      <option name=\"INDEPENDENT_SCRIPT_WORKING_DIRECTORY\" value=\"true\" />\r\n      <option name=\"SCRIPT_WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"INDEPENDENT_INTERPRETER_PATH\" value=\"true\" />\r\n      <option name=\"INTERPRETER_PATH\" value=\"wsl.exe\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"EXECUTE_IN_TERMINAL\" value=\"true\" />\r\n      <option name=\"EXECUTE_SCRIPT_FILE\" value=\"true\" />\r\n      <envs />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"51d08d94-4974-4f6a-9bc3-eabacdcaa2b7\" name=\"Changes\" comment=\"\" />\r\n      <created>1705909996094</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1705909996094</updated>\r\n      <workItem from=\"1705909997370\" duration=\"12325000\" />\r\n      <workItem from=\"1705999771091\" duration=\"134000\" />\r\n      <workItem from=\"1706066891613\" duration=\"60100000\" />\r\n      <workItem from=\"1706657783088\" duration=\"9547000\" />\r\n      <workItem from=\"1706672024939\" duration=\"43856000\" />\r\n      <workItem from=\"1706791105298\" duration=\"131000\" />\r\n      <workItem from=\"1706831424509\" duration=\"15705000\" />\r\n      <workItem from=\"1707093157774\" duration=\"25201000\" />\r\n      <workItem from=\"1707177777795\" duration=\"23895000\" />\r\n      <workItem from=\"1707208183043\" duration=\"11854000\" />\r\n      <workItem from=\"1707279748794\" duration=\"7937000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"FE_develop\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6b26c45aa65b21e7e2c6d6cb6f1dd3442bd2a137)
++++ b/.idea/workspace.xml	(date 1707292977417)
+@@ -88,31 +88,31 @@
+     <option name="showScratchesAndConsoles" value="false" />
+     <option name="showVisibilityIcons" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_ADD_EXTERNAL_FILES": "true",
+-    "DefaultHtmlFileTemplate": "HTML File",
+-    "Node.js.App.js.executor": "Debug",
+-    "Node.js.SignalingConnection.js.executor": "Run",
+-    "Node.js.StreamerStomp.js.executor": "Run",
+-    "Node.js.Streaming.jsx.executor": "Run",
+-    "Node.js.Watching.jsx.executor": "Run",
+-    "Node.js.index.js.executor": "Run",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "FE__develop",
+-    "ignore_missing_gitignore": "true",
+-    "last_opened_file_path": "C:/Users/SSAFY/Desktop/frontcode/S10P12A105/FrontEnd/src/WebRTC",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "settings.editor.selected.configurable": "settings.typescriptcompiler",
+-    "ts.external.directory.path": "C:\\Users\\SSAFY\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
++    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
++    &quot;Node.js.App.js.executor&quot;: &quot;Debug&quot;,
++    &quot;Node.js.SignalingConnection.js.executor&quot;: &quot;Run&quot;,
++    &quot;Node.js.StreamerStomp.js.executor&quot;: &quot;Run&quot;,
++    &quot;Node.js.Streaming.jsx.executor&quot;: &quot;Run&quot;,
++    &quot;Node.js.Watching.jsx.executor&quot;: &quot;Run&quot;,
++    &quot;Node.js.index.js.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;FE__develop&quot;,
++    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/Desktop/frontcode/S10P12A105/FrontEnd/src/WebRTC&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;settings.typescriptcompiler&quot;,
++    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\SSAFY\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="C:\Users\SSAFY\Desktop\frontcode\S10P12A105\FrontEnd\src\WebRTC" />

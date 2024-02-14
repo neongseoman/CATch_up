@@ -48,11 +48,13 @@ const Watching = ({buskerEmail}) => {
             console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
                 console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
-            } else if (pc.iceConnectionState === 'disconnected'){
+            } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed'){
+                if (pc){
+                    pc.close()
+                }
+                pcRef.current = new RTCPeerConnection(PCConfig);
 
-                console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')
-            } else if(pc.iceConnectionState === 'failed') {
-                console.log(koreaTime +' 피어 간 연결이  실패.');
+                console.log(koreaTime +' 피어 간 연결이 끊어졌거나 실패했습니다.');
             }
         };
         pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인
