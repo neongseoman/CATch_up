@@ -77,9 +77,9 @@ const WatchingPage = () => {
                     현재 시청자 수 : {data.audienceCount}명 | 방송 시작 시간 : {getTimeFromStartTime(data.startTime)}
                   </Count>
                 </ProfileField>
-                <UserProfile onClick={() => handleProfileClick(data.userNo)}>
+                {/* <UserProfile onClick={() => handleProfileClick(data.userNo)}>
                   프로필 보러 가기
-                </UserProfile>
+                </UserProfile> */}
               </MiddleBottomBox>
             </MiddleContainer>
             <RightBox>
