@@ -7,16 +7,6 @@ const ShortsWrapper = styled.button`
   background: none;
 `;
 
-const Video = styled.div`
-  width: calc(55%);
-  height: 300px;
-  display: flex;
-  float: left;
-  border-radius: 10px;
-  background-color: #8b8f92;
-  margin-top: 15px;
-`;
-
 const Info = styled.div`
   width: calc(46%);
   margin-left: -10%;
@@ -33,18 +23,6 @@ const Info = styled.div`
   margin-top: 15px;
 `;
 
-const TagField = styled.div`
-  display: flex;
-  gap: 4px;
-`;
-
-const Tag = styled.div`
-  font-size: 10px;
-  background: #56350a;
-  color: #f7b84b;
-  border-radius: 30px;
-  padding: 6px;
-`;
 
 const ShortsTitle = styled.div`
   color: white;
@@ -106,7 +84,7 @@ height: 300px;
 display: flex;  
 float: left;
 border-radius: 10px;
-margin-top: 15.5px;
+margin-top: 15px;
 background-color: #8b8f92;
 object-fit: cover; 
 `
