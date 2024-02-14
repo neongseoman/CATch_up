@@ -100,6 +100,15 @@ const Data = styled.p`
   font-size: 12px;
   color: white;
 `;
+const Image = styled.img`
+width: calc(55%);
+height: 300px;
+display: flex;  
+float: left;
+border-radius: 10px;
+background-color: #8b8f92;
+object-fit: cover; 
+`
 
 const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreamingTime }) => {
 
@@ -133,7 +142,7 @@ const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreaming
                   </Options>
               </StreamingInfoField>
           </Info>
-          <Video>{shortsData.shortsPath}</Video>
+          <Image src={"/img/shortsPreview/" + shortsData.shortsPath}></Image>
       </ShortsWrapper>
   );
 };
