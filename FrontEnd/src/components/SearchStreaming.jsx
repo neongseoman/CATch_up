@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
 import styled from "styled-components";
-import CardStreaming from "./CardStreaming";
-import {getCurrentBuskingInfo} from "../Apis/streamingApi";
 import { useRecoilValue } from 'recoil';
 import { searchTermState } from '../RecoilState/userRecoilState';
-import Kakaomap from "./KakaoMap";
+import { getCurrentBuskingInfo } from "../Apis/streamingApi";
+import CardStreaming from "./CardStreaming";
+import Kakaomap from './KakaoMap';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -19,13 +18,6 @@ const Wrapper = styled.div`
 const MapWrapper = styled.div`
     width: 100%;
     height: 500px;
-    border-radius: 5px;
-    background: grey;
-    background: linear-gradient(
-            to bottom,
-            rgba(128, 128, 128, 0.5),
-            rgba(128, 128, 128, 0)
-    );
 `;
 
 const SearchStreaming = () => {
@@ -35,29 +27,46 @@ const SearchStreaming = () => {
     const [buskerData, setBuskerData] = useState();
     const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=${searchTerm}&page=0&size=10`;
 
-    const handleStreamingClick = (buskerEmail) => {
-        navigate('/watchingpage',{ state: { buskerEmail } });
+    const handleStreamingClick = (buskerEmail, data) => {
+        navigate('/watchingpage', { state: { buskerEmail, data } });
     };
-
-    // useEffect(() => {
-    //     axios
-    //         .get(url)
-    //         .then((response) => {
-    //             console.log("데이터:", response.data);
-    //             setData(response.data.content);
-    //         })
-    //         .catch((error) => {
-    //             console.error("에러:", error);
-    //         });
-    // }, []);
+    
+    async function getUserData(email) {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/profile/email?email=${email}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const userData = await response.json();
+            return userData;
+        } catch (error) {
+            console.error(error);
+            throw error; 
+        }
+    }
     
     useEffect(() => {
         const fetchData = async () => {
-            try{
+            try {
                 const currentBuskingInfo = await getCurrentBuskingInfo();
                 console.log('current Busking Info:', currentBuskingInfo);
+
+                for (let i = 0; i < currentBuskingInfo.length; i++) {
+                    console.log(currentBuskingInfo[i].buskerEmail)
+                    const user = await getUserData(currentBuskingInfo[i].buskerEmail)
+                    currentBuskingInfo[i].nickname = user.nickname;
+                    currentBuskingInfo[i].startTime = user.createdDate;
+                }
                 setBuskerData(currentBuskingInfo);
-            }catch (error) {
+
+            } catch (error) {
                 console.error('Error in useEffect:', error);
             }
         };
@@ -76,13 +85,9 @@ const SearchStreaming = () => {
 
     return (
         <Wrapper>
-
-                        <MapWrapper>
-
-<Kakaomap></Kakaomap>
-
-</MapWrapper>
-
+            <MapWrapper>
+                <Kakaomap></Kakaomap>
+            </MapWrapper>
             {buskerData && Array.isArray(buskerData)
                 ? buskerData.map((e, i) => (
                     <CardStreaming
@@ -93,16 +98,6 @@ const SearchStreaming = () => {
                     />
                 ))
                 : null}
-            {/* {data && Array.isArray(data)
-                ? data.map((e, i) => (
-                    <CardStreaming
-                        key={i}
-                        data={e}
-                        handleStreamingClick={() => handleStreamingClick()}
-                        getTimeFromStartTime={getTimeFromStartTime}
-                    />
-                ))
-                : null} */}
         </Wrapper>
     );
 };

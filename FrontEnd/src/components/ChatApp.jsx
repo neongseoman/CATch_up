@@ -213,7 +213,7 @@ const ChatApp = () => {
                   key={index}
                 >
                   <div style={{ float: "left", alignItems: "center" }}>
-                    {!false && (
+                    {false && (
                       <div
                         style={{
                           float: "left",

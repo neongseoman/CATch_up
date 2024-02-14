@@ -4,7 +4,6 @@ import VideoTmp from "./VideoTmp";
 
 const StreamingWrapper = styled.button`
     width: 100%;
-    /* height: 300px; */
     background: none;
 `;
 
@@ -15,6 +14,7 @@ const Video = styled.div`
     float: left;
     border-radius: 10px;
     background-color: #8b8f92;
+    margin-top: 15px;
 `;
 
 const Info = styled.div`
@@ -30,19 +30,25 @@ const Info = styled.div`
     justify-content: space-evenly;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 15px;
 `;
 
 const TagField = styled.div`
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
 `;
 
 const Tag = styled.div`
+    height: 20px;
     font-size: 10px;
     background: #56350a;
     color: #f7b84b;
     border-radius: 30px;
     padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const StreamingTitle = styled.div`
@@ -90,11 +96,15 @@ const Option = styled.p`
 `;
 
 const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => {
+    const hashtags = data.buskingHashtag.split(" ");
+
     return (
         <StreamingWrapper onClick={handleStreamingClick}>
             <Info>
                 <TagField>
-                    <Tag>#{data.buskingHashtag}</Tag>
+                {hashtags.map((tag, i) => (
+                    <Tag key={i}>#{tag}</Tag>
+                ))}
                 </TagField>
                 <StreamingTitle>{data.buskingTitle}</StreamingTitle>
                 <StreamingInfo>{data.buskingInfo}</StreamingInfo>
@@ -105,9 +115,7 @@ const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => 
                             e.target.src = "/img/logo_withoutDot.png";
                         }}
                     /> */}
-                    <ProfileImg
-                        src= "/img/logo_withoutDot.png"
-                    />
+                    <ProfileImg src= "/img/logo_withoutDot.png" />
                     <ProfileName>{data.nickname}</ProfileName>
                 </ProfileField>
                 <OptionField>

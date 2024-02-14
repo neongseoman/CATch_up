@@ -50,11 +50,13 @@ const Watching = ({buskerEmail}) => {
             console.log(koreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
                 console.log(koreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
-            } else if (pc.iceConnectionState === 'disconnected'){
+            } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed'){
+                if (pc){
+                    pc.close()
+                }
+                pcRef.current = new RTCPeerConnection(PCConfig);
 
-                console.log(koreaTime +' 피어 간 연결이  끊어졌습니다.')
-            } else if(pc.iceConnectionState === 'failed') {
-                console.log(koreaTime +' 피어 간 연결이  실패.');
+                console.log(koreaTime +' 피어 간 연결이 끊어졌거나 실패했습니다.');
             }
         };
         pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인
@@ -65,15 +67,39 @@ const Watching = ({buskerEmail}) => {
                 console.log(koreaTime +' 데이터 연결이 끊어졌습니다.');
             } else if(pc.connectionState === "failed"){
 
-                // window.location.replace("/watchingpage")
             }
         };
         pc.ontrack = (event) =>{
             remoteVideo.srcObject = event.streams[0]
         }
-        pc.onsignalingstatechange = (event) =>{
-            console.log(koreaTime+ " Negotiation을 진행합니다.")
+        pc.onsignalingstatechange = (event) => {
+            console.log(koreaTime + " signaling 상태가 바뀝니다.")
+            console.log(pc.signalingState)
         }
+        pc.onnegotiationneeded = (event) => {
+            console.log(koreaTime+ " Negotiation을 진행합니다.")
+            makingOffer = true
+            // pc.createOffer({
+            // })
+            //     .then((offer) => {
+            //         console.log("sdp offer created") // sdp status
+            //         pc.setLocalDescription(offer)
+            //             .then((r) => {
+            //                 client.publish({
+            //                     destination: `/app/api/busker/${userId}/offer`,
+            //                     body: JSON.stringify({
+            //                         userId,
+            //                         offer,
+            //                     })
+            //                 })
+            //                 makingOffer = false
+            //             })
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //     })
+        }
+
 
         if (typeof WebSocket !== 'function') {
             client.webSocketFactory = function () {

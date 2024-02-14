@@ -7,15 +7,6 @@ const ShortsWrapper = styled.button`
   background: none;
 `;
 
-const Video = styled.div`
-  width: calc(55%);
-  height: 300px;
-  display: flex;
-  float: left;
-  border-radius: 10px;
-  background-color: #8b8f92;
-`;
-
 const Info = styled.div`
   width: calc(46%);
   margin-left: -10%;
@@ -29,20 +20,9 @@ const Info = styled.div`
   justify-content: space-evenly;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: 15px;
 `;
 
-const TagField = styled.div`
-  display: flex;
-  gap: 4px;
-`;
-
-const Tag = styled.div`
-  font-size: 10px;
-  background: #56350a;
-  color: #f7b84b;
-  border-radius: 30px;
-  padding: 6px;
-`;
 
 const ShortsTitle = styled.div`
   color: white;
@@ -98,21 +78,30 @@ const Data = styled.p`
   font-size: 12px;
   color: white;
 `;
+const Image = styled.img`
+width: calc(55%);
+height: 300px;
+display: flex;  
+float: left;
+border-radius: 10px;
+margin-top: 15px;
+background-color: #8b8f92;
+object-fit: cover; 
+`
 
 const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreamingTime }) => {
+
   return (
       <ShortsWrapper onClick={() => handleShortsClick(shortsData.streamNo)}>
           <Info>
-              <TagField>
-                  <Tag>#{shortsData.category}</Tag>
-              </TagField>
               <ProfileField>
-                  <ProfileImg
+                  {/* <ProfileImg
                     src={shortsData.profileImagePath}
                     onError={(e) => {
                       e.target.src = "/img/logo_withoutDot.png";
                     }}
-                  />
+                  /> */}
+                  <ProfileImg src= "/img/logo_withoutDot.png" />
                   <ProfileName>{shortsData.nickname}</ProfileName>
               </ProfileField>
               <ShortsTitle>{shortsData.title}</ShortsTitle>
@@ -132,7 +121,7 @@ const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreaming
                   </Options>
               </StreamingInfoField>
           </Info>
-          <Video>{shortsData.shortsPath}</Video>
+          <Image src={"/img/shortsPreview/" + shortsData.shortsPath}></Image>
       </ShortsWrapper>
   );
 };

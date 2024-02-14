@@ -5,42 +5,51 @@ import VideoTmp from "../components/VideoTmp";
 import StreamerList from "../components/StreamerList";
 import Navbar from "../components/Navbar";
 import Watching from "./Watching";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const WatchingPage = () => {
-  const { buskerEmail } = useLocation().state;
+  const { data } = useLocation().state;
+  const navigate = useNavigate();
   const [streamingInfo, setStreamingInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const handleProfileClick = () => {
-    alert("해당 방송 주인 프로필 화면으로 이동!");
+  const handleProfileClick = (id) => {
+    navigate(`/user/userprofilepage/${id}`);
   };
 
-  useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // 서버로부터 스트리밍 정보를 가져오는 HTTP 요청
-          const response = await fetch("", {
-            method: "GET",
-            credentials: "include",
-          });
+  const getTimeFromStartTime = (startTime) => {
+    const date = new Date(startTime);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
 
-          if (!response.ok) {
-            throw new Error("서버 응답이 실패했습니다");
-          }
+    return `${hours < 10 ? "0" + hours : hours}시 ${minutes < 10 ? "0" + minutes : minutes}분`;
+  };
 
-          const data = await response.json();
-          console.log(data);
-          setStreamingInfo(data);
-          setLoading(false);
-        } catch (e) {
-          setLoading(false);
-          console.log(e);
-        }
-      };
+  // useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         // 서버로부터 스트리밍 정보를 가져오는 HTTP 요청
+  //         const response = await fetch("", {
+  //           method: "GET",
+  //           credentials: "include",
+  //         });
 
-      fetchData();
-    }, []);
+  //         if (!response.ok) {
+  //           throw new Error("서버 응답이 실패했습니다");
+  //         }
+
+  //         const data = await response.json();
+  //         console.log(data);
+  //         setStreamingInfo(data);
+  //         setLoading(false);
+  //       } catch (e) {
+  //         setLoading(false);
+  //         console.log(e);
+  //       }
+  //     };
+
+  //     fetchData();
+  //   }, []);
 
   return (
     <Wrapper>
@@ -55,29 +64,22 @@ const WatchingPage = () => {
             </LeftBox>
             <MiddleContainer>
               <MiddleTopBox>
-                <Watching buskerEmail={buskerEmail} />
-                {/*<VideoTmp />*/}
+                <Watching buskerEmail={data.buskerEmail} />
               </MiddleTopBox>
               <MiddleBottomBox>
-                <StreamingTitle>방송 제목</StreamingTitle>
-                <StreamingInfo>방송 설명</StreamingInfo>
-                <Tags>해시태그</Tags>
+                <StreamingTitle>{data.buskingTitle}</StreamingTitle>
+                <StreamingInfo>{data.buskingInfo}</StreamingInfo>
+                <Tags>{data.buskingHashtag}</Tags>
                 <ProfileField>
-                  <ProfileImg
-                  // src={e.profileImagePath}
-                  // onError={(e) => {
-                  //     e.target.src = "/img/logo.png";
-                  // }}
-                  />
-                  <ProfileName>방송중인 사용자 닉네임</ProfileName>
-                  <Toggle>팔로우 토글</Toggle>
+                  <ProfileImg src= "/img/logo_withoutDot.png" />
+                  <ProfileName>{data.nickname}</ProfileName>
                   <Count>
-                    현재 시청자 수 : 30000명 | 방송 시작 시간 : 13시 28분
+                    현재 시청자 수 : {data.audienceCount}명 | 방송 시작 시간 : {getTimeFromStartTime(data.startTime)}
                   </Count>
                 </ProfileField>
-                <UserProfile onClick={handleProfileClick}>
+                {/* <UserProfile onClick={() => handleProfileClick(data.userNo)}>
                   프로필 보러 가기
-                </UserProfile>
+                </UserProfile> */}
               </MiddleBottomBox>
             </MiddleContainer>
             <RightBox>
@@ -98,15 +100,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100vh; // Use full screen height
+  height: 100vh;
 `;
 
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20%; // 1/3 of the container width
-  height: 100%; // Full height
+  width: 20%;
+  height: 100%;
 `;
 
 const MiddleContainer = styled.div`
@@ -120,13 +122,13 @@ const MiddleTopBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1000px; // Half height
+  height: 1000px;
 `;
 
 const MiddleBottomBox = styled.div`
   display: flex;
   flex-direction: column;
-  height: 500px; // Half height
+  height: 500px;
   background: black;
   padding: 10px;
 `;

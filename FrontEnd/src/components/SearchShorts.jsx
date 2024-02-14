@@ -75,8 +75,8 @@ const SearchShorts = () => {
               formatStreamingTime={formatStreamingTime}
             />
           ))
-        : null}
-       </Wrapper>
+      : null}
+    </Wrapper>
   );
 };
 
