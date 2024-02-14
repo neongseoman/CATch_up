@@ -72,9 +72,46 @@ const Watching = ({buskerEmail}) => {
         pc.ontrack = (event) =>{
             remoteVideo.srcObject = event.streams[0]
         }
-        pc.onsignalingstatechange = (event) =>{
+        pc.onsignalingstatechange = (event) => {
+            console.log(koreaTime + " signaling 상태가 바뀝니다.")
+            console.log(pc.signalingState)
+        }
+        pc.onnegotiationneeded = (event) => {
             console.log(koreaTime+ " Negotiation을 진행합니다.")
+            makingOffer = true
+            pc.createOffer({
+            })
+                .then((offer) => {
+                    console.log("sdp offer created") // sdp status
+                    pc.setLocalDescription(offer)
+                        .then((r) => {
+                            client.publish({
+                                destination: `/app/api/busker/${userId}/offer`,
+                                body: JSON.stringify({
+                                    userId,
+                                    offer,
+                                })
+                            })
+                            makingOffer = false
+                        })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
 
+
+        if (typeof WebSocket !== 'function') {
+            client.webSocketFactory = function () {
+                console.log("Stomp error sockjs is running");
+                return new SockJS('https://i10a105.p.ssafy.io/api/signal');
+            };
+        }
+
+        client.onConnect = (frame) => {
+            console.log(frame); // stomp status
+
+            makingOffer = true
             // pc.createOffer({
             //     offerToReceiveAudio:true,
             //     offerToReceiveVideo:true
@@ -98,42 +135,6 @@ const Watching = ({buskerEmail}) => {
             //     .catch((error) => {
             //         console.log(error)
             //     })
-        }
-
-        if (typeof WebSocket !== 'function') {
-            client.webSocketFactory = function () {
-                console.log("Stomp error sockjs is running");
-                return new SockJS('https://i10a105.p.ssafy.io/api/signal');
-            };
-        }
-
-        client.onConnect = (frame) => {
-            console.log(frame); // stomp status
-
-            makingOffer = true
-            pc.createOffer({
-                offerToReceiveAudio:true,
-                offerToReceiveVideo:true
-            })
-                .then((offer) => {
-                    console.log("sdp offer created") // sdp status
-                    pc.setLocalDescription(offer)
-                        .then((r) => {
-                            client.publish({
-                                destination: `/app/api/audience/${userId}/offer`,
-                                body: JSON.stringify({
-                                    buskerId,
-                                    audienceId: userId,
-                                    offer,
-                                })
-                            })
-                            new RTCPeerConnectionIceEvent("onicecandidate")
-                            makingOffer = false
-                        })
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
 
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
