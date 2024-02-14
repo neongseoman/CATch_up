@@ -11,8 +11,6 @@ console.log("WatchingPage is called")
 const WatchingPage = () => {
   const { data } = useLocation().state;
   const navigate = useNavigate();
-  const [streamingInfo, setStreamingInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
   console.log("watching page data : " + data.buskerEmail)
 
   const handleProfileClick = (id) => {
@@ -57,9 +55,7 @@ const WatchingPage = () => {
     <Wrapper>
       <GlobalStyle />
       <Container>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
+        {(
           <>
             <LeftBox>
               <StreamerList />
@@ -79,9 +75,9 @@ const WatchingPage = () => {
                     현재 시청자 수 : {data.audienceCount}명 | 방송 시작 시간 : {getTimeFromStartTime(data.startTime)}
                   </Count>
                 </ProfileField>
-                {/* <UserProfile onClick={() => handleProfileClick(data.userNo)}>
+                <UserProfile onClick={() => handleProfileClick(data.userNo)}>
                   프로필 보러 가기
-                </UserProfile> */}
+                </UserProfile>
               </MiddleBottomBox>
             </MiddleContainer>
             <RightBox>
