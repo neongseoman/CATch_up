@@ -1,10 +1,7 @@
 import React, {useState} from "react";
 import {styled, createGlobalStyle} from 'styled-components';
 import ChatApp from "../components/ChatApp";
-import VideoTmp from "../components/VideoTmp";
-import StreamerList from "../components/StreamerList"
 import Streaming from "./Streaming";
-import Navbar from "../components/Navbar";
 import axios from "axios";
 import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
@@ -15,7 +12,10 @@ const StreamingPage = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState)
     const userId = userInfo.userId
     const [isStreaming, setIsStreaming] = useState(true)
+
     const HandleEndButtonClick = () => {
+        alert('방송이 종료됩니다!')
+
         // Your logic for handling "방송 종료"
         const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/busker/${userId}/stopBusking`, {
             body: JSON.stringify({
@@ -36,7 +36,6 @@ const StreamingPage = () => {
             <GlobalStyle/>
             <Container>
                 <LeftBox>
-                    <p>카메라, 마이크 ON/OFF</p>
                     <EndButton onClick={HandleEndButtonClick}>방송 종료</EndButton>
                 </LeftBox>
                 <MiddleBox>
@@ -65,10 +64,9 @@ const LeftBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 20%;
+    justify-content: flex-end;
     height: 100%;
     background: black;
-
 `;
 
 const EndButton = styled.button`
@@ -78,6 +76,7 @@ const EndButton = styled.button`
     background: #F7B84B;
     color: white;
     font-size: 28px;
+    margin-bottom: 55px;
 `;
 
 const MiddleBox = styled.div`
