@@ -13,7 +13,7 @@ const WatchingPage = () => {
   const navigate = useNavigate();
   const [streamingInfo, setStreamingInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log("watching page data : " + data)
+  console.log("watching page data : " + data.buskerEmail)
 
   const handleProfileClick = (id) => {
     navigate(`/user/userprofilepage/${id}`);
