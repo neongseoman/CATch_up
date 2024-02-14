@@ -25,7 +25,7 @@ const Watching = ({buskerEmail}) => {
         const remoteVideo = document.getElementById("remoteVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
             if (event.candidate) {
-                // console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
+                console.log("Client Send Ice Candidate : [ " + event.candidate.candidate + " ] ")
                 client.publish({
                     destination: `/app/api/audience/${userId}/iceCandidate`,
                     body: JSON.stringify({
