@@ -49,8 +49,6 @@ const SearchResultPage = () => {
     const [viewProfileResult, setViewProfileResult] = useState(tmp.viewProfileResult);
     const [viewShortsResult, setViewShortsResult] = useState(tmp.viewShortsResult);
     
-    
-
     const handleStreamingClick = () => {
         setViewStreamingResult(true);
         setViewProfileResult(false);
@@ -68,16 +66,16 @@ const SearchResultPage = () => {
         setViewProfileResult(false);
         setViewShortsResult(true);
     };
-    
+
     useEffect(() => {
-            const viewState = {
-                viewStreamingResult,
-                viewProfileResult,
-                viewShortsResult,
-            };
-            console.log(JSON.stringify(viewState))
-            localStorage.setItem('viewState', JSON.stringify(viewState));
-        }, [viewStreamingResult, viewProfileResult, viewShortsResult]);
+        const viewState = {
+            viewStreamingResult,
+            viewProfileResult,
+            viewShortsResult,
+        };
+        console.log(JSON.stringify(viewState))
+        localStorage.setItem('viewState', JSON.stringify(viewState));
+    }, [viewStreamingResult, viewProfileResult, viewShortsResult]);
 
     return (
         <Wrapper>

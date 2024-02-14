@@ -3,8 +3,42 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+const MyProfile1 = ({ userInfo }) => {
+  const navigate = useNavigate();
+
+  // const handleEditClick = () => {
+  //   alert('프로필 수정 모달 띄우기!');
+  // };
+
+  const handleStartClick = () => {
+    navigate('/streaming/info');
+  };
+
+  return (
+    <Wrapper>
+      <InfoField>
+        <ProfileImg
+            src={userInfo.profileImagePath}
+            onError={(e) => {
+                e.target.src = '/img/logo_withoutDot.png';
+            }}
+        />
+        <TextField>
+          <TextTop>
+            <UserNickname>{userInfo.nickname}</UserNickname>
+            <EditButton>✐edit</EditButton>
+          </TextTop>
+          <UserIntroduce>{userInfo.introduction}</UserIntroduce>
+        </TextField>
+        
+      </InfoField>
+      <StartButton onClick={handleStartClick}>방송하기</StartButton>
+    </Wrapper>
+  );
+};
+
 const Wrapper = styled.div`
-    margin-top: 10px;
+    margin-top: 20px;
     width: 100%;
     height: 130px;
     display: flex;
@@ -23,15 +57,14 @@ const ProfileImg = styled.img`
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    margin-left: 20px;
-    transform: scale(2);
+    margin-left: 25px;
 `;
 
 const TextField = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-left: 15px;
+    margin-left: 25px;
 `;
 
 const TextTop = styled.p`
@@ -72,39 +105,5 @@ const StartButton = styled.button`
     width: 130px;
     height: 130px;
 `;
-
-const MyProfile1 = ({ userInfo }) => {
-  const navigate = useNavigate();
-
-  const handleEditClick = () => {
-    alert('프로필 수정 모달 띄우기!');
-  };
-
-  const handleStartClick = () => {
-    navigate('/streaming/info');
-  };
-
-  return (
-    <Wrapper>
-      <InfoField>
-        <ProfileImg
-            src={userInfo.profileImagePath}
-            onError={(e) => {
-                e.target.src = '/img/logo.png';
-            }}
-        />
-        <TextField>
-          <TextTop>
-            <UserNickname>{userInfo.nickname}</UserNickname>
-            <EditButton onClick={handleEditClick}>✐edit</EditButton>
-          </TextTop>
-          <UserIntroduce>{userInfo.introduction}</UserIntroduce>
-        </TextField>
-        
-      </InfoField>
-      <StartButton onClick={handleStartClick}>방송하기</StartButton>
-    </Wrapper>
-  );
-};
 
 export default MyProfile1;
