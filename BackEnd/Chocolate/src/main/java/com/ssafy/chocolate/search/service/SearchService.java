@@ -41,4 +41,12 @@ public class SearchService {
     }
 
 
+    public List<SearchShortsDto> getShortsByLikes() {
+
+        List<SearchShortsDto> searchResultPage = liveStreamSessionRepository.getShortsByLikes();
+
+        return searchResultPage;
+
+
+    }
 }

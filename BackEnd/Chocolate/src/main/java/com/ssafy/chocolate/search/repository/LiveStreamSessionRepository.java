@@ -162,6 +162,38 @@ public class LiveStreamSessionRepository {
         return searchResultPage;
     }
 
+    public List<SearchShortsDto> getShortsByLikes() {
+        String sql = "SELECT ssc.*, ui.profile_image_path, ui.nickname " +
+                "FROM stream_short_clips ssc " +
+                "JOIN user_info ui ON ssc.user_no = ui.user_no " +
+                "ORDER BY ssc.likes DESC";
+
+        List<SearchShortsDto> shortsList = jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> {
+                    SearchShortsDto shorts = new SearchShortsDto();
+
+                    shorts.setNickname(resultSet.getString("nickname"));
+                    shorts.setProfileImagePath(resultSet.getString("profile_image_path"));
+                    shorts.setStreamNo(resultSet.getLong("stream_no"));
+                    shorts.setUserNo(resultSet.getLong("user_no"));
+                    shorts.setLikes(resultSet.getLong("likes"));
+                    shorts.setComments(resultSet.getLong("comments"));
+                    shorts.setViews(resultSet.getLong("views"));
+                    shorts.setMaxViews(resultSet.getLong("max_views"));
+                    shorts.setTitle(resultSet.getString("title"));
+                    shorts.setShortsPath(resultSet.getString("shorts_path"));
+                    shorts.setIntroduction(resultSet.getString("introduction"));
+                    shorts.setCreatedTime(resultSet.getTimestamp("created_time").toLocalDateTime());
+                    shorts.setStreamedTime(resultSet.getTimestamp("streamed_time").toLocalDateTime());
+                    shorts.setStreamingTime(resultSet.getLong("streaming_time"));
+
+                    return shorts;
+                }
+        );
+
+        return shortsList;
+    }
 
 
 }

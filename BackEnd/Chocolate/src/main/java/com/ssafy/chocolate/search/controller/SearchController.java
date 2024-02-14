@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
@@ -53,6 +55,13 @@ public class SearchController {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<SearchShortsDto> searchResult = searchService.searchShorts(query, pageable);
+
+        return searchResult;
+    }
+
+    @GetMapping("/shorts")
+    public List<SearchShortsDto> getShorts() {
+        List<SearchShortsDto> searchResult = searchService.getShortsByLikes();
 
         return searchResult;
     }
