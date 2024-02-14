@@ -162,15 +162,15 @@ const UserProfile1 = ({ userInfo }) => {
   // 팔로워 및 팔로잉 수를 가져오는 함수
     useEffect(() => {
       // 팔로잉 수
-      fetch(`/api/users/${userInfo.userId}/followings/count`)
+      fetch(`/api/users/${userInfo.id}/followings/count`)
         .then((response) => response.json())
         .then((data) => setFollowingsCount(data));
 
       // 팔로워 수
-      fetch(`/api/users/${userInfo.userId}/followers/count`)
+      fetch(`/api/users/${userInfo.id}/followers/count`)
         .then((response) => response.json())
         .then((data) => setFollowersCount(data));
-    }, [userInfo.userId]);
+    }, [userInfo.id]);
     
   return (
     <Wrapper>

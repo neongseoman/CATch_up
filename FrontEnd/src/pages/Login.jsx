@@ -46,8 +46,10 @@ function LoginForm() {
       const addInfo = response2.data.additionalInfo;
 
 
-      const fetchedUserInfo = { isLoggedIn: true, userId: username, idNo: addInfo.id, nickname: addInfo.nickname};
-      
+      const fetchedUserInfo = {
+        isLoggedIn: true, userId: username, idNo: addInfo.id, nickname: addInfo.nickname, lat: 37.5012, lng: 127.0396
+      };
+
       setUserInfo(fetchedUserInfo); // 로그인 후 사용자 정보를 atom에 저장
       localStorage.setItem('user', addInfo.nickname);
 
@@ -74,9 +76,9 @@ function LoginForm() {
         <br />
         <TextInput placeholder="이메일을 입력하세요" value={username}
           onChange={(e) => setUsername(e.target.value)}></TextInput>
-        
+
         <ValMsg></ValMsg>
-        
+
         <TextInput type="password" placeholder="비밀번호를 입력하세요" value={password}
           onChange={(e) => setPassword(e.target.value)} ></TextInput>
 
