@@ -6,7 +6,10 @@ import CardStreaming from "./CardStreaming";
 import {getCurrentBuskingInfo} from "../Apis/streamingApi";
 import { useRecoilValue } from 'recoil';
 import { searchTermState } from '../RecoilState/userRecoilState';
+<<<<<<< HEAD
 import Kakaomap from "./KakaoMap";
+=======
+>>>>>>> 3acc12ee112be4453b08a5853a489d714b5bfc26
 
 const Wrapper = styled.div`
     width: 100%;
@@ -76,11 +79,15 @@ const SearchStreaming = () => {
 
     return (
         <Wrapper>
+<<<<<<< HEAD
                         <MapWrapper>
 
 <Kakaomap></Kakaomap>
 
 </MapWrapper>
+=======
+            <MapWrapper></MapWrapper>
+>>>>>>> 3acc12ee112be4453b08a5853a489d714b5bfc26
             {buskerData && Array.isArray(buskerData)
                 ? buskerData.map((e, i) => (
                     <CardStreaming
