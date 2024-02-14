@@ -101,21 +101,18 @@ const ProfileField = styled.p`
 `;
 
 const ProfileImg = styled.img`
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 5px;
-    color: white;
-    object-fit: cover;
-    transform: scale(2);
 `;
 
 const ProfileName = styled.p`
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: 10px;
+    margin-left: 5px;
     font-size: 16px;
     color: white;
 `;
@@ -237,7 +234,7 @@ const ShortsDetail = () => {
                             <ProfileImg
                                 src={shortsInfo.member.profileImagePath}
                                 onError={(e) => {
-                                    e.target.src = '/img/logo.png';
+                                    e.target.src = '/img/logo_withoutDot.png';
                                 }}
                             />
                             <ProfileName>{shortsInfo.member.nickname}</ProfileName>

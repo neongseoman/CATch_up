@@ -66,7 +66,6 @@ const ProfileImg = styled.img`
   height: 30px;
   border-radius: 50%;
   margin-right: 5px;
-  transform: scale(2);
 `;
 
 const ProfileName = styled.p`
@@ -111,7 +110,7 @@ const CardShorts = ({ shortsData, handleShortsClick, formatDate, formatStreaming
                   <ProfileImg
                     src={shortsData.profileImagePath}
                     onError={(e) => {
-                      e.target.src = "/img/logo.png";
+                      e.target.src = "/img/logo_withoutDot.png";
                     }}
                   />
                   <ProfileName>{shortsData.nickname}</ProfileName>

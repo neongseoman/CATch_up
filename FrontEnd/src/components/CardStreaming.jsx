@@ -103,7 +103,7 @@ const CardStreaming = ({ streamingData, handleStreamingClick, getTimeFromStartTi
                     <ProfileImg
                         src={streamingData.profileImagePath}
                         onError={(e) => {
-                            e.target.src = "/img/logo.png";
+                            e.target.src = "/img/logo_withoutDot.png";
                         }}
                     />
                     <ProfileName>{streamingData.nickname}</ProfileName>

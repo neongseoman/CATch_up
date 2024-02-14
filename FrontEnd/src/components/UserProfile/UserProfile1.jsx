@@ -34,7 +34,6 @@ const ProfileImg = styled.img`
     height: 90px;
     border-radius: 50%;
     margin-left: 20px;
-    transform: scale(2);
 `;
 
 const TextField = styled.div`
@@ -180,7 +179,7 @@ const UserProfile1 = ({ userInfo }) => {
         <ProfileImg
             src={userInfo.profileImagePath}
             onError={(e) => {
-                e.target.src = '/img/logo.png';
+                e.target.src = '/img/logo_withoutDot.png';
             }}
         />
         <TextField>
