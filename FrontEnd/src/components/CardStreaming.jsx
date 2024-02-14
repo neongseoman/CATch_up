@@ -67,7 +67,6 @@ const ProfileImg = styled.img`
     height: 30px;
     border-radius: 50%;
     margin-right: 5px;
-    transform: scale(2);
 `;
 
 const ProfileName = styled.p`
@@ -90,27 +89,31 @@ const Option = styled.p`
     margin-top: 20px;
 `;
 
-const CardStreaming = ({ streamingData, handleStreamingClick, getTimeFromStartTime }) => {
+const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => {
     return (
         <StreamingWrapper onClick={handleStreamingClick}>
             <Info>
                 <TagField>
-                    <Tag>#{streamingData.category}</Tag>
+                    <Tag>#{data.buskingHashtag}</Tag>
                 </TagField>
-                <StreamingTitle>{streamingData.title}</StreamingTitle>
-                <StreamingInfo>{streamingData.introduction}</StreamingInfo>
+                <StreamingTitle>{data.buskingTitle}</StreamingTitle>
+                <StreamingInfo>{data.buskingInfo}</StreamingInfo>
                 <ProfileField>
-                    <ProfileImg
-                        src={streamingData.profileImagePath}
+                    {/* <ProfileImg
+                        src={data.profileImagePath}
                         onError={(e) => {
                             e.target.src = "/img/logo_withoutDot.png";
                         }}
+                    /> */}
+                    <ProfileImg
+                        src= "/img/logo_withoutDot.png"
                     />
-                    <ProfileName>{streamingData.nickname}</ProfileName>
+                    <ProfileName>{data.nickname}</ProfileName>
                 </ProfileField>
                 <OptionField>
                     <Option>
-                        {getTimeFromStartTime(streamingData.startTime)}부터 {streamingData.maxViewer}명 시청중
+                        {getTimeFromStartTime(data.startTime)}부터 {data.audienceCount}명
+                        시청중
                     </Option>
                 </OptionField>
             </Info>
