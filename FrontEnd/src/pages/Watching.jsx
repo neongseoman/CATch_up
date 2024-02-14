@@ -8,7 +8,7 @@ import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
-let makingOffer = false
+let makingOffer = true
 console.log("Watching is called")
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
@@ -123,34 +123,35 @@ const Watching = ({buskerEmail}) => {
         }
 
         client.onConnect = (frame) => {
-
-            const currentKoreaTime = getKoreaTime();
             console.log(frame); // stomp status
 
-            makingOffer = true
-            // pc.createOffer({
-            //     offerToReceiveAudio:true,
-            //     offerToReceiveVideo:true
-            // })
-            //     .then((offer) => {
-            //         console.log("sdp offer created") // sdp status
-            //         pc.setLocalDescription(offer)
-            //             .then((r) => {
-            //                 client.publish({
-            //                     destination: `/app/api/audience/${userId}/offer`,
-            //                     body: JSON.stringify({
-            //                         buskerId,
-            //                         audienceId: userId,
-            //                         offer,
-            //                     })
-            //                 })
-            //                 new RTCPeerConnectionIceEvent("onicecandidate")
-            //                 makingOffer = false
-            //             })
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //     })
+            if (makingOffer){
+                pc.createOffer({
+                    offerToReceiveAudio:true,
+                    offerToReceiveVideo:true
+                })
+                    .then((offer) => {
+                        console.log("sdp offer created") // sdp status
+                        pc.setLocalDescription(offer)
+                            .then((r) => {
+                                client.publish({
+                                    destination: `/app/api/audience/${userId}/offer`,
+                                    body: JSON.stringify({
+                                        buskerId,
+                                        audienceId: userId,
+                                        offer,
+                                    })
+                                })
+                                new RTCPeerConnectionIceEvent("onicecandidate")
+                                makingOffer = false
+                            })
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+
+
 
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
