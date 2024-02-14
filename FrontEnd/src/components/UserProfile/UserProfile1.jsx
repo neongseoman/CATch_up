@@ -122,7 +122,7 @@ const UserProfile1 = ({ userInfo }) => {
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
 
-  
+
 
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');
@@ -145,42 +145,43 @@ const UserProfile1 = ({ userInfo }) => {
     const url = isFollowing ? `${process.env.REACT_APP_API_BASE_URL}/api/users/unfollow/${userInfo.email}` : `${process.env.REACT_APP_API_BASE_URL}/api/users/follow/${userInfo.email}`;
 
     const method = isFollowing ? 'DELETE' : 'POST';
-  
+
     fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', // 쿠키/인증 정보를 요청과 함께 보내도록 설정
     })
-    .then(() => {
-      setIsFollowing(!isFollowing);
-      // 팔로우 상태에 따라 팔로워 수 조정
-      setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
-    })
-    .catch((error) => console.error('Error:', error));
+      .then(() => {
+        setIsFollowing(!isFollowing);
+        // 팔로우 상태에 따라 팔로워 수 조정
+        setFollowersCount((prev) => isFollowing ? prev - 1 : prev + 1);
+      })
+      .catch((error) => console.error('Error:', error));
   };
 
   // 팔로워 및 팔로잉 수를 가져오는 함수
-    useEffect(() => {
-      // 팔로잉 수
-      fetch(`/api/users/${userInfo.id}/followings/count`)
-        .then((response) => response.json())
-        .then((data) => setFollowingsCount(data));
+  useEffect(() => {
+    if (recoil.isLoggedIn) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/is-following/${userInfo.email}`, {
+        credentials: 'include'
+      })
+      .then(response => response.json()) // 응답을 JSON으로 변환
+      .then(isFollowing => {
+        console.log("API 응답:", isFollowing); // API 응답 확인
+        setIsFollowing(isFollowing);
+      });
+    }
+  }, [userInfo.email]);
 
-      // 팔로워 수
-      fetch(`/api/users/${userInfo.id}/followers/count`)
-        .then((response) => response.json())
-        .then((data) => setFollowersCount(data));
-    }, [userInfo.id]);
-    
   return (
     <Wrapper>
       <BackButton>↩</BackButton>
       <InfoField>
         <ProfileImg
-            src={userInfo.profileImagePath}
-            onError={(e) => {
-                e.target.src = '/img/logo_withoutDot.png';
-            }}
+          src={userInfo.profileImagePath}
+          onError={(e) => {
+            e.target.src = '/img/logo_withoutDot.png';
+          }}
         />
         <TextField>
           <TextTop>
