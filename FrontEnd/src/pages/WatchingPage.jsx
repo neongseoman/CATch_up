@@ -7,11 +7,13 @@ import Navbar from "../components/Navbar";
 import Watching from "./Watching";
 import { useLocation, useNavigate } from "react-router-dom";
 
+console.log("WatchingPage is called")
 const WatchingPage = () => {
   const { data } = useLocation().state;
   const navigate = useNavigate();
   const [streamingInfo, setStreamingInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  console.log("watching page data : " + data.buskerEmail)
 
   const handleProfileClick = (id) => {
     navigate(`/user/userprofilepage/${id}`);

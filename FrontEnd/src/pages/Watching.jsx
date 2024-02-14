@@ -9,7 +9,7 @@ import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
 let makingOffer = false
-
+console.log("Watching is called")
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -22,6 +22,8 @@ const Watching = ({buskerEmail}) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
+    console.log(buskerId)
+    console.log(buskerEmail)
 
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
@@ -79,25 +81,6 @@ const Watching = ({buskerEmail}) => {
         pc.onnegotiationneeded = (event) => {
             console.log(koreaTime+ " Negotiation을 진행합니다.")
             makingOffer = true
-            // pc.createOffer({
-            // })
-            //     .then((offer) => {
-            //         console.log("sdp offer created") // sdp status
-            //         pc.setLocalDescription(offer)
-            //             .then((r) => {
-            //                 client.publish({
-            //                     destination: `/app/api/busker/${userId}/offer`,
-            //                     body: JSON.stringify({
-            //                         userId,
-            //                         offer,
-            //                     })
-            //                 })
-            //                 makingOffer = false
-            //             })
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //     })
         }
 
 
