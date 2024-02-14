@@ -106,6 +106,7 @@ height: 300px;
 display: flex;  
 float: left;
 border-radius: 10px;
+margin-top: 15.5px;
 background-color: #8b8f92;
 object-fit: cover; 
 `
