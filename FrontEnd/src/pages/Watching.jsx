@@ -9,7 +9,6 @@ import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
 let makingOffer = true
-console.log("Watching is called")
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -22,9 +21,6 @@ const Watching = ({buskerEmail}) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
-    console.log(buskerId)
-    console.log(buskerEmail)
-
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
         pc.onicecandidate = (event) => { //setLocalDescription이 불러옴.
@@ -79,37 +75,12 @@ const Watching = ({buskerEmail}) => {
         }
         pc.onsignalingstatechange = (event) => {
             const currentKoreaTime = getKoreaTime();
-
             console.log(currentKoreaTime + " signaling 상태가 바뀝니다.")
             console.log(pc.signalingState)
         }
         pc.onnegotiationneeded = (event) => {
             const currentKoreaTime = getKoreaTime();
-            console.log(currentKoreaTime+ " Negotiation 진행합니다.")
-
-            pc.createOffer({
-                offerToReceiveAudio:true,
-                offerToReceiveVideo:true
-            })
-                .then((offer) => {
-                    console.log("sdp offer created") // sdp status
-                    pc.setLocalDescription(offer)
-                        .then((r) => {
-                            client.publish({
-                                destination: `/app/api/audience/${userId}/offer`,
-                                body: JSON.stringify({
-                                    buskerId,
-                                    audienceId: userId,
-                                    offer,
-                                })
-                            })
-                            new RTCPeerConnectionIceEvent("onicecandidate")
-                            makingOffer = false
-                        })
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            console.log(currentKoreaTime+ " onnegotiationneeded")
         }
 
         if (typeof WebSocket !== 'function') {
@@ -121,8 +92,10 @@ const Watching = ({buskerEmail}) => {
 
         client.onConnect = (frame) => {
             console.log(frame); // stomp status
-
-            if (makingOffer){
+            if (pc) {
+                pc.close()
+            }
+            if (makingOffer) {
                 pc.createOffer({
                     offerToReceiveAudio:true,
                     offerToReceiveVideo:true
@@ -140,15 +113,14 @@ const Watching = ({buskerEmail}) => {
                                     })
                                 })
                                 new RTCPeerConnectionIceEvent("onicecandidate")
-                                makingOffer = false
                             })
                     })
                     .catch((error) => {
                         console.log(error)
                     })
+
+                makingOffer = false
             }
-
-
 
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
