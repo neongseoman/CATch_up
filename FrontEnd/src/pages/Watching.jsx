@@ -48,14 +48,9 @@ const Watching = ({buskerEmail}) => {
             console.log(currentKoreaTime +' ICE 연결 상태:', pc.iceConnectionState);
             if (pc.iceConnectionState === 'connected') {
                 console.log(currentKoreaTime +' 피어 간 연결이 성공적으로 수립되었습니다.');
-            } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
-                if (pc){
-                    pc.close()
-                }
-                pcRef.current = new RTCPeerConnection(PCConfig);
-
+            }
+            else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
                 console.log(currentKoreaTime +' 피어 간 연결이 끊어졌거나 실패했습니다.');
-                pc.restartIce()
             }
         };
         pc.onconnectionstatechange = (event) => { // 데이터 연결 상태 확인
@@ -92,9 +87,7 @@ const Watching = ({buskerEmail}) => {
 
         client.onConnect = (frame) => {
             console.log(frame); // stomp status
-            if (pc) {
-                pc.close()
-            }
+            console.log(makingOffer)
             if (makingOffer) {
                 pc.createOffer({
                     offerToReceiveAudio:true,
