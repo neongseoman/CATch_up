@@ -208,7 +208,12 @@ const ShortsDetail = () => {
                 <p>Loading...</p>
             ) : (
                 <>
-                <Video>{shortsInfo.streamShortClips.shortsPath}</Video>
+
+                <video width="640" height="360" controls>
+                    <source src="/video/video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+
                 <Info>
                     <TopInfo>
                             <TextField>

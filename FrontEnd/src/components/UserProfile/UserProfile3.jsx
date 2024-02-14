@@ -6,24 +6,32 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     margin-top: 10px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    float:left;
 `;
 
 const Shorts = styled.div`
-    width: 100%;
-    margin-bottom: 30px;
+    width: 50%;
+    float: left;
 `;
 
 const Video = styled.div`
   width: 98%;
   height: 200px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   display: flex;
-  float: left;
   border-radius: 10px;
   background-color: #8b8f92;
   cursor: pointer;
+`;
+const Image = styled.img`
+  width: 98%;
+  height: 200px;
+  margin-bottom: 10px;
+  display: flex;
+  border-radius: 10px;
+  background-color: #8b8f92;
+  cursor: pointer;
+  object-fit: cover; 
 `;
 
 const UserProfile3 = ({ userInfo }) => {
@@ -65,8 +73,8 @@ const UserProfile3 = ({ userInfo }) => {
     <Wrapper>
       {shortsInfo && Array.isArray(shortsInfo)
         ? shortsInfo.map((e, i) => (
-            <Shorts key={i}>
-              <Video onClick={() => handleShortsClick(e.streamNo)}>{e.shortsPath}</Video>
+            <Shorts key={i}>              
+              <Image onClick={() => handleShortsClick(e.streamNo)} src={"/img/shortsPreview/" + e.shortsPath}></Image>
             </Shorts>
           ))
         : null}
@@ -75,3 +83,6 @@ const UserProfile3 = ({ userInfo }) => {
 };
 
 export default UserProfile3;
+
+
+
