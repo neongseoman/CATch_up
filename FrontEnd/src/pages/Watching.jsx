@@ -9,7 +9,7 @@ import {userInfoState} from "../RecoilState/userRecoilState";
 
 // const audienceId = "audienceID"
 let makingOffer = false
-
+console.log("Watching is called")
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
