@@ -75,19 +75,6 @@ const Watching = ({buskerEmail}) => {
         }
         pc.onsignalingstatechange = (event) =>{
             console.log(koreaTime+ " Negotiation을 진행합니다.")
-        }
-
-        if (typeof WebSocket !== 'function') {
-            client.webSocketFactory = function () {
-                console.log("Stomp error sockjs is running");
-                return new SockJS('https://i10a105.p.ssafy.io/api/signal');
-            };
-        }
-
-        client.onConnect = (frame) => {
-            console.log(frame); // stomp status
-
-            makingOffer = true
             pc.createOffer({
                 offerToReceiveAudio:true,
                 offerToReceiveVideo:true
@@ -111,6 +98,19 @@ const Watching = ({buskerEmail}) => {
                 .catch((error) => {
                     console.log(error)
                 })
+        }
+
+        if (typeof WebSocket !== 'function') {
+            client.webSocketFactory = function () {
+                console.log("Stomp error sockjs is running");
+                return new SockJS('https://i10a105.p.ssafy.io/api/signal');
+            };
+        }
+
+        client.onConnect = (frame) => {
+            console.log(frame); // stomp status
+
+            makingOffer = true
 
             // sdpOffer를 보내고 Answer를 받음
             client.subscribe(`/audience/${userId}/sdpAnswer`, (res) => {
