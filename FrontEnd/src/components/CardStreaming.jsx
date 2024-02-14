@@ -36,14 +36,19 @@ const Info = styled.div`
 const TagField = styled.div`
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
 `;
 
 const Tag = styled.div`
+    height: 20px;
     font-size: 10px;
     background: #56350a;
     color: #f7b84b;
     border-radius: 30px;
     padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const StreamingTitle = styled.div`
@@ -92,15 +97,15 @@ const Option = styled.p`
 
 const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => {
     const hashtags = data.buskingHashtag.split(" ");
-    
+
     return (
         <StreamingWrapper onClick={handleStreamingClick}>
             <Info>
+                <TagField>
                 {hashtags.map((tag, i) => (
-                    <TagField key={i}>
-                        <Tag>#{tag}</Tag>
-                    </TagField>
+                    <Tag key={i}>#{tag}</Tag>
                 ))}
+                </TagField>
                 <StreamingTitle>{data.buskingTitle}</StreamingTitle>
                 <StreamingInfo>{data.buskingInfo}</StreamingInfo>
                 <ProfileField>
