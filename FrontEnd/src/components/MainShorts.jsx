@@ -54,7 +54,10 @@ const MainShorts = () => {
         .get(url)
         .then((response) => {
           console.log("데이터:", response.data);
-          setData(response.data);
+
+          const data = response.data;
+
+          setData(data.slice(0, 5));
         })
         .catch((error) => {
           console.error("에러:", error);

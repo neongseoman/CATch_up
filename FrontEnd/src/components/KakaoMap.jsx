@@ -12,56 +12,56 @@ function Kakaomap(props) {
       stream_no: 1,
       start_time: "2023-10-01 12:00",
       end_time: "2023-10-01 14:00",
-      title: "서울 중심 버스킹",
-      introduction: "서울 한복판에서 열리는 화려한 버스킹 쇼",
-      hashtags: "#서울 #버스킹 #라이브",
+      title: "역삼동 화려한 버스킹 쇼",
+      introduction: "역삼역 근처에서 벌어지는 화려한 버스킹 쇼를 감상하세요",
+      hashtags: "#역삼 #버스킹 #라이브",
       max_viewer: 150,
-      lat: 37.55705,
-      lng: 126.9259
+      lat: 37.50281, 
+      lng: 127.0420
     },
     {
       stream_no: 2,
       start_time: "2023-10-02 15:00",
       end_time: "2023-10-02 17:00",
-      title: "홍대 거리의 목소리",
-      introduction: "홍대 거리에서 펼쳐지는 감성 가득한 라이브",
-      hashtags: "#홍대 #음악 #스트리트",
+      title: "역삼 공원 라이브",
+      introduction: "역삼 공원에서 보컬 라이브 공연입니다.",
+      hashtags: "#역삼 #공원 #스트리트",
       max_viewer: 200,
-      lat: 37.5565,
-      lng: 126.923
+      lat: 37.50485, 
+      lng: 127.0365
     },
     {
       stream_no: 3,
       start_time: "2023-10-03 18:00",
       end_time: "2023-10-03 20:00",
-      title: "인디 밴드의 밤",
-      introduction: "홍대에서 만나는 신선한 인디 밴드의 사운드",
-      hashtags: "#인디 #밴드 #홍대라이브",
+      title: "역삼 개나리공연(원) !!",
+      introduction: "역삼 개나리공원에서 라이브 공연을 즐겨보세요",
+      hashtags: "#역삼 #개나리 #공원 #보컬",
       max_viewer: 180,
-      lat: 37.5555,
-      lng: 126.9245
+      lat: 37.49793,
+      lng: 127.0360
     },
     {
       stream_no: 4,
       start_time: "2023-10-04 19:00",
       end_time: "2023-10-04 21:00",
-      title: "홍대 야외 댄스 배틀",
-      introduction: "열정이 넘치는 홍대의 댄스 크루 배틀",
-      hashtags: "#댄스 #홍대 #배틀",
+      title: "역삼 댄스 배틀",
+      introduction: "열정이 넘치는 역삼의 댄스 크루 배틀",
+      hashtags: "#댄스 #역삼 #배틀",
       max_viewer: 220,
-      lat: 37.5545,
-      lng: 126.922
+      lat: 37.50220,
+      lng: 127.0303
     },
     {
       stream_no: 5,
       start_time: "2023-10-05 20:00",
       end_time: "2023-10-05 22:00",
-      title: "홍대에서의 재즈의 밤",
-      introduction: "재즈 음악과 함께하는 홍대의 밤",
-      hashtags: "#재즈 #홍대 #음악회",
+      title: "역삼 리얼 길거리 공연",
+      introduction: "리얼 길거리에서하는 역삼 공연입니다.",
+      hashtags: "#길거리 #공연 #라이브",
       max_viewer: 250,
-      lat: 37.5535,
-      lng: 126.921
+      lat: 37.50172, 
+      lng: 127.0455
     }
   ]);
 
@@ -126,11 +126,11 @@ const handleStreamingClick = (buskerEmail, data) => {
             hashtags: currentBuskingInfo[0].buskingHashtag,
             max_viewer: currentBuskingInfo[0].audienceCount,
             geoLocation: {
-              latitude: currentBuskingInfo[0].geoLocation.latitude,
-              longitude: currentBuskingInfo[0].geoLocation.longitude,
+              latitude: 37.50127,
+              longitude: 127.0396
             },
-            lat: currentBuskingInfo[0].geoLocation.latitude,
-            lng: currentBuskingInfo[0].geoLocation.longitude,
+            lat: 37.50127,
+            lng: 127.0396,
             buskerEmail: currentBuskingInfo[0].buskerEmail,
             nickname: currentBuskingInfo[0].nickname,
             audienceCount: currentBuskingInfo[0].audienceCount,
@@ -160,7 +160,7 @@ const handleStreamingClick = (buskerEmail, data) => {
   }, []);
 
   const options = useMemo(() => ({
-    center: new kakao.maps.LatLng(37.55705, 126.9259),
+    center: new kakao.maps.LatLng(37.50127, 127.0396),
     level: 5,
   }), []);
 
