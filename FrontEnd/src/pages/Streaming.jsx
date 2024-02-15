@@ -7,6 +7,7 @@ import {koreaTime} from "../WebRTC/PCEvent";
 import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 // const userId = "buskerID"
 let makingOffer = false
@@ -169,6 +170,14 @@ const Streaming = ({ isStreaming }) => {
 
         return () => {
             // Cleanup function to be executed on component unmount
+            const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/busker/${userId}/stopBusking`, {
+                body: JSON.stringify({
+                    userId
+                })
+            })
+                .then(r => {
+                    console.log(r)
+                })
             console.log("Closing WebSocket connection and Peer Connection");
             client.deactivate(); // Close the WebSocket connection
             pc.close(); // Close the Peer Connection

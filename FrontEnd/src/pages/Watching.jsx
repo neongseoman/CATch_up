@@ -6,10 +6,10 @@ import * as SockJS from "sockjs-client";
 import {koreaTime} from "../WebRTC/PCEvent";
 import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
+import axios from "axios";
 
 // const audienceId = "audienceID"
 let makingOffer = false
-console.log("Watching is called")
 const Watching = ({buskerEmail}) => {
     const pcRef = useRef(new RTCPeerConnection(PCConfig));
     const clientRef = useRef(
@@ -22,8 +22,6 @@ const Watching = ({buskerEmail}) => {
     const pc = pcRef.current;
     const client = clientRef.current;
     const userId = userInfo.userId
-    console.log(buskerId)
-    console.log(buskerEmail)
 
     useEffect(() => {
         const remoteVideo = document.getElementById("remoteVideo")
@@ -154,6 +152,22 @@ const Watching = ({buskerEmail}) => {
         };
 
         client.activate();
+
+        return () => {
+            // Cleanup function to be executed on component unmount
+            const response = axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/audience/${userId}/leaveBusking`, {
+                body: JSON.stringify({
+                    buskerId,
+                    userId
+                })
+            })
+                .then(r => {
+                    console.log(r)
+                })
+            console.log("Closing WebSocket connection and Peer Connection");
+            client.deactivate(); // Close the WebSocket connection
+            pc.close(); // Close the Peer Connection
+        };
 
 
     }, []);
