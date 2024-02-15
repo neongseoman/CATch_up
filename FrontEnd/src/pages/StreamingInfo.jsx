@@ -85,7 +85,7 @@ const StreamingInfo = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(   )
+                body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
