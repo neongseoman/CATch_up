@@ -14,6 +14,20 @@ const ChatApp = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const chatContainerRef = useRef(null);
   const [showButton, setShowButton] = useState(true);
+  const [isNarrowScreen, setIsNarrowScreen] = useState(window.innerWidth < 900);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNarrowScreen(window.innerWidth < 900);
+    };
+
+    // 창 크기가 변경될 때마다 handleResize 함수를 호출
+    window.addEventListener('resize', handleResize);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleItemClick = (item) => {
     if (lastClickedItem !== null) {
       lastClickedItem.classList.remove("clicked");
@@ -38,7 +52,7 @@ const ChatApp = () => {
   };
 
   const connect = () => {
-    if (stompClient) disconnect();
+    // if (stompClient) disconnect();
 
     // const socket = new SockJS("http://127.0.0.1:8080/chat");
     // const client = new Client(); // Create a new 'Client' instance
@@ -133,7 +147,7 @@ const ChatApp = () => {
     }
   }, [chatMessages]);
 
-  return (
+  return (  
     <div
       style={{
         borderLeft: "2px solid #33333C",
@@ -142,16 +156,15 @@ const ChatApp = () => {
         height: "100vh", // 전체 페이지 높이를 차지하도록 설정
       }}
     >
-      <div
-        style={{
-          height: "100%",
-          fontFamily: "Arial, sans-serif",
-          margin: 0,
-          padding: 0,
-          backgroundColor: "#000", // 배경을 검정색으로 설정
-        }}
-      >
-        <div
+    <div
+      style={{
+        fontFamily: "Arial, sans-serif",
+        margin: 0,
+        backgroundColor: "#000", // 배경을 검정색으로 설정
+        paddingTop: isNarrowScreen ? "200px" : "0px", // 조건부로 paddingTop 적용
+      }}
+    >
+        {/* <div
           style={{
             backgroundColor: "#33333C",
             color: "white",
@@ -172,16 +185,16 @@ const ChatApp = () => {
           >
             채팅
           </p>
-        </div>
+        </div> */}
         <div id="chat-container" style={{ height: "100%", display: "flex" }}>
           <div
             id="chat-main"
             style={{
               backgroundColor: "#000", // 메인 채팅창 배경을 검정색으로 설정
               width: "100%",
-              height: "calc(100% - 80px)",
-              marginTop: "23px",
-              padding: "20px",
+              height: "100%",
+
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
             }}
@@ -259,16 +272,15 @@ const ChatApp = () => {
             <div
               style={{
                 height: "80px",
-                width: "22%",
+                // width: "100%",
                 position: "fixed",
                 bottom: "20px",
                 backgroundColor: "#383842",
-                paddingLeft: "1.5%",
-                paddingRight: "1%",
-                paddingTop: "20px",
+                padding: "13px",
                 paddingBottom: "0px",
                 display: "flex",
                 borderRadius: "5px",
+                marginTop:"auto"
               }}
             >
               <textarea
@@ -276,11 +288,11 @@ const ChatApp = () => {
                   resize: "none",
                   height: "50px",
                   color: "#ffffff",
-                  width: "97%",
+                  width: "100%",
                   border: "none",
                   outline: "none",
                   fontSize: "16px",
-                  marginRight: "3%",
+                  // marginRight: "3%",
                   backgroundColor: "#383842",
                 }}
                 type="text"
@@ -296,7 +308,7 @@ const ChatApp = () => {
               />
               <button
                 style={{
-                  backgroundColor: "#4288F8",
+                  backgroundColor: "#b7891e",
                   color: "white",
                   border: "none",
                   outline: "none",
@@ -304,11 +316,12 @@ const ChatApp = () => {
                   width: "60px",
                   height: "30px",
                   cursor: "pointer",
-                  marginTop: "20px",
+                  marginTop: "12px",
+                  marginLeft:"auto"
                 }}
                 onClick={sendMessage}
               >
-                <h4 style={{ fontSize: "10px", margin: "0px", color: "white" }}>
+                <h4 style={{ fontSize: "14px", margin: "0px", color: "white" }}>
                   전송
                 </h4>
               </button>

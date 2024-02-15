@@ -28,6 +28,8 @@ const SearchStreaming = () => {
     const url = `${process.env.REACT_APP_API_BASE_URL}/api/search/searchStreaming?query=${searchTerm}&page=0&size=10`;
 
     const handleStreamingClick = (buskerEmail, data) => {
+        
+        // console.log(buskerEmail, data)
         navigate('/watchingpage', { state: { buskerEmail, data } });
     };
     
@@ -93,7 +95,7 @@ const SearchStreaming = () => {
                     <CardStreaming
                         key={i}
                         data={e}
-                        handleStreamingClick={() => handleStreamingClick(e.buskerEmail)}
+                        handleStreamingClick={() => handleStreamingClick(e.buskerEmail, buskerData[i])}
                         getTimeFromStartTime={getTimeFromStartTime}
                     />
                 ))

@@ -53,6 +53,7 @@ const ProfileName = styled.p`
   margin-bottom: auto;
   font-size: 16px;
   color: white;
+  text-align: left;
 `;
 
 const StreamingInfoField = styled.div`
