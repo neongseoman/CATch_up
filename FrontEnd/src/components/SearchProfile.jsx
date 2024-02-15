@@ -80,7 +80,9 @@ const LiveIcon = styled.img`
 const UserInfo = styled.p`
   font-size: 14px;
   color: white;
-  margin: 0px;
+  margin-right: 10px;
+  text-align: left;
+  word-break: keep-all;
 `;
 
 const SearchProfile = () => {

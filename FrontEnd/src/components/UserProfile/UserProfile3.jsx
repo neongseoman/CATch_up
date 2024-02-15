@@ -83,6 +83,3 @@ const UserProfile3 = ({ userInfo }) => {
 };
 
 export default UserProfile3;
-
-
-
