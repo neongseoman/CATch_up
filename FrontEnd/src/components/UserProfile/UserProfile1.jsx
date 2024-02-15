@@ -78,11 +78,14 @@ const UnfollowButton = styled.button`
 
 const UserIntroduce = styled.p`
     font-size: 15px;
+    text-align: left;
+    word-break: keep-all;
 `;
 
 const CountField = styled.div`
     width: 100%;
     margin-top: 10px;
+    text-align: left;
 `;
 
 const StreamsButton = styled.button`
@@ -121,8 +124,6 @@ const UserProfile1 = ({ userInfo }) => {
   const [followersCount, setFollowersCount] = useState(userInfo.follower);
   const [followingsCount, setFollowingsCount] = useState(userInfo.following);
   const [recoil, setUserInfo] = useRecoilState(userInfoState);
-
-
 
   const handleStreamsClick = () => {
     alert('스트리밍 기록 모달 띄우기!');

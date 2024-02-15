@@ -7,7 +7,7 @@ const StreamingWrapper = styled.button`
     background: none;
 `;
 
-const Video = styled.div`
+const Image = styled.img`
     width: calc(49%);
     height: 260px;
     display: flex;
@@ -15,6 +15,7 @@ const Video = styled.div`
     border-radius: 10px;
     background-color: #8b8f92;
     margin-top: 15px;
+    object-fit: cover; 
 `;
 
 const Info = styled.div`
@@ -82,6 +83,7 @@ const ProfileName = styled.p`
     margin-bottom: auto;
     font-size: 16px;
     color: white;
+    text-align: left;
 `;
 
 const OptionField = styled.div`
@@ -123,9 +125,7 @@ const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => 
                     </Option>
                 </OptionField>
             </Info>
-            <Video>
-                <VideoTmp />
-            </Video>
+            <Image src="/img/streamingPreview/streaming.jpg"/>
         </StreamingWrapper>
     );
 };
