@@ -100,8 +100,10 @@ public class SignalController {
         buskingManagingService.setAudienceIceCandidate(audienceId,audienceIceCandidateMessage);
     }
 
-    @MessageMapping("/api/leaveBusking")
-    public void leaveBusking() {
+    @PostMapping("/api/audience/{audienceId}/leaveBusking")
+    public ResponseEntity leaveBusking(@RequestBody LeaveParamDto leaveParamDto) {
+        buskingManagingService.leaveBusking(leaveParamDto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/api/busker/{buskerId}/stopBusking")

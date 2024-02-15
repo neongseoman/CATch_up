@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface LiveStreamSessionJpaRepository extends JpaRepository<LiveStreamSession, Integer> {
     List<LiveStreamSession> findByUserNo(int userNo);
+    List<LiveStreamSession> findByUserNoAndEndTimeIsNull(Long userNo);
 }

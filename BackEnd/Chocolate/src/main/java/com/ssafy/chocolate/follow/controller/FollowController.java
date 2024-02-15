@@ -54,7 +54,7 @@ public class FollowController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{userId}/is-following/{followingUsername}")
+    @GetMapping("/is-following/{followingUsername}")
     public ResponseEntity<Boolean> isFollowing(@AuthenticationPrincipal UserDetails currentUser, @PathVariable String followingUsername) {
         String id = currentUser.getUsername();
         Long followerId = followService.findUserIdByUsername(id);

@@ -6,17 +6,13 @@ import com.ssafy.chocolate.kurento.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
-import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -118,10 +114,8 @@ public class BuskingManagingService {
 
     }
 
-    public void leaveBusking(WebSocketSession session, JsonObject jsonMessage) {
-        String busker = jsonMessage.get("busker").getAsString();
-        String audience = jsonMessage.get("audience").getAsString();
-        Busking busking = buskingManaging.get(busker);
-        busking.leave(audience);
+    public void leaveBusking(LeaveParamDto leaveParamDto) {
+        Busking busking = buskingManaging.get(leaveParamDto.getBuskerId());
+        busking.leave(leaveParamDto.getUserId());
     }
 }
