@@ -30,6 +30,11 @@ const Main = () => {
 
 const TwoColumnLayout = styled.div`
   display: flex;
+  flex-direction: row; // 기본적으로 가로로 배치
+
+  @media (max-width: 900px) {
+    flex-direction: column; // 브라우저 가로 크기가 900px 이하인 경우 세로로 배치
+  }
 `;
 
 const ColumnContainer = styled.div`
