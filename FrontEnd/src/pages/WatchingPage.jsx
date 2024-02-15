@@ -91,30 +91,47 @@ const WatchingPage = () => {
 };
 
 const Wrapper = styled.div`
-  overflow-y: hidden;
+    overflow-y: auto; // 전체 페이지에 대한 세로 스크롤 활성화  
 `;
-
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: row; // 기본은 가로 배치
   width: 100%;
-  height: 100vh;
-`;
+  height: 100vh; // 전체 화면 높이
 
+  @media (max-width: 900px) {
+    flex-direction: column; // 모바일 화면에서는 세로 배치
+    overflow-y: auto; // 세로 스크롤 활성화
+    height: auto; // 콘텐츠에 맞게 높이 조정
+    height:500px;
+  }
+`;
 const LeftBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20%;
+  width: 300px;
   height: 100%;
+  min-width: 200px;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const MiddleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 55%;
+  width: calc(100% - 600px); // 화면 가로 길이에서 600px 뺀 나머지 사용
   height: 100%;
+
+  @media (max-width: 900px) {
+    width: 100%; // 모바일 화면에서는 전체 너비 사용
+    overflow-y: auto; // 내부 스크롤 활성화
+    min-height:400px;
+  }
 `;
+
 
 const MiddleTopBox = styled.div`
   display: flex;
@@ -185,9 +202,17 @@ const RightBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25%;
+  width:300px;
   height: 100%;
   background: orange;
+  max-width: 300px;
+
+  @media (max-width: 900px) {
+    width: 100%; // 모바일 화면에서는 전체 너비 사용
+    min-width: 0; // 모바일에서는 최소 너비 제한 없앰
+    height:200px;
+    max-width: 5000px;
+  }
 `;
 
 const UserProfile = styled.button`

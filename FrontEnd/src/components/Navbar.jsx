@@ -148,10 +148,10 @@ const Header = styled.header`
   align-items: center; /* 수직 중앙 정렬 */
   ${props => props.isMainPage ? 'flex-direction: column; ' : ''}
   // 모바일 화면에 대한 스타일
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     flex-direction: column; // 세로 방향으로 쌓기
     height: auto; // 높이 자동 조절
-  }
+  } */
 `;
 const Spacer = styled.div`
   flex-grow: 1;
@@ -177,13 +177,13 @@ const Nav = styled.nav`
     margin-left: auto; // 마지막 요소만 오른쪽으로 정렬
   }
 
-  // 모바일 화면에 대한 스타일
+  /* // 모바일 화면에 대한 스타일
   @media (max-width: 768px) {
     gap: 15px;
     width: 100%; // 너비를 100%로 설정
     flex-direction: column; // 모바일 화면에서는 세로 방향으로 정렬
     justify-content: flex-start; // 모바일 화면에서는 시작 지점에서 정렬
-  }
+  } */
 `;
 
 const StyledLink = styled(Link)`
@@ -205,9 +205,9 @@ const StyledLink = styled(Link)`
   }
 
   // 모바일 화면에 대한 스타일
-  @media (max-width: 768px) {
-    width: 50px;
-    font-size: 14px;
+  @media (max-width: 900px) {
+    /* width: 50px; */
+    font-size: 12px;
   }
 `;
 
@@ -229,7 +229,7 @@ const HamburgerIcon = styled.div`
     border-radius: 15px; /* 마우스 오버 시 테두리 반경 */
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: block; // 모바일 화면에서만 햄버거 아이콘 표시
   }
 `;
