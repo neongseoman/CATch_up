@@ -45,6 +45,11 @@ const StreamingInfo = () => {
     };
 
     const handleStreaming = async () => {
+        if (!userInfo.isLoggedIn) {
+            alert("로그인 후 이용가능합니다.");
+            return; // 로그인하지 않은 경우 함수 실행을 여기서 중단합니다.
+        }
+        
         const formData = {
             buskerEmail: userInfo.userId,
             buskingTitle,
