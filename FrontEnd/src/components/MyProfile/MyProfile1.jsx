@@ -55,8 +55,8 @@ const InfoField = styled.div`
 `;
 
 const ProfileImg = styled.img`
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     margin-left: 25px;
 `;
