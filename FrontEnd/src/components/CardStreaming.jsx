@@ -8,8 +8,8 @@ const StreamingWrapper = styled.button`
 `;
 
 const Video = styled.div`
-    width: calc(55%);
-    height: 300px;
+    width: calc(49%);
+    height: 260px;
     display: flex;
     float: left;
     border-radius: 10px;
@@ -18,10 +18,10 @@ const Video = styled.div`
 `;
 
 const Info = styled.div`
-    width: calc(46%);
+    width: calc(52%);
     margin-left: -10%;
     padding: 2% 5%;
-    height: 300px;
+    height: 260px;
     display: flex;
     float: right;
     color: white;
@@ -53,14 +53,16 @@ const Tag = styled.div`
 
 const StreamingTitle = styled.div`
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     text-align: left;
+    word-break: keep-all;
 `;
 
 const StreamingInfo = styled.div`
     color: white;
     font-size: 12px;
     text-align: left;
+    word-break: keep-all;
 `;
 
 const ProfileField = styled.p`
@@ -69,8 +71,8 @@ const ProfileField = styled.p`
 `;
 
 const ProfileImg = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     margin-right: 5px;
 `;
@@ -78,21 +80,18 @@ const ProfileImg = styled.img`
 const ProfileName = styled.p`
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 20px;
+    font-size: 16px;
     color: white;
 `;
 
 const OptionField = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     margin-top: 20px;
+    justify-content: flex-end;
 `;
 
 const Option = styled.p`
-    font-size: 12px;
+    font-size: 10px;
     color: white;
-    margin-top: 20px;
 `;
 
 const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => {
@@ -120,8 +119,7 @@ const CardStreaming = ({ data, handleStreamingClick, getTimeFromStartTime }) => 
                 </ProfileField>
                 <OptionField>
                     <Option>
-                        {getTimeFromStartTime(data.startTime)}부터 {data.audienceCount}명
-                        시청중
+                        {getTimeFromStartTime(data.startTime)}부터 {data.audienceCount}명 시청중
                     </Option>
                 </OptionField>
             </Info>
