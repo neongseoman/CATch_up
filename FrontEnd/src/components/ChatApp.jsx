@@ -32,13 +32,13 @@ const ChatApp = () => {
 
     connect();
     setChatMessages([
-      { sender: "System", content: "You have joined the room." },
+      { sender: "알림", content: "방송에 입장하였습니다." },
     ]);
     setShowButton(false); // 버튼 숨김
   };
 
   const connect = () => {
-    if (stompClient) disconnect();
+    // if (stompClient) disconnect();
 
     // const socket = new SockJS("http://127.0.0.1:8080/chat");
     // const client = new Client(); // Create a new 'Client' instance
@@ -151,7 +151,7 @@ const ChatApp = () => {
           backgroundColor: "#000", // 배경을 검정색으로 설정
         }}
       >
-        <div
+        {/* <div
           style={{
             backgroundColor: "#33333C",
             color: "white",
@@ -172,7 +172,7 @@ const ChatApp = () => {
           >
             채팅
           </p>
-        </div>
+        </div> */}
         <div id="chat-container" style={{ height: "100%", display: "flex" }}>
           <div
             id="chat-main"
@@ -180,7 +180,7 @@ const ChatApp = () => {
               backgroundColor: "#000", // 메인 채팅창 배경을 검정색으로 설정
               width: "100%",
               height: "calc(100% - 80px)",
-              marginTop: "23px",
+              marginTop: "-10px",
               padding: "20px",
               display: "flex",
               flexDirection: "column",
@@ -207,9 +207,8 @@ const ChatApp = () => {
               {chatMessages.map((chatMessage, index) => (
                 <div
                   style={{ width: "100%", float: "left", marginTop: "10px" }}
-                  className={`message ${
-                    false ? "my-message" : "other-message"
-                  }`}
+                  className={`message ${false ? "my-message" : "other-message"
+                    }`}
                   key={index}
                 >
                   <div style={{ float: "left", alignItems: "center" }}>
@@ -256,19 +255,27 @@ const ChatApp = () => {
                 </div>
               ))}
             </div>
+
+
+            {showButton && (
+              <button
+                style={{ marginBottom: "300px", height: "300px" }}
+                onClick={joinChatRoom}
+              >
+                connect
+              </button>
+            )}
+
             <div
               style={{
                 height: "80px",
-                width: "22%",
+                // width: "20%",
                 position: "fixed",
                 bottom: "20px",
                 backgroundColor: "#383842",
-                paddingLeft: "1.5%",
-                paddingRight: "1%",
-                paddingTop: "20px",
-                paddingBottom: "0px",
+                padding: "10px",
                 display: "flex",
-                borderRadius: "5px",
+                borderRadius: "10px",
               }}
             >
               <textarea
@@ -276,7 +283,7 @@ const ChatApp = () => {
                   resize: "none",
                   height: "50px",
                   color: "#ffffff",
-                  width: "97%",
+                  // width: "100",
                   border: "none",
                   outline: "none",
                   fontSize: "16px",
@@ -296,32 +303,23 @@ const ChatApp = () => {
               />
               <button
                 style={{
-                  backgroundColor: "#4288F8",
+                  backgroundColor: "#a0692a",
                   color: "white",
                   border: "none",
                   outline: "none",
                   borderRadius: "5px",
                   width: "60px",
-                  height: "30px",
+                  height: "50px",
                   cursor: "pointer",
-                  marginTop: "20px",
+                  marginTop:"5px"
                 }}
                 onClick={sendMessage}
               >
-                <h4 style={{ fontSize: "10px", margin: "0px", color: "white" }}>
+                <h4 style={{ fontSize: "15px", margin: "0px", color: "white" }}>
                   전송
                 </h4>
               </button>
             </div>
-
-            {showButton && (
-              <button
-                style={{ marginBottom: "300px", height: "300px" }}
-                onClick={joinChatRoom}
-              >
-                connect
-              </button>
-            )}
           </div>
         </div>
       </div>
