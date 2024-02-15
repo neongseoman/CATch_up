@@ -245,7 +245,7 @@ const ChatApp = () => {
                       style={{
                         color: false ? "#4AB3FF" : "#F7B84B",
                         float: "left",
-                        fontSize: "13px",
+                        fontSize: "17px",
                         fontWeight: "100",
                       }}
                     >
@@ -259,7 +259,7 @@ const ChatApp = () => {
                       color: "#fff",
                       float: "left",
                       marginLeft: "5px",
-                      fontSize: "13px",
+                      fontSize: "17px",
                       fontWeight: "100",
                       overflowWrap: "break-word",
                     }}
