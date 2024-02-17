@@ -4,6 +4,8 @@ import SockJS from "sockjs-client";
 import * as StompJS from "@stomp/stompjs";
 // import { Client } from "@stomp/stompjs";
 import "./css/ChatApp.css";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../RecoilState/userRecoilState";
 
 const ChatApp = ({buskerEmail}) => {
   const [roomId, setRoomId] = useState(buskerEmail);
@@ -15,7 +17,8 @@ const ChatApp = ({buskerEmail}) => {
   const chatContainerRef = useRef(null);
   const [showButton, setShowButton] = useState(true);
   const [isNarrowScreen, setIsNarrowScreen] = useState(window.innerWidth < 900);
-
+  const [userInfo,setUserInfo] = useRecoilState(userInfoState)
+    const userId = userInfo.userId;
   useEffect(() => {
     const handleResize = () => {
       setIsNarrowScreen(window.innerWidth < 900);
@@ -148,7 +151,7 @@ const ChatApp = ({buskerEmail}) => {
     }
   }, [chatMessages]);
 
-  return (  
+  return (
     <div
       style={{
         borderLeft: "2px solid #33333C",
@@ -226,42 +229,41 @@ const ChatApp = ({buskerEmail}) => {
                   }`}
                   key={index}
                 >
-                  <div style={{ float: "left", alignItems: "center" }}>
-                    {/*{false && (*/}
-                    {/*  <div*/}
-                    {/*    style={{*/}
-                    {/*      float: "left",*/}
-                    {/*      width: "8px",*/}
-                    {/*      height: "15px",*/}
-                    {/*      backgroundColor: "#4AB3FF",*/}
-                    {/*      borderRadius: "3px",*/}
-                    {/*      marginRight: "5px",*/}
-                    {/*    }}*/}
-                    {/*  >*/}
-                    {/*    {" "}*/}
-                    {/*  </div>*/}
-                    {/*)}*/}
-                      {false}
-                    <span
-                      className="sender"
-                      style={{
-                        // color: false ? "#4AB3FF" : "#F7B84B",
-                        color: "#F7B84B",
-                        float: "left",
-                        fontSize: "17px",
-                        fontWeight: "100",
-                      }}
-                    >
-                      {chatMessage.sender}:
-                    </span>
-                  </div>
+                    <div style={{float: "left", alignItems: "center"}}>
+                        {/*{false && (*/}
+                        {/*  <div*/}
+                        {/*    style={{*/}
+                        {/*      float: "left",*/}
+                        {/*      width: "8px",*/}
+                        {/*      height: "15px",*/}
+                        {/*      backgroundColor: "#4AB3FF",*/}
+                        {/*      borderRadius: "3px",*/}
+                        {/*      marginRight: "5px",*/}
+                        {/*    }}*/}
+                        {/*  >*/}
+                        {/*    {" "}*/}
+                        {/*  </div>*/}
+                        {/*)}*/}
+                        {false}
+                        <span
+                            className="sender"
+                            style={{
+                                color: chatMessage.sender !== userId ? "#4AB3FF" : "#F7B84B",
+                                float: "left",
+                                fontSize: "17px",
+                                fontWeight: "100",
+                            }}
+                        >
+                          {chatMessage.sender ? `${chatMessage.sender}` : "익명의 사용자 "}:
+                        </span>
+                    </div>
 
-                  <span
-                    className="content"
-                    style={{
-                      color: "#fff",
-                      float: "left",
-                      marginLeft: "5px",
+                    <span
+                        className="content"
+                        style={{
+                            color: "#fff",
+                            float: "left",
+                            marginLeft: "5px",
                       fontSize: "17px",
                       fontWeight: "100",
                       overflowWrap: "break-word",
