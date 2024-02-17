@@ -73,21 +73,21 @@ public class Busking extends UserSession implements Closeable {
                 e.printStackTrace();
             }
         });
-        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
-            ConnectionState newState = connectionStateChangedEvent.getNewState();
-            log.debug(newState.toString());
-            if (newState == ConnectionState.CONNECTED) {
-                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
-                log.info("ICE connection is connected. State: " + newState);
-            } else if (newState == ConnectionState.DISCONNECTED) {
-                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
-                log.info("ICE connection is closed. State: " + newState);
-            }
-        });
+//        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
+//            ConnectionState newState = connectionStateChangedEvent.getNewState();
+//            log.debug(newState.toString());
+//            if (newState == ConnectionState.CONNECTED) {
+//                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
+//                log.info("ICE connection is connected. State: " + newState);
+//            } else if (newState == ConnectionState.DISCONNECTED) {
+//                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
+//                log.info("ICE connection is closed. State: " + newState);
+//            }
+//        });
 
         buskerWebRtcEndpoint.addIceComponentStateChangedListener(iceComponentStateChangedEvent ->
-                log.debug(String.valueOf(iceComponentStateChangedEvent.getState()))
-
+                        log.debug(buskerEmail+" Ice State is "+iceComponentStateChangedEvent.getState())
+//                iceComponent
         );
         buskerWebRtcEndpoint.addErrorListener( errorEvent -> {
                     log.debug(String.valueOf(errorEvent.getErrorCode()));
@@ -161,17 +161,13 @@ public class Busking extends UserSession implements Closeable {
         });
 
         audienceWebRtcEndpoint.addIceComponentStateChangedListener(iceComponentStateChangedEvent ->
-                log.debug(String.valueOf(iceComponentStateChangedEvent.getState()))
-
+                log.debug(sdpOffer.getAudienceId()+" Ice State is "+iceComponentStateChangedEvent.getState())
         );
         audienceWebRtcEndpoint.addErrorListener( errorEvent -> {
-                log.debug(String.valueOf(errorEvent.getErrorCode()));
-                log.debug(String.valueOf(errorEvent.getDescription()));
+                log.debug(sdpOffer.getAudienceId()+" EndPoint Error : "+String.valueOf(errorEvent.getErrorCode()));
+                log.debug(sdpOffer.getAudienceId()+" EndPoint Error : "+String.valueOf(errorEvent.getDescription()));
                 }
         );
-
-
-
 
         String sdpAnswer = audienceWebRtcEndpoint.processOffer(sdpOffer.getOffer().getSdp());
         JsonObject sdpResponse = new JsonObject();
