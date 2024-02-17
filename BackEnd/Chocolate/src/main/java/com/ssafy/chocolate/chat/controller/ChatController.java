@@ -42,10 +42,12 @@ public class ChatController {
             return principal.toString(); // 또는 null 반환
         }
     }
-    @MessageMapping("/api/chat.sendToNewTopic") // 클라이언트에서 해당 경로로 메시지를 전송..
-    public void sendToNewTopic(@Payload String message) {
-        String topicName = message.split("LLLL")[1];
-        String topicPath = "/topic/" + topicName;
+    @MessageMapping("/api/chat/{buskerEmail}") // 클라이언트에서 해당 경로로 메시지를 전송..
+    public void sendToNewTopic(@DestinationVariable String buskerEmail,
+                               @Payload String message) {
+        System.out.println(message);
+//        String topicName = message.split("LLLL")[1];
+        String topicPath = "/topic/" + buskerEmail;
         messagingTemplate.convertAndSend(topicPath, message);
     }
     @GetMapping({"/chatapp"})
