@@ -8,6 +8,7 @@ import {useRecoilState} from "recoil";
 import {userInfoState} from "../RecoilState/userRecoilState";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import login from "./Login";
 
 // const userId = "buskerID"
 let makingOffer = false
@@ -103,7 +104,8 @@ const Streaming = ({ isStreaming }) => {
                 })
         }
 
-        const constraints = {video: true, audio: true}
+        // const constraints = {video: true, audio: true}
+        const constraints = {video: false, audio: true}
 
          navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
@@ -179,7 +181,7 @@ const Streaming = ({ isStreaming }) => {
                     console.log(r)
                 })
             console.log("Closing WebSocket connection and Peer Connection");
-            client.deactivate(); // Close the WebSocket connection
+            client.deactivate().then(r => console.log(r)); // Close the WebSocket connection
             pc.close(); // Close the Peer Connection
         };
 
