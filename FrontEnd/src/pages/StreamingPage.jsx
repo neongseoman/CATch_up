@@ -12,7 +12,6 @@ const StreamingPage = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState)
     const userId = userInfo.userId
     const [isStreaming, setIsStreaming] = useState(true)
-
     const HandleEndButtonClick = () => {
         alert('방송이 종료됩니다!')
 
@@ -42,7 +41,7 @@ const StreamingPage = () => {
                     <Streaming isStreaming={isStreaming}/>
                 </MiddleBox>
                 <RightBox>
-                    <ChatApp/>
+                    <ChatApp buskerEmail={userId}/>
                 </RightBox>
             </Container>
         </Wrapper>

@@ -5,8 +5,8 @@ import * as StompJS from "@stomp/stompjs";
 // import { Client } from "@stomp/stompjs";
 import "./css/ChatApp.css";
 
-const ChatApp = () => {
-  const [roomId, setRoomId] = useState("public");
+const ChatApp = ({buskerEmail}) => {
+  const [roomId, setRoomId] = useState(buskerEmail);
   const [lastClickedItem, setLastClickedItem] = useState(null);
   const [stompClient, setStompClient] = useState(null);
   const [sender, setSender] = useState("");
@@ -39,10 +39,10 @@ const ChatApp = () => {
   const joinChatRoom = () => {
     // disconnect();
 
-    const connectedRoomId = "public";
+    const connectedRoomId = buskerEmail
     console.log("임시방으로 접속. connectedRoomId: " + connectedRoomId);
 
-    setRoomId("public");
+    setRoomId(connectedRoomId);
 
     connect();
     setChatMessages([
@@ -57,7 +57,8 @@ const ChatApp = () => {
     // const socket = new SockJS("http://127.0.0.1:8080/chat");
     // const client = new Client(); // Create a new 'Client' instance
     const client = new StompJS.Client({
-      brokerURL: "wss://i10a105.p.ssafy.io/api/chat",
+      // brokerURL: "wss://i10a105.p.ssafy.io/api/chat",
+      brokerURL: `${process.env.REACT_APP_API_WEBSOCKET_BASE_URL}`,
     });
 
     // client.webSocketFactory = () => socket;
@@ -92,7 +93,7 @@ const ChatApp = () => {
       });
 
       stompClient.publish({
-        destination: `/app/api/chat.sendToNewTopic`,
+        destination: `/app/api/chat/${buskerEmail}`,
         body: chatMessage,
       });
       setMessage(""); // 메시지 입력란을 비웁니다.
@@ -226,24 +227,26 @@ const ChatApp = () => {
                   key={index}
                 >
                   <div style={{ float: "left", alignItems: "center" }}>
-                    {false && (
-                      <div
-                        style={{
-                          float: "left",
-                          width: "8px",
-                          height: "15px",
-                          backgroundColor: "#4AB3FF",
-                          borderRadius: "3px",
-                          marginRight: "5px",
-                        }}
-                      >
-                        {" "}
-                      </div>
-                    )}
+                    {/*{false && (*/}
+                    {/*  <div*/}
+                    {/*    style={{*/}
+                    {/*      float: "left",*/}
+                    {/*      width: "8px",*/}
+                    {/*      height: "15px",*/}
+                    {/*      backgroundColor: "#4AB3FF",*/}
+                    {/*      borderRadius: "3px",*/}
+                    {/*      marginRight: "5px",*/}
+                    {/*    }}*/}
+                    {/*  >*/}
+                    {/*    {" "}*/}
+                    {/*  </div>*/}
+                    {/*)}*/}
+                      {false}
                     <span
                       className="sender"
                       style={{
-                        color: false ? "#4AB3FF" : "#F7B84B",
+                        // color: false ? "#4AB3FF" : "#F7B84B",
+                        color: "#F7B84B",
                         float: "left",
                         fontSize: "17px",
                         fontWeight: "100",

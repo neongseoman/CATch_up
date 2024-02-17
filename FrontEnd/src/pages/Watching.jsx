@@ -171,7 +171,7 @@ const Watching = ({buskerEmail}) => {
                     console.log(r)
                 })
             console.log("Closing WebSocket connection and Peer Connection");
-            client.deactivate(); // Close the WebSocket connection
+            client.deactivate().then(r => console.log(r)); // Close the WebSocket connection
             pc.close(); // Close the Peer Connection
         };
 
