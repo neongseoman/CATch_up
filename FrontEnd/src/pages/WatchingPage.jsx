@@ -23,32 +23,6 @@ const WatchingPage = () => {
     return `${hours < 10 ? "0" + hours : hours}시 ${minutes < 10 ? "0" + minutes : minutes}분`;
   };
 
-  // useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         // 서버로부터 스트리밍 정보를 가져오는 HTTP 요청
-  //         const response = await fetch("", {
-  //           method: "GET",
-  //           credentials: "include",
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error("서버 응답이 실패했습니다");
-  //         }
-
-  //         const data = await response.json();
-  //         console.log(data);
-  //         setStreamingInfo(data);
-  //         setLoading(false);
-  //       } catch (e) {
-  //         setLoading(false);
-  //         console.log(e);
-  //       }
-  //     };
-
-  //     fetchData();
-  //   }, []);
-
   return (
     <Wrapper>
       <GlobalStyle />
@@ -79,7 +53,7 @@ const WatchingPage = () => {
               </MiddleBottomBox>
             </MiddleContainer>
             <RightBox>
-              <ChatApp />
+              <ChatApp buskerEmail={data.buskerEmail}/>
             </RightBox>
           </>
         )}
