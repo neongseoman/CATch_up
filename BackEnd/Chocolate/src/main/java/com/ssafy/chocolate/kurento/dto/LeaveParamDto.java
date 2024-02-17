@@ -8,4 +8,12 @@ import lombok.Setter;
 public class LeaveParamDto {
     String buskerId;
     String userId;
+
+    @Override
+    public String toString() {
+        return "LeaveParamDto{" +
+                "buskerId='" + buskerId + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

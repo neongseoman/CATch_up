@@ -102,13 +102,15 @@ public class SignalController {
 
     @PostMapping("/api/audience/{audienceId}/leaveBusking")
     public ResponseEntity leaveBusking(@RequestBody LeaveParamDto leaveParamDto) {
+        log.info("leaveParamDto : " +leaveParamDto.toString());
+        log.info(leaveParamDto.getUserId() +" send leave busking room message and Busker is " + leaveParamDto.getBuskerId());
         buskingManagingService.leaveBusking(leaveParamDto);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/api/busker/{buskerId}/stopBusking")
     public void stopBusking(@PathVariable String buskerId) throws IOException {
-//        log.info(buskerId);
+        log.info(buskerId + " send busking stop request");
         buskingManagingService.stopBusking(buskerId); // 에러처리 해야하는데...
     }
 

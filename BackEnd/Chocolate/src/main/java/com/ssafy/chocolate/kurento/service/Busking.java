@@ -73,21 +73,9 @@ public class Busking extends UserSession implements Closeable {
                 e.printStackTrace();
             }
         });
-//        buskerWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
-//            ConnectionState newState = connectionStateChangedEvent.getNewState();
-//            log.debug(newState.toString());
-//            if (newState == ConnectionState.CONNECTED) {
-//                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
-//                log.info("ICE connection is connected. State: " + newState);
-//            } else if (newState == ConnectionState.DISCONNECTED) {
-//                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
-//                log.info("ICE connection is closed. State: " + newState);
-//            }
-//        });
 
         buskerWebRtcEndpoint.addIceComponentStateChangedListener(iceComponentStateChangedEvent ->
-                        log.info(buskerEmail+" Ice State is "+iceComponentStateChangedEvent.getState())
-//                iceComponent
+                        log.info("busker : " + buskerEmail+" Ice Component State is "+iceComponentStateChangedEvent.getState())
         );
         buskerWebRtcEndpoint.addErrorListener( errorEvent -> {
                     log.info(String.valueOf(errorEvent.getErrorCode()));
@@ -146,22 +134,22 @@ public class Busking extends UserSession implements Closeable {
             }
         });
 
-        audienceWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
-            ConnectionState newState = connectionStateChangedEvent.getNewState();
-
-            log.debug(String.valueOf(newState));
-            if (newState == ConnectionState.CONNECTED) {
-                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
-                log.info("ICE connection is connected. State: " + newState);
-                audienceCount++;
-            } else if (newState == ConnectionState.DISCONNECTED) {
-                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
-                log.info("ICE connection is closed. State: " + newState);
-            }
-        });
+//        audienceWebRtcEndpoint.addConnectionStateChangedListener(connectionStateChangedEvent -> {
+//            ConnectionState newState = connectionStateChangedEvent.getNewState();
+//
+//            log.debug(String.valueOf(newState));
+//            if (newState == ConnectionState.CONNECTED) {
+//                // ICE 연결이 커넥티드 되었을 때 로그를 출력합니다.
+//                log.info("ICE connection is connected. State: " + newState);
+//                audienceCount++;
+//            } else if (newState == ConnectionState.DISCONNECTED) {
+//                // ICE 연결이 종료되거나 실패한 경우 로그를 출력합니다.
+//                log.info("ICE connection is closed. State: " + newState);
+//            }
+//        });
 
         audienceWebRtcEndpoint.addIceComponentStateChangedListener(iceComponentStateChangedEvent ->
-                log.info(sdpOffer.getAudienceId()+" Ice State is "+iceComponentStateChangedEvent.getState())
+                log.info("Audience : " + sdpOffer.getAudienceId()+" Ice Component State is "+iceComponentStateChangedEvent.getState())
         );
         audienceWebRtcEndpoint.addErrorListener( errorEvent -> {
                 log.info(sdpOffer.getAudienceId()+" EndPoint Error : "+String.valueOf(errorEvent.getErrorCode()));
