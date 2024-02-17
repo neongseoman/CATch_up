@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LeaveParamDto {
-    String buskerId;
-    String userId;
+    private String buskerId;
+    private String userId;
 
     @Override
     public String toString() {
