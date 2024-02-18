@@ -77,7 +77,6 @@ const UserProfile2 = ({ userInfo }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mapLink, setMapLink] = useState('');
-  const mapRef = useRef(null); // 지도를 표시할 div의 ref
 
   useEffect(() => {
     fetchActiveSessions(userInfo)
@@ -100,34 +99,6 @@ const UserProfile2 = ({ userInfo }) => {
       });
   }, [userInfo, recoil.lat, recoil.lng, recoil.nickname]); // userInfo 및 recoil 상태가 변경될 때마다 요청을 다시 보냄
   
-  useEffect(() => {
-    // 세션이 있고, 지도 관련 kakao 객체가 로드된 경우에만 지도를 초기화
-    if (session && window.kakao && window.kakao.maps) {
-      const mapContainer = mapRef.current; // 지도를 표시할 div
-      const options = {
-        center: new window.kakao.maps.LatLng(session.latitude, session.longitude),
-        level: 3,
-        draggable: false // 지도가 움직이지 않도록 설정
-      };
-      const map = new window.kakao.maps.Map(mapContainer, options);
-
-      // 마커 이미지의 URL 및 크기 정의
-      const imageSrc = '/img/green.png'; // 마커 이미지 경로
-      const imageSize = new kakao.maps.Size(50, 50); // 마커 이미지의 크기
-
-      // MarkerImage 객체 생성
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-      // 마커 생성 및 마커 이미지 설정
-      const markerPosition = new kakao.maps.LatLng(session.latitude, session.longitude);
-      const marker = new kakao.maps.Marker({
-        position: markerPosition,
-        image: markerImage
-      });
-      marker.setMap(map); // 지도에 마커를 표시
-    }
-  }, [loading, session]); // session 상태가 변경될 때마다 지도 업데이트
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -143,7 +114,7 @@ const UserProfile2 = ({ userInfo }) => {
       {/* <StyledButton href={"https://map.naver.com/p/directions/14141991.9426749,4509208.0793999,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%ED%85%8C%ED%97%A4%EB%9E%80%EB%A1%9C%20212,,ADDRESS_POI/14142459.96321,4509225.0578328,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%97%AD%EC%82%BC%EB%8F%99%20711-5,,ADDRESS_POI/-/transit?c=16.28,0,0,0,dh"} target="_blank" rel="noopener noreferrer"> */}
       길찾기 🚩
       </StyledButton>
-      <MapContainer ref={mapRef} />
+
     </ContentAndButtonContainer>
   ) : (
     <h3>{userInfo.nickname}님은 현재 방송 중이 아닙니다!!</h3>
