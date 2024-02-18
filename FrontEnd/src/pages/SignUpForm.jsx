@@ -9,8 +9,10 @@ function SignUpForm() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태 추가
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState(''); // 비밀번호 불일치 에러 메시지 상태 추가
   const [usernameError, setUsernameError] = useState('');
 
   // 이메일 유효성 검사 함수
@@ -48,10 +50,22 @@ function SignUpForm() {
     }
   };
 
-  const isFormValid = () => {
-    // 이메일과 비밀번호가 유효하고, 추가적인 오류 메시지가 없어야 함
-    return validateEmail(email) && validatePassword(password) && !emailError && !passwordError;
+  // 비밀번호 확인 입력 시 에러 메시지 업데이트
+  const handleConfirmPasswordChange = (e) => {
+    const confirmPasswordInput = e.target.value;
+    setConfirmPassword(confirmPasswordInput);
+    if (password !== confirmPasswordInput) {
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
+    } else {
+      setConfirmPasswordError('');
+    }
   };
+
+  const isFormValid = () => {
+    // 비밀번호와 비밀번호 확인이 일치하는지도 검사하도록 수정
+    return validateEmail(email) && validatePassword(password) && password === confirmPassword && !emailError && !passwordError && !confirmPasswordError;
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -121,6 +135,16 @@ function SignUpForm() {
       />
       <ValMsg style={{ color: passwordError ? 'red' : 'transparent', height: '30px' }}>
         {passwordError || '⠀'}
+      </ValMsg>
+
+      <TextInput
+        type="password"
+        placeholder="비밀번호 확인"
+        value={confirmPassword}
+        onChange={handleConfirmPasswordChange}
+      />
+      <ValMsg style={{ color: confirmPasswordError ? 'red' : 'transparent', height: '30px' }}>
+        {confirmPasswordError || '⠀'}
       </ValMsg>
 
       <Button onClick={handleSubmit}>회원가입</Button>
