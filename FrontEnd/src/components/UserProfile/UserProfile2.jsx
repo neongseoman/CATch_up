@@ -40,7 +40,17 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
+const Wrapper2 = styled.div`
+  width: 100%;
+  height: 400px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column; // 자식 요소들을 수직으로 정렬
+  border-radius: 10px;
+  background-color: #2C2A26;
+  justify-content: center;
+  align-items: center;
+`;
 // 내용과 버튼을 수평으로 정렬하기 위한 컨테이너 스타일 추가
 const ContentAndButtonContainer = styled.div`
   display: flex;

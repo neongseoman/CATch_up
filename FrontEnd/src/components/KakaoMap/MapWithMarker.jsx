@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 const MapContainer = styled.div`
   width: 100%;
-  height: 350px;
+  height: 400px;
+  border-radius: 10px;
 `;
 
 const MapWithMarker = ({ latitude, longitude, markerImageSrc = '/img/green.png' }) => {
