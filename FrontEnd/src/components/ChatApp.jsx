@@ -4,10 +4,10 @@ import SockJS from "sockjs-client";
 import * as StompJS from "@stomp/stompjs";
 // import { Client } from "@stomp/stompjs";
 import "./css/ChatApp.css";
-import {useRecoilState} from "recoil";
-import {userInfoState} from "../RecoilState/userRecoilState";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../RecoilState/userRecoilState";
 
-const ChatApp = ({buskerEmail}) => {
+const ChatApp = ({ buskerEmail }) => {
   const [roomId, setRoomId] = useState(buskerEmail);
   const [lastClickedItem, setLastClickedItem] = useState(null);
   const [stompClient, setStompClient] = useState(null);
@@ -17,18 +17,17 @@ const ChatApp = ({buskerEmail}) => {
   const chatContainerRef = useRef(null);
   const [showButton, setShowButton] = useState(true);
   const [isNarrowScreen, setIsNarrowScreen] = useState(window.innerWidth < 900);
-  const [userInfo,setUserInfo] = useRecoilState(userInfoState)
-    const userId = userInfo.userId;
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const userId = userInfo.userId;
   useEffect(() => {
     const handleResize = () => {
       setIsNarrowScreen(window.innerWidth < 900);
     };
 
-    // 창 크기가 변경될 때마다 handleResize 함수를 호출
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleItemClick = (item) => {
@@ -42,7 +41,7 @@ const ChatApp = ({buskerEmail}) => {
   const joinChatRoom = () => {
     // disconnect();
 
-    const connectedRoomId = buskerEmail
+    const connectedRoomId = buskerEmail;
     console.log("임시방으로 접속. connectedRoomId: " + connectedRoomId);
 
     setRoomId(connectedRoomId);
@@ -142,6 +141,15 @@ const ChatApp = ({buskerEmail}) => {
       }
     };
     fetchData();
+
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight - 180);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -160,14 +168,14 @@ const ChatApp = ({buskerEmail}) => {
         height: "100vh", // 전체 페이지 높이를 차지하도록 설정
       }}
     >
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        margin: 0,
-        backgroundColor: "#000", // 배경을 검정색으로 설정
-        paddingTop: isNarrowScreen ? "200px" : "0px", // 조건부로 paddingTop 적용
-      }}
-    >
+      <div
+        style={{
+          fontFamily: "Arial, sans-serif",
+          margin: 0,
+          backgroundColor: "#000", // 배경을 검정색으로 설정
+          paddingTop: isNarrowScreen ? "200px" : "0px", // 조건부로 paddingTop 적용
+        }}
+      >
         {/* <div
           style={{
             backgroundColor: "#33333C",
@@ -216,7 +224,7 @@ const ChatApp = ({buskerEmail}) => {
               ref={chatContainerRef}
               className="chat-scroll"
               style={{
-                height: "calc(100% - 40px)",
+                height: `${windowHeight}px`,
                 overflowY: "auto",
                 paddingRight: "10px",
               }}
@@ -229,41 +237,45 @@ const ChatApp = ({buskerEmail}) => {
                   }`}
                   key={index}
                 >
-                    <div style={{float: "left", alignItems: "center"}}>
-                        {/*{false && (*/}
-                        {/*  <div*/}
-                        {/*    style={{*/}
-                        {/*      float: "left",*/}
-                        {/*      width: "8px",*/}
-                        {/*      height: "15px",*/}
-                        {/*      backgroundColor: "#4AB3FF",*/}
-                        {/*      borderRadius: "3px",*/}
-                        {/*      marginRight: "5px",*/}
-                        {/*    }}*/}
-                        {/*  >*/}
-                        {/*    {" "}*/}
-                        {/*  </div>*/}
-                        {/*)}*/}
-                        {false}
-                        <span
-                            className="sender"
-                            style={{
-                                color: chatMessage.sender !== userId ? "#4AB3FF" : "#F7B84B",
-                                float: "left",
-                                fontSize: "17px",
-                                fontWeight: "100",
-                            }}
-                        >
-                          {chatMessage.sender ? `${chatMessage.sender}` : "익명의 사용자 "}:
-                        </span>
-                    </div>
-
+                  <div style={{ float: "left", alignItems: "center" }}>
+                    {/*{false && (*/}
+                    {/*  <div*/}
+                    {/*    style={{*/}
+                    {/*      float: "left",*/}
+                    {/*      width: "8px",*/}
+                    {/*      height: "15px",*/}
+                    {/*      backgroundColor: "#4AB3FF",*/}
+                    {/*      borderRadius: "3px",*/}
+                    {/*      marginRight: "5px",*/}
+                    {/*    }}*/}
+                    {/*  >*/}
+                    {/*    {" "}*/}
+                    {/*  </div>*/}
+                    {/*)}*/}
+                    {false}
                     <span
-                        className="content"
-                        style={{
-                            color: "#fff",
-                            float: "left",
-                            marginLeft: "5px",
+                      className="sender"
+                      style={{
+                        color:
+                          chatMessage.sender !== userId ? "#4AB3FF" : "#F7B84B",
+                        float: "left",
+                        fontSize: "17px",
+                        fontWeight: "100",
+                      }}
+                    >
+                      {chatMessage.sender
+                        ? `${chatMessage.sender}`
+                        : "익명의 사용자 "}
+                      :
+                    </span>
+                  </div>
+
+                  <span
+                    className="content"
+                    style={{
+                      color: "#fff",
+                      float: "left",
+                      marginLeft: "5px",
                       fontSize: "17px",
                       fontWeight: "100",
                       overflowWrap: "break-word",
@@ -275,9 +287,9 @@ const ChatApp = ({buskerEmail}) => {
               ))}
             </div>
             <div
+              id="chatForm"
               style={{
                 height: "80px",
-                // width: "100%",
                 position: "fixed",
                 bottom: "20px",
                 backgroundColor: "#383842",
@@ -285,7 +297,7 @@ const ChatApp = ({buskerEmail}) => {
                 paddingBottom: "0px",
                 display: "flex",
                 borderRadius: "5px",
-                marginTop:"auto"
+                marginTop: "auto",
               }}
             >
               <textarea
@@ -322,7 +334,7 @@ const ChatApp = ({buskerEmail}) => {
                   height: "30px",
                   cursor: "pointer",
                   marginTop: "12px",
-                  marginLeft:"auto"
+                  marginLeft: "auto",
                 }}
                 onClick={sendMessage}
               >

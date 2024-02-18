@@ -1,22 +1,40 @@
 .chat-scroll::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+
+.chat-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chat-scroll {
+  width: 100%;
+  height: calc(100% - 90px);
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.chat-scroll p {
+  font-size: 2rem;
+  padding: 0.6rem 1rem;
+  background: #febf00;
+}
+
+#chatForm {
+  height: 80px;
+  width: 90%;
+  position: fixed;
+  bottom: 20px;
+  background-color: #383842;
+  padding: 13px;
+  padding-bottom: 0px;
+  display: flex;
+  border-radius: 5px;
+  margin-top: auto;
+}
+
+@media (min-width: 900px) {
+  #chatForm {
+    width: 275px;
   }
-  
-  .chat-scroll {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .chat-scroll {
-    width: 100%;
-    height: calc(100% - 90px);
-    overflow-y: auto;
-    padding-right: 10px;
-  }
-  
-  .chat-scroll p {
-    font-size: 2rem;
-    padding: 0.6rem 1rem;
-    background: #febf00;
-  }
-  
+}
