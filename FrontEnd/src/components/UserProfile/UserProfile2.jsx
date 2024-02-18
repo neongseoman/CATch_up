@@ -1,5 +1,5 @@
-// 사용자 프로필-2
-import React, { useState, useEffect } from 'react';
+/*global kakao */ 
+import React, { useState, useEffect,useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../RecoilState/userRecoilState';
