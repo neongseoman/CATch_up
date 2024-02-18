@@ -1,6 +1,6 @@
 /*global kakao */ 
 import { useRef, useEffect, useMemo,useState  } from 'react';
-import { getCurrentBuskingInfo } from "../Apis/streamingApi";
+import { getCurrentBuskingInfo } from "../../Apis/streamingApi";
 import { useNavigate } from 'react-router-dom';
 
 function Kakaomap(props) {

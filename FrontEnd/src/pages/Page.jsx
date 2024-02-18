@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
-import CustomText from "../components/CustomText";
+import CustomText from "../components/common/CustomText";
 
 const Page = () => {
   const { pageId } = useParams();

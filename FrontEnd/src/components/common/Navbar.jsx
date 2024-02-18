@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
-import ErrorPage from '../pages/ErrorPage';
+import ErrorPage from '../../pages/ErrorPage';
 import { useSetRecoilState } from 'recoil';
-import { userInfoState, userInfoInitialState } from '../RecoilState/userRecoilState';
+import { userInfoState, userInfoInitialState } from '../../RecoilState/userRecoilState';
 
 
 const Navbar = () => {

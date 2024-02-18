@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import VideoTmp from "./VideoTmp";
+import VideoTmp from "./common/VideoTmp";
 
 const StreamingWrapper = styled.button`
     width: 100%;

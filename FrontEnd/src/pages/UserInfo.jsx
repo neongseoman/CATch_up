@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
-import { Button } from "../components/Button";
+import { Button } from "../components/common/Button";
 
 function UserInfo() {
   const [userInfo, setUserInfo] = useState(null);

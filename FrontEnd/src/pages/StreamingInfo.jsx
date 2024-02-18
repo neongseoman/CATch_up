@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomText from '../components/CustomText';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import CustomText from '../components/common/CustomText';
+import TextInput from '../components/common/TextInput';
+import Button from '../components/common/Button';
 import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
 import { buskerGeolocation, userInfoState } from "../RecoilState/userRecoilState";
 import LocationUsageToggle from "../components/LocationUsageToggle"
 import HashTagInput from '../components/HashTagInput';
-import KakaoMapSearch from '../components/KakaoMapSearch'
+import KakaoMapSearch from '../components/KakaoMap/KakaoMapSearch'
 
 const StreamingInfo = () => {
     const navigate = useNavigate();
@@ -132,7 +132,7 @@ const StreamingInfo = () => {
 
 
             <CustomText typography="h4" bold>
-            방송하려는 위치로 마커를 이동해주세요
+            방송하려는 위치로 마커를 이동해주세요.
             </CustomText>
 
             {locationError && <p>Error: {locationError}</p>}

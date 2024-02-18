@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useSetRecoilState } from 'recoil';
-import { searchTermState } from '../RecoilState/userRecoilState';
+import { searchTermState } from '../../RecoilState/userRecoilState';
 
 const SearchContainer = styled.div`
   display: flex;

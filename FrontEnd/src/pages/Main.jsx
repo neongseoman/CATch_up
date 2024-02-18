@@ -1,5 +1,5 @@
 import React from "react";
-import CustomText from "../components/CustomText";
+import CustomText from "../components/common/CustomText";
 import styled from "@emotion/styled";
 import MainStreaming from "../components/MainStreaming";
 import MainShorts from "../components/MainShorts";

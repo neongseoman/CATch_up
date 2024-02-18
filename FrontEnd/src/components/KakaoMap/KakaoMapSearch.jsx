@@ -1,7 +1,7 @@
 /*global kakao */ 
 import React, { useEffect, useRef, useState } from 'react';
-import TextInput from './TextInput';
-import Button from './Button';
+import TextInput from '../common/TextInput';
+import Button from '../common/Button';
 import styled from "@emotion/styled";
 
 const KakaoMapSearch = ({ onLocationSelect }) => {

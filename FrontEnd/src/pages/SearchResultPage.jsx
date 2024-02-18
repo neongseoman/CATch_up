@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CustomText from '../components/CustomText';
+import CustomText from '../components/common/CustomText';
 import SearchStreaming from '../components/SearchStreaming';
 import SearchProfile from '../components/SearchProfile';
 import SearchShorts from '../components/SearchShorts';

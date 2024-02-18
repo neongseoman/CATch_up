@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../RecoilState/userRecoilState';
-import MapWithMarker from '../MapWithMarker';
+import MapWithMarker from '../KakaoMap/MapWithMarker';
 
 const StyledH4 = styled.h4`
   font-size: 1.4em; /* 원하는 스타일 */
@@ -105,7 +105,8 @@ const UserProfile2 = ({ userInfo }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-<Wrapper>
+    <>
+    <Wrapper>
   {session ? (
     <ContentAndButtonContainer>
       <div>
@@ -128,6 +129,18 @@ const UserProfile2 = ({ userInfo }) => {
     <h3>{userInfo.nickname}님은 현재 방송 중이 아닙니다!!</h3>
   )}
 </Wrapper>
+
+      {session && (
+        <Wrapper>
+        <MapWithMarker
+          latitude={session.latitude}
+          longitude={session.longitude}
+          markerImageSrc="/img/green.png"
+        />
+        </Wrapper>
+      )}
+    </>
+
   );
 };
 

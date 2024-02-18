@@ -6,7 +6,7 @@ import { userInfoState } from '../RecoilState/userRecoilState';
 import MyProfile1 from '../components/MyProfile/MyProfile1';
 import MyProfile2 from '../components/MyProfile/MyProfile2';
 import MyProfile3 from '../components/MyProfile/MyProfile3';
-import CustomText from '../components/CustomText';
+import CustomText from '../components/common/CustomText';
 
 const Wrapper = styled.div`
     width: 100%;

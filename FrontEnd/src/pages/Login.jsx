@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomText from '../components/CustomText';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button'
+import CustomText from '../components/common/CustomText';
+import TextInput from '../components/common/TextInput';
+import Button from '../components/common/Button'
 import styled from "@emotion/styled";
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../RecoilState/userRecoilState';

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import CustomText from "../components/CustomText";
+import CustomText from "../components/common/CustomText";
 import {PCConfig} from "../WebRTC/RTCConfig";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";

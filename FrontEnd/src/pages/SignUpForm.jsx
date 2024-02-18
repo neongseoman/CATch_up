@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import TextInput from '../components/common/TextInput';
+import Button from '../components/common/Button';
 import styled from "@emotion/styled";
-import CustomText from '../components/CustomText';
+import CustomText from '../components/common/CustomText';
 
 function SignUpForm() {
   const navigate = useNavigate();

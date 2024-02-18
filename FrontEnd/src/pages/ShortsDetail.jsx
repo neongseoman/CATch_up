@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CustomText from '../components/CustomText';
+import CustomText from '../components/common/CustomText';
 import ReviewList from '../components/ReviewList';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../RecoilState/userRecoilState';

@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { searchTermState } from '../RecoilState/userRecoilState';
 import { getCurrentBuskingInfo } from "../Apis/streamingApi";
 import CardStreaming from "./CardStreaming";
-import Kakaomap from './KakaoMap';
+import Kakaomap from './KakaoMap/KakaoMap';
 
 const Wrapper = styled.div`
     width: 100%;

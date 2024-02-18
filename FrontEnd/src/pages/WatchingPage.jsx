@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { styled, createGlobalStyle } from "styled-components";
 import ChatApp from "../components/ChatApp";
-import VideoTmp from "../components/VideoTmp";
+import VideoTmp from "../components/common/VideoTmp";
 import StreamerList from "../components/StreamerList";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/common/Navbar";
 import Watching from "./Watching";
 import { useLocation, useNavigate } from "react-router-dom";
 
