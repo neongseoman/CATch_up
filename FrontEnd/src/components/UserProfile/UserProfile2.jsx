@@ -99,6 +99,7 @@ const UserProfile2 = ({ userInfo }) => {
         setLoading(false);
       });
   }, [userInfo, recoil.lat, recoil.lng, recoil.nickname]); // userInfo 및 recoil 상태가 변경될 때마다 요청을 다시 보냄
+  
   useEffect(() => {
     // 세션이 있고, 지도 관련 kakao 객체가 로드된 경우에만 지도를 초기화
     if (session && window.kakao && window.kakao.maps) {
@@ -125,7 +126,7 @@ const UserProfile2 = ({ userInfo }) => {
       });
       marker.setMap(map); // 지도에 마커를 표시
     }
-  }, [session]); // session 상태가 변경될 때마다 지도 업데이트
+  }, [loading, session]); // session 상태가 변경될 때마다 지도 업데이트
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
