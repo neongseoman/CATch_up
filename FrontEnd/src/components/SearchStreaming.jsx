@@ -86,6 +86,7 @@ const SearchStreaming = () => {
     };
 
     return (
+        <>        
         <Wrapper>
             <MapWrapper>
                 <Kakaomap></Kakaomap>
@@ -101,7 +102,10 @@ const SearchStreaming = () => {
                 ))
                 : null}
         </Wrapper>
+        </>
+
     );
 };
+
 
 export default SearchStreaming;

@@ -1,4 +1,4 @@
-/*global kakao */ 
+/*global kakao */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
@@ -41,15 +41,24 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 const Wrapper2 = styled.div`
+  position: relative; // 내부 요소의 절대 위치를 기준으로 설정
   width: 100%;
-  height: 400px;
+  height: 350px; // 또는 원하는 높이
   margin-top: 10px;
-  display: flex;
-  flex-direction: column; // 자식 요소들을 수직으로 정렬
   border-radius: 10px;
+   // 배경색은 예시로 사용됨
+`;
+const PositionLabel = styled.div`
+  position: absolute; // Wrapper2 기준으로 절대 위치 설정
+  top: 10px; // 상단에서 0
+  left: 10px; // 좌측에서 0
+  border-radius:15px;
+  padding: 10px; // 텍스트 주변에 여백 추가
+  padding-right:15px;
+  font-weight: bold; // 굵은 글씨체
+  color: white; // 글씨 색상
   background-color: #2C2A26;
-  justify-content: center;
-  align-items: center;
+  z-index:10;
 `;
 // 내용과 버튼을 수평으로 정렬하기 위한 컨테이너 스타일 추가
 const ContentAndButtonContainer = styled.div`
@@ -100,7 +109,7 @@ const UserProfile2 = ({ userInfo }) => {
           const link = `http://map.naver.com/index.nhn?slng=${recoil.lng}&slat=${recoil.lat}&stext='${encodeURIComponent(recoil.nickname)}'님의 위치&elng=${activeSession.longitude}&elat=${activeSession.latitude}&etext=${encodeURIComponent(activeSession.title)}&menu=route&pathType=1`;
           setMapLink(link);
         }
-        
+
         setLoading(false);
       })
       .catch(err => {
@@ -109,39 +118,43 @@ const UserProfile2 = ({ userInfo }) => {
         setLoading(false);
       });
   }, [userInfo, recoil.lat, recoil.lng, recoil.nickname]); // userInfo 및 recoil 상태가 변경될 때마다 요청을 다시 보냄
-  
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-    <Wrapper>
-  {session ? (
-    <ContentAndButtonContainer>
-      <div>
-        <StyledH4>🎬️ {session.title}</StyledH4>
-        <StyledP>📝 {session.introduction}</StyledP>
-      </div>
-      <StyledButton href={mapLink} target="_blank" rel="noopener noreferrer">
-      {/* <StyledButton href={"https://map.naver.com/p/directions/14141991.9426749,4509208.0793999,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%ED%85%8C%ED%97%A4%EB%9E%80%EB%A1%9C%20212,,ADDRESS_POI/14142459.96321,4509225.0578328,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%97%AD%EC%82%BC%EB%8F%99%20711-5,,ADDRESS_POI/-/transit?c=16.28,0,0,0,dh"} target="_blank" rel="noopener noreferrer"> */}
-      길찾기 🚩
-      </StyledButton>
+      <Wrapper>
+        {session ? (
+          <ContentAndButtonContainer>
+            <div>
+              <StyledH4>🎬️ {session.title}</StyledH4>
+              <StyledP>📝 {session.introduction}</StyledP>
+            </div>
+            <StyledButton href={mapLink} target="_blank" rel="noopener noreferrer">
+              {/* <StyledButton href={"https://map.naver.com/p/directions/14141991.9426749,4509208.0793999,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%ED%85%8C%ED%97%A4%EB%9E%80%EB%A1%9C%20212,,ADDRESS_POI/14142459.96321,4509225.0578328,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%97%AD%EC%82%BC%EB%8F%99%20711-5,,ADDRESS_POI/-/transit?c=16.28,0,0,0,dh"} target="_blank" rel="noopener noreferrer"> */}
+              길찾기 🚩
+            </StyledButton>
 
-    </ContentAndButtonContainer>
-  ) : (
-    <h3>{userInfo.nickname}님은 현재 방송 중이 아닙니다!!</h3>
-  )}
-</Wrapper>
+          </ContentAndButtonContainer>
+        ) : (
+          <h3>{userInfo.nickname}님은 현재 방송 중이 아닙니다!!</h3>
+        )}
+      </Wrapper>
 
       {session && (
-        <Wrapper>
-        <MapWithMarker
-          latitude={session.latitude}
-          longitude={session.longitude}
-          markerImageSrc="/img/green.png"
-        />
-        </Wrapper>
+
+        <Wrapper2>
+          <PositionLabel>
+            <img src="/img/live.1.png" alt="Location Icon" style={{ marginRight: '3px', width: '40px', height: '18px' }} />
+            현재 방송중인 위치</PositionLabel>
+          <MapWithMarker
+            latitude={session.latitude}
+            longitude={session.longitude}
+            markerImageSrc="/img/green.png"
+          />
+        </Wrapper2>
       )}
     </>
 
