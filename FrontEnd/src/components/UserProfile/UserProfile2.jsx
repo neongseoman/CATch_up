@@ -1,8 +1,9 @@
 /*global kakao */ 
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../RecoilState/userRecoilState';
+import MapWithMarker from '../MapWithMarker';
 
 const StyledH4 = styled.h4`
   font-size: 1.4em; /* 원하는 스타일 */
@@ -99,6 +100,7 @@ const UserProfile2 = ({ userInfo }) => {
       });
   }, [userInfo, recoil.lat, recoil.lng, recoil.nickname]); // userInfo 및 recoil 상태가 변경될 때마다 요청을 다시 보냄
   
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -114,7 +116,13 @@ const UserProfile2 = ({ userInfo }) => {
       {/* <StyledButton href={"https://map.naver.com/p/directions/14141991.9426749,4509208.0793999,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%ED%85%8C%ED%97%A4%EB%9E%80%EB%A1%9C%20212,,ADDRESS_POI/14142459.96321,4509225.0578328,%EC%84%9C%EC%9A%B8%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%97%AD%EC%82%BC%EB%8F%99%20711-5,,ADDRESS_POI/-/transit?c=16.28,0,0,0,dh"} target="_blank" rel="noopener noreferrer"> */}
       길찾기 🚩
       </StyledButton>
-
+      {session && (
+        <MapWithMarker
+          latitude={session.latitude}
+          longitude={session.longitude}
+          markerImageSrc="/img/green.png"
+        />
+      )}
     </ContentAndButtonContainer>
   ) : (
     <h3>{userInfo.nickname}님은 현재 방송 중이 아닙니다!!</h3>
