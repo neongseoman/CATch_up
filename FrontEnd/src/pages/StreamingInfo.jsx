@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { buskerGeolocation, userInfoState } from "../RecoilState/userRecoilState";
 import LocationUsageToggle from "../components/LocationUsageToggle"
 import HashTagInput from '../components/HashTagInput';
+import KakaoMapSearch from '../components/KakaoMapSearch'
 
 const StreamingInfo = () => {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const StreamingInfo = () => {
                 setLocationError('Geolocation is not supported by your browser');
                 return;
             }
-
+    
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
@@ -36,14 +37,15 @@ const StreamingInfo = () => {
                 },
                 () => {
                     setLocationError('Unable to retrieve your location');
-                }
+                },
+                { enableHighAccuracy: true } // enableHighAccuracy 옵션 추가
             );
         } else {
             setGeolocation({ latitude: null, longitude: null });
             setLocationError('');
         }
     };
-
+    
     const handleStreaming = async () => {
         if (!userInfo.isLoggedIn) {
             alert("로그인 후 이용가능합니다.");
@@ -68,6 +70,7 @@ const StreamingInfo = () => {
                 body: JSON.stringify(formData)
             });
 
+            console.log(JSON.stringify(formData))
             if (!response.ok) {
                 throw new Error('Failed to create busking info');
             }
@@ -126,7 +129,15 @@ const StreamingInfo = () => {
                 />
                 <NoticeText>(동의하지 않으면 스트리밍을 시작할 수 없습니다!)</NoticeText>
             </ToggleField>
+
+
+            <CustomText typography="h4" bold>
+            방송하려는 위치로 마커를 이동해주세요
+            </CustomText>
+
             {locationError && <p>Error: {locationError}</p>}
+
+            <KakaoMapSearch onLocationSelect={setGeolocation} />
 
             <Button type="submit" onClick={handleStreaming}>방송 시작</Button>
         </>

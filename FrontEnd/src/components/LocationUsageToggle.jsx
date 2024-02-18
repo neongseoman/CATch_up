@@ -48,7 +48,7 @@ const HiddenCheckbox = styled.input`
 
 const LocationUsageToggle = ({ useLocation, handleLocationToggle }) => (
   <StyledLabel>
-    위치 정보 사용
+    위치 정보 제공 동의
     <CheckboxContainer checked={useLocation}>
     <HiddenCheckbox type="checkbox" checked={useLocation} onChange={handleLocationToggle} />
     </CheckboxContainer>

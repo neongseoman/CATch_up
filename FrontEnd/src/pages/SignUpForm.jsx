@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import styled from "@emotion/styled";
+import CustomText from '../components/CustomText';
 
 function SignUpForm() {
   const navigate = useNavigate();
@@ -108,6 +109,12 @@ function SignUpForm() {
 
   return (
     <div>
+      <CustomText typography="h1" bold>
+          회원 가입
+      </CustomText>
+      <ValMsg style={{ height: '20px' }}>
+      </ValMsg>
+
       <TextInput
         type="email"
         placeholder="이메일 주소(아이디)"
