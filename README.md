@@ -11,8 +11,8 @@ Catch UP은 버스킹 공연의 매력을 더 많은 사람들과 공유하고, 
 Catch UP 프로젝트는 다음과 같은 브랜치 구조를 가지고 있습니다:
 
 - [master(default) 브랜치](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105/-/tree/master?ref_type=heads): 프로젝트의 아키텍처 관련 자료와 기본적인 문서가 저장되어 있습니다. 이 브랜치는 프로젝트의 기본 구조를 정의하고, 전반적인 아키텍처 설계를 제공합니다.
-- [FE_develop 브랜치](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105/-/tree/FE_develop?ref_type=heads): 프로젝트의 프론트엔드 개발을 위한 브랜치입니다. 사용자 인터페이스 디자인, 클라이언트 사이드 로직, 프론트엔드 관련 기술 스택의 개발이 이 브랜치에서 진행됩니다.
-- [BE_develop 브랜치](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105/-/tree/BE_develop?ref_type=heads): 백엔드 개발을 위한 브랜치입니다. 서버 사이드 로직, 데이터베이스 관리, API 개발 등 백엔드 관련 작업이 이 브랜치에서 이루어집니다.
+- [FE_develop 브랜치](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105/-/tree/FE_develop?ref_type=heads): 프로젝트의 프론트엔드 개발을 위한 브랜치입니다. WebRTC PeerConnection,사용자 인터페이스 디자인, 클라이언트 사이드 로직, 프론트엔드 관련 기술 스택의 개발이 이 브랜치에서 진행됩니다.
+- [BE_develop 브랜치](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A105/-/tree/BE_develop?ref_type=heads): 백엔드 개발을 위한 브랜치입니다. WebRTC Signaling Server,서버 사이드 로직, 데이터베이스 관리, API 개발 등 백엔드 관련 작업이 이 브랜치에서 이루어집니다.
 
 각 브랜치는 특정 개발 영역에 초점을 맞추며, 개발 과정에서 협업과 코드 리뷰를 용이하게 하기 위해 분리되어 관리됩니다.
 
